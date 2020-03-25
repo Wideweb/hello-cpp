@@ -8,13 +8,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(SOURCE_LIB hello.cpp)	
 
 if(BUILD_SHARED_LIBS)
-    add_library(HelloLib SHARED ${SOURCE_LIB})
+    add_library(helloLib SHARED ${SOURCE_LIB})
 else()
-    add_library(HelloLib STATIC ${SOURCE_LIB})
+    add_library(helloLib STATIC ${SOURCE_LIB})
 endif()
 
-
-target_include_directories(HelloLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-install(TARGETS HelloLib DESTINATION lib)
-install(FILES hello.h DESTINATION include)
+target_include_directories(helloLib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

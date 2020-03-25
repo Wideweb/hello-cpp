@@ -7,6 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(SOURCE_EXE hello.cpp)	
 
-add_executable(HelloBin ${SOURCE_EXE})
+add_executable(hello ${SOURCE_EXE})
 
-target_link_libraries(HelloBin PUBLIC HelloLib)
+target_link_libraries(hello PUBLIC helloLib)
