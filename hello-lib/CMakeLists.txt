@@ -8,8 +8,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(SOURCE_LIB hello.cpp)	
 
 if(BUILD_SHARED_LIBS)
+    message("Build hello-lib as shared")
     add_library(helloLib SHARED ${SOURCE_LIB})
 else()
+    message("Build hello-lib as static")
     add_library(helloLib STATIC ${SOURCE_LIB})
 endif()
 
