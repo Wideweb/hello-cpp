@@ -1,0 +1,9 @@
+~
+.vscode
+.travis
+build
+.git
+.gitignore
+.clang-format
+.travis.yml
+README.md
