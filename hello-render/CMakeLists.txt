@@ -1,2 +1,2 @@
-add_subdirectory(render-lib)
+add_subdirectory(engine)
 add_subdirectory(app)
