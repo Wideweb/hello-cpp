@@ -1,5 +1,4 @@
-#ifndef Canvas_hpp
-#define Canvas_hpp
+#pragma once
 
 #include <array>
 #include <fstream>
@@ -38,5 +37,3 @@ class IRender {
     virtual void clear(Color) = 0;
     virtual void setPixel(Position, Color color) = 0;
 };
-
-#endif /* Canvas_hpp */
