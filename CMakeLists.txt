@@ -13,7 +13,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY})
 
-include(external/SDL2/CMakeLists.txt)
+#include(external/SDL2/CMakeLists.txt)
 
 function(add_external)
     set(options SHARED STATIC)
@@ -33,4 +33,5 @@ endfunction()
 
 # add_subdirectory(hello-lib)
 # add_subdirectory(hello-bin)
-add_subdirectory(hello-sdl)
+# add_subdirectory(hello-sdl)
+add_subdirectory(hello-render)
