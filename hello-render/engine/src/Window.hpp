@@ -6,7 +6,7 @@
 
 namespace Engine {
 
-enum class EventType { None = 0, MouseMoved, Window };
+enum class EventType { None = 0, MouseMoved, WindowClosed };
 
 class MouseEvent {
   public:

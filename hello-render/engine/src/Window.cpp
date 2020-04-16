@@ -68,7 +68,7 @@ void Window::readInput() {
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) {
-            // WindowEvent event(EventType::Window);
+            WindowEvent event(EventType::WindowClosed);
             // m_eventCallback(event);
             break;
         } else if (e.type == SDL_MOUSEMOTION) {
