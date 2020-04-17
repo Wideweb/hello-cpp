@@ -60,8 +60,14 @@ std::string Window::init(const WindowProps &props) {
     return "";
 }
 
-void Window::setEventCallback(const EventCallbackFn &callback) {
-    m_eventCallback = callback;
+void Window::setMouseEventCallback(
+    const EventCallbackFn<MouseEvent> &callback) {
+    m_mouseEventCallback = callback;
+}
+
+void Window::setWindowEventCallback(
+    const EventCallbackFn<WindowEvent> &callback) {
+    m_windowEventCallback = callback;
 }
 
 void Window::readInput() {
@@ -69,11 +75,11 @@ void Window::readInput() {
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) {
             WindowEvent event(EventType::WindowClosed);
-            // m_eventCallback(event);
+            m_windowEventCallback(event);
             break;
         } else if (e.type == SDL_MOUSEMOTION) {
             MouseEvent event(e.motion.x, e.motion.y, EventType::MouseMoved);
-            m_eventCallback(event);
+            m_mouseEventCallback(event);
         }
     }
 }

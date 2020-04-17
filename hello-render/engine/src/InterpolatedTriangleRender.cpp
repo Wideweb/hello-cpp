@@ -7,8 +7,8 @@ void InterpolatedTriangleRender::setProgram(GfxProgram &program) {
     m_Program = &program;
 }
 
-void InterpolatedTriangleRender::drawTriangles(std::vector<Vertex> vertexes,
-                                               std::vector<int> indexes) {
+void InterpolatedTriangleRender::drawTriangles(std::vector<Vertex> &vertexes,
+                                               std::vector<int> &indexes) {
     for (size_t i = 0; i < indexes.size(); i += 3) {
         Vertex v0 = m_Program->vertexShader(vertexes.at(indexes.at(i)));
         Vertex v1 = m_Program->vertexShader(vertexes.at(indexes.at(i + 1)));
@@ -25,11 +25,13 @@ void InterpolatedTriangleRender::drawTriangles(std::vector<Vertex> vertexes,
     }
 }
 
-std::vector<Vertex>
-InterpolatedTriangleRender::rasterizeTriange(Vertex v0, Vertex v1, Vertex v2) {
+std::vector<Vertex> InterpolatedTriangleRender::rasterizeTriange(Vertex &v0,
+                                                                 Vertex &v1,
+                                                                 Vertex &v2) {
     std::vector<Vertex> out;
 
-    auto degenerateTriangleByX = [&](Vertex top, Vertex middle, Vertex bottom) {
+    auto degenerateTriangleByX = [&](Vertex &top, Vertex &middle,
+                                     Vertex &bottom) {
         std::vector<Vertex> line = {top, middle, bottom};
         std::sort(line.begin(), line.end(), [&](Vertex first, Vertex second) {
             return first.f0 < second.f0;
@@ -44,7 +46,8 @@ InterpolatedTriangleRender::rasterizeTriange(Vertex v0, Vertex v1, Vertex v2) {
         }
     };
 
-    auto degenerateTriangleByY = [&](Vertex top, Vertex middle, Vertex bottom) {
+    auto degenerateTriangleByY = [&](Vertex &top, Vertex &middle,
+                                     Vertex &bottom) {
         std::vector<Vertex> line = {top, middle, bottom};
         std::sort(line.begin(), line.end(), [&](Vertex first, Vertex second) {
             return first.f1 < second.f1;
@@ -59,8 +62,8 @@ InterpolatedTriangleRender::rasterizeTriange(Vertex v0, Vertex v1, Vertex v2) {
         }
     };
 
-    auto horizontalUpwardTriangle = [&](Vertex top, Vertex middleLeft,
-                                        Vertex middleRight) {
+    auto horizontalUpwardTriangle = [&](Vertex &top, Vertex &middleLeft,
+                                        Vertex &middleRight) {
         for (float y = 0; y <= middleLeft.f1 - top.f1; y++) {
             Vertex from =
                 interpolate(middleLeft, top, y / (middleLeft.f1 - top.f1));
@@ -74,8 +77,8 @@ InterpolatedTriangleRender::rasterizeTriange(Vertex v0, Vertex v1, Vertex v2) {
         }
     };
 
-    auto horizontalDownwardTriangle = [&](Vertex top, Vertex middleLeft,
-                                          Vertex middleRight) {
+    auto horizontalDownwardTriangle = [&](Vertex &top, Vertex &middleLeft,
+                                          Vertex &middleRight) {
         for (float y = 0; y <= top.f1 - middleLeft.f1; y++) {
             Vertex from =
                 interpolate(middleLeft, top, y / (top.f1 - middleLeft.f1));
@@ -96,10 +99,10 @@ InterpolatedTriangleRender::rasterizeTriange(Vertex v0, Vertex v1, Vertex v2) {
         float minY = std::min({v0.f1, v1.f1, v2.f1});
         float maxY = std::max({v0.f1, v1.f1, v2.f1});
 
-        float dx = maxX - minX;
-        float dy = maxY - minY;
+        float dx = std::abs(maxX - minX);
+        float dy = std::abs(maxY - minY);
 
-        if (dx * dx > dy * dy) {
+        if (dx > dy) {
             degenerateTriangleByX(v0, v1, v2);
         } else {
             degenerateTriangleByY(v0, v1, v2);
@@ -111,7 +114,7 @@ InterpolatedTriangleRender::rasterizeTriange(Vertex v0, Vertex v1, Vertex v2) {
     std::vector<Vertex> vertexes = {v0, v1, v2};
     std::sort(
         vertexes.begin(), vertexes.end(),
-        [&](Vertex first, Vertex second) { return first.f1 < second.f1; });
+        [&](Vertex &first, Vertex &second) { return first.f1 < second.f1; });
 
     Vertex top = vertexes[0];
     Vertex middle = vertexes[1];
@@ -145,7 +148,8 @@ InterpolatedTriangleRender::rasterizeTriange(Vertex v0, Vertex v1, Vertex v2) {
     return out;
 }
 
-Vertex InterpolatedTriangleRender::interpolate(Vertex v0, Vertex v1, float t) {
+Vertex InterpolatedTriangleRender::interpolate(Vertex &v0, Vertex &v1,
+                                               float t) {
     return {interpolate(v0.f0, v1.f0, t), interpolate(v0.f1, v1.f1, t),
             interpolate(v0.f2, v1.f2, t), interpolate(v0.f3, v1.f3, t),
             interpolate(v0.f4, v1.f4, t)};
@@ -155,9 +159,10 @@ float InterpolatedTriangleRender::interpolate(float from, float to, float t) {
     return from + (to - from) * t;
 }
 
-bool InterpolatedTriangleRender::isCollinear(Vertex v0, Vertex v1, Vertex v2) {
+bool InterpolatedTriangleRender::isCollinear(Vertex &v0, Vertex &v1,
+                                             Vertex &v2) {
     return (v1.f0 - v0.f0) * (v2.f1 - v0.f1) ==
            (v2.f0 - v0.f0) * (v1.f1 - v0.f1);
 }
 
-}
+} // namespace Engine

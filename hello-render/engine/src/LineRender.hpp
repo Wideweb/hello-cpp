@@ -15,4 +15,4 @@ class LineRender : IRender {
     void drawLine(Position from, Position to, Color color);
 };
 
-}
+} // namespace Engine

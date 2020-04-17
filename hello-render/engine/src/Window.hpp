@@ -36,17 +36,19 @@ struct WindowProps {
 };
 
 class Window {
-    using EventCallbackFn = std::function<void(MouseEvent &)>;
+    template <typename T> using EventCallbackFn = std::function<void(T &)>;
 
   private:
     SDL_Window *m_Window;
     SDL_Renderer *m_Renderer;
     WindowProps m_Props;
-    EventCallbackFn m_eventCallback;
+    EventCallbackFn<MouseEvent> m_mouseEventCallback;
+    EventCallbackFn<WindowEvent> m_windowEventCallback;
 
   public:
     std::string init(const WindowProps &props);
-    void setEventCallback(const EventCallbackFn &callback);
+    void setMouseEventCallback(const EventCallbackFn<MouseEvent> &callback);
+    void setWindowEventCallback(const EventCallbackFn<WindowEvent> &callback);
     void readInput();
     bool draw(void *pixels);
     void shutDown();

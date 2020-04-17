@@ -39,7 +39,7 @@ class myGfxProgram : public Engine::GfxProgram {
         return out;
     }
 
-    Color fragmentShader(const Engine::Vertex &vertex) override {
+    Engine::Color fragmentShader(const Engine::Vertex &vertex) override {
         float dx = m_MouseX - vertex.f0;
         float dy = m_MouseY - vertex.f1;
         float t = (dx * dx + dy * dy) / (m_Radius * m_Radius);
@@ -68,8 +68,8 @@ class myApp : public Engine::Application {
 
   public:
     myApp() {
-        const float tilesNumberX = width / m_TileSize + 1;
-        const float tilesNumberY = height / m_TileSize + 1;
+        const float tilesNumberX = Engine::width / m_TileSize + 1;
+        const float tilesNumberY = Engine::height / m_TileSize + 1;
 
         for (int i = 0; i < tilesNumberY; i++) {
             for (int j = 0; j < tilesNumberX; j++) {

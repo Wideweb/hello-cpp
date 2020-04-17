@@ -14,4 +14,4 @@ void IndexedTriangleRender::drawTriangles(Pixels<3> vertexes,
     }
 }
 
-}
+} // namespace Engine

@@ -80,4 +80,4 @@ void LineRender::drawLine(Position from, Position to, Color color) {
     }
 }
 
-}
+} // namespace Engine

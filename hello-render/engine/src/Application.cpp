@@ -7,8 +7,10 @@ namespace Engine {
 Application::Application() {
     m_Window = std::unique_ptr<Window>(new Window);
     m_Window->init({width, height, sizeof(Color) * 8, width * sizeof(Color)});
-    m_Window->setEventCallback(
+    m_Window->setMouseEventCallback(
         std::bind(&Application::onMouseEvent, this, std::placeholders::_1));
+    m_Window->setWindowEventCallback(
+        std::bind(&Application::onWindowEvent, this, std::placeholders::_1));
 
     m_Render = std::unique_ptr<InterpolatedTriangleRender>(
         new InterpolatedTriangleRender(m_Canvas));
@@ -25,7 +27,11 @@ void Application::run() {
 
 void Application::onMouseEvent(MouseEvent &e) {}
 
-void Application::onWindowEvent(WindowEvent &e) {}
+void Application::onWindowEvent(WindowEvent &e) {
+    if (e.type == EventType::WindowClosed) {
+        m_Running = false;
+    }
+}
 
 Application::~Application() {}
 

@@ -1,12 +1,6 @@
 #include "Canvas.hpp"
 
-bool operator==(const Color &c1, const Color &c2) {
-    return c1.r == c2.r && c1.g == c2.g && c1.b == c2.b;
-}
-
-bool operator==(const Position &p1, const Position &p2) {
-    return p1.x == p2.x && p1.y == p2.y;
-}
+namespace Engine {
 
 void Canvas::save(const std::string &fileName) {
     std::ofstream outfile(fileName, std::ios::binary);
@@ -28,3 +22,5 @@ void Canvas::load(const std::string &fileName) {
     infile.read(reinterpret_cast<char *>(this), sizeof(Color) * size());
     infile.close();
 }
+
+} // namespace Engine
