@@ -99,8 +99,8 @@ std::vector<Vertex> InterpolatedTriangleRender::rasterizeTriange(Vertex &v0,
         float minY = std::min({v0.f1, v1.f1, v2.f1});
         float maxY = std::max({v0.f1, v1.f1, v2.f1});
 
-        float dx = std::abs(maxX - minX);
-        float dy = std::abs(maxY - minY);
+        float dx = maxX - minX;
+        float dy = maxY - minY;
 
         if (dx > dy) {
             degenerateTriangleByX(v0, v1, v2);
