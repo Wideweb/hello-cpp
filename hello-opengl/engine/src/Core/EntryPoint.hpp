@@ -4,7 +4,7 @@
 
 extern Engine::Application *Engine::createApplication();
 
-void main() {
+int main() {
     auto app = Engine::createApplication();
     app->run();
     delete app;

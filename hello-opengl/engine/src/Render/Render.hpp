@@ -8,7 +8,7 @@ namespace Engine {
 
 class Render {
   public:
-    virtual ~Render(){};
+    virtual ~Render() = default;
     virtual void setClearColor(float r, float g, float b, float a) = 0;
     virtual void color() = 0;
     virtual void drawLines(std::shared_ptr<Shader> shader,

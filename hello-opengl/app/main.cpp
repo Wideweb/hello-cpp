@@ -105,7 +105,7 @@ class MyLayer : public Engine::Layer {
 
 class MyApp : public Engine::Application {
   public:
-    MyApp() {}
+    MyApp() { addLayer(new MyLayer()); }
 
     virtual ~MyApp() {}
 };

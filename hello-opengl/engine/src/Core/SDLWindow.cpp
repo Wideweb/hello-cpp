@@ -12,6 +12,10 @@ static std::ostream &operator<<(std::ostream &out, const SDL_version &v) {
     return out;
 }
 
+SDLWindow::SDLWindow() {}
+
+SDLWindow::~SDLWindow() {}
+
 void SDLWindow::init(const WindowProps &props) {
     using namespace std;
     using namespace std::string_view_literals;

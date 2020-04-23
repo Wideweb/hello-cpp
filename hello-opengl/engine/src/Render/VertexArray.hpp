@@ -6,7 +6,7 @@ namespace Engine {
 
 class VertexArray {
   public:
-    virtual ~VertexArray(){};
+    virtual ~VertexArray() = default;
 
     virtual void bind() = 0;
     virtual void unbind() = 0;
