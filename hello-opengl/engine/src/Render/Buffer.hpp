@@ -63,7 +63,7 @@ struct BufferElement {
             return GL_FLOAT;
         }
     }
-}; // namespace Engine
+};
 
 class BufferLayout {
   private:
