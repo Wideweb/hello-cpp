@@ -32,7 +32,7 @@ class Window {
   public:
     template <typename T> using EventCallbackFn = std::function<void(T &)>;
 
-    virtual ~Window();
+    virtual ~Window(){};
 
     virtual void init(const WindowProps &props) = 0;
 

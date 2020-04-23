@@ -97,7 +97,7 @@ class BufferLayout {
 
 class VertexBuffer {
   public:
-    virtual ~VertexBuffer();
+    virtual ~VertexBuffer(){};
 
     virtual void bind() = 0;
     virtual void unbind() = 0;
@@ -110,7 +110,7 @@ class VertexBuffer {
 
 class IndexBuffer {
   public:
-    virtual ~IndexBuffer();
+    virtual ~IndexBuffer(){};
 
     virtual void bind() = 0;
     virtual void unbind() = 0;
