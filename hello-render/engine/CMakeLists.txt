@@ -23,5 +23,5 @@ target_include_directories(engine PUBLIC include)
 target_include_directories(engine PRIVATE src)
 
 find_package(SDL2 REQUIRED)
-target_include_directories(engine PUBLIC /usr/local/Cellar/sdl2/2.0.10/include)
-target_link_libraries(engine PRIVATE ${SDL2_LIBRARIES})
+target_include_directories(engine PUBLIC /usr/local/Cellar/sdl2/2.0.12_1/include)
+target_link_libraries(engine PRIVATE SDL2::SDL2)
