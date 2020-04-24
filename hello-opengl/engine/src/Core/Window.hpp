@@ -9,11 +9,11 @@ enum class EventType { None = 0, MouseMoved, WindowClosed };
 
 class MouseEvent {
   public:
-    int x;
-    int y;
+    float x;
+    float y;
     EventType type;
 
-    MouseEvent(int x, int y, EventType type) : x(x), y(y), type(type) {}
+    MouseEvent(float x, float y, EventType type) : x(x), y(y), type(type) {}
 };
 
 class WindowEvent {

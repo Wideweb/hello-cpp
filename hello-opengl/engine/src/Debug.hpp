@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#define OM_GL_CHECK()                                                          \
+#define GL_CHECK()                                                             \
     {                                                                          \
         const int err = static_cast<int>(glGetError());                        \
         if (err != GL_NO_ERROR) {                                              \

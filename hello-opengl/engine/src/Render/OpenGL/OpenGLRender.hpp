@@ -10,7 +10,7 @@ class OpenGLRender : public Render {
     OpenGLRender();
     virtual ~OpenGLRender();
     virtual void setClearColor(float r, float g, float b, float a) override;
-    virtual void color() override;
+    virtual void clear() override;
     virtual void drawLines(std::shared_ptr<Shader> shader,
                            std::shared_ptr<VertexArray> vertexArray) override;
     virtual void
