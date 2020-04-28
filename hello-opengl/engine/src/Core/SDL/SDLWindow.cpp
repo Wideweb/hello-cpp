@@ -115,6 +115,9 @@ void SDLWindow::readInput() {
         } else if (e.type == SDL_MOUSEMOTION) {
             MouseEvent event(e.motion.x, e.motion.y, EventType::MouseMoved);
             m_mouseEventCallback(event);
+        } else if (e.type == SDL_MOUSEBUTTONDOWN) {
+            MouseEvent event(e.motion.x, e.motion.y, EventType::MouseDown);
+            m_mouseEventCallback(event);
         }
     }
 }

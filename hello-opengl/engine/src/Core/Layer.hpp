@@ -1,11 +1,19 @@
 #pragma once
 
+#include "EntityManager.hpp"
 #include "Window.hpp"
+#include <string>
 
 namespace Engine {
 
 class Layer {
+  private:
+    EntityManager m_EntityManager;
+
   public:
+    std::shared_ptr<Entity> addEntity(std::string name);
+    std::vector<std::shared_ptr<Entity>> &getEntities();
+
     virtual void onAttach(){};
     virtual void onDetach(){};
 

@@ -8,7 +8,9 @@ Application *Application::s_Instance = nullptr;
 
 Application::Application() {
     m_Window = std::unique_ptr<Window>(Window::create());
+    m_Input = std::unique_ptr<Input>(Input::create());
     m_Render = std::unique_ptr<Render>(Render::create());
+    m_Camera = std::unique_ptr<Camera>(new Camera());
 
     initialize();
 
@@ -16,7 +18,7 @@ Application::Application() {
 }
 
 void Application::initialize() {
-    m_Window->init({640, 420});
+    m_Window->init({600, 600});
     m_Window->setMouseEventCallback(
         std::bind(&Application::onMouseEvent, this, std::placeholders::_1));
     m_Window->setWindowEventCallback(
@@ -26,10 +28,14 @@ void Application::initialize() {
 void Application::run() {
     while (m_Running) {
         m_Window->readInput();
+        m_Input->update();
+
+        m_Render->setClearColor(0.0, 0.0, 0.0, 1.0);
+        m_Render->clear();
 
         for (auto layer : m_LayerStack) {
             layer->onUpdate();
-            layer->onRender();
+            m_SystemStack.exec(layer->getEntities());
         }
 
         m_Window->swapBuffers();
