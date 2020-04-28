@@ -50,6 +50,10 @@ void Application::onMouseEvent(MouseEvent &e) {
 }
 
 void Application::onWindowEvent(WindowEvent &e) {
+    if (e.type == EventType::WindowResized) {
+        m_Render->setViewport(m_Window->getWidth(), m_Window->getHeight());
+    }
+
     for (auto layer : m_LayerStack) {
         layer->onWindowEvent(e);
     }

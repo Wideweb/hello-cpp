@@ -5,7 +5,13 @@
 
 namespace Engine {
 
-enum class EventType { None = 0, MouseMoved, MouseDown, WindowClosed };
+enum class EventType {
+    None = 0,
+    MouseMoved,
+    MouseDown,
+    WindowResized,
+    WindowClosed
+};
 
 class MouseEvent {
   public:
@@ -35,6 +41,9 @@ class Window {
     virtual ~Window() = default;
 
     virtual void init(const WindowProps &props) = 0;
+
+    virtual int getWidth() const = 0;
+    virtual int getHeight() const = 0;
 
     virtual void
     setMouseEventCallback(const EventCallbackFn<MouseEvent> &callback) = 0;

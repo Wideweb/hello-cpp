@@ -20,6 +20,8 @@ void SDLWindow::init(const WindowProps &props) {
     using namespace std;
     using namespace std::string_view_literals;
 
+    m_Props = props;
+
     SDL_version compiled = {0, 0, 0};
     SDL_version linked = {0, 0, 0};
 
@@ -41,9 +43,9 @@ void SDLWindow::init(const WindowProps &props) {
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 
-    m_Window = SDL_CreateWindow("title", SDL_WINDOWPOS_CENTERED,
-                                SDL_WINDOWPOS_CENTERED, props.width,
-                                props.height, ::SDL_WINDOW_OPENGL);
+    m_Window = SDL_CreateWindow(
+        "title", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, props.width,
+        props.height, ::SDL_WINDOW_OPENGL | ::SDL_WINDOW_RESIZABLE);
 
     if (m_Window == nullptr) {
         const char *err_message = SDL_GetError();
@@ -95,6 +97,10 @@ void SDLWindow::init(const WindowProps &props) {
     }
 }
 
+int SDLWindow::getWidth() const { return m_Props.width; }
+
+int SDLWindow::getHeight() const { return m_Props.height; }
+
 void SDLWindow::setMouseEventCallback(
     const EventCallbackFn<MouseEvent> &callback) {
     m_mouseEventCallback = callback;
@@ -110,6 +116,13 @@ void SDLWindow::readInput() {
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) {
             WindowEvent event(EventType::WindowClosed);
+            m_windowEventCallback(event);
+        } else if (e.type == SDL_WINDOWEVENT &&
+                   e.window.event == SDL_WINDOWEVENT_RESIZED) {
+
+            SDL_GetWindowSize(m_Window, &m_Props.width, &m_Props.height);
+
+            WindowEvent event(EventType::WindowResized);
             m_windowEventCallback(event);
             break;
         } else if (e.type == SDL_MOUSEMOTION) {

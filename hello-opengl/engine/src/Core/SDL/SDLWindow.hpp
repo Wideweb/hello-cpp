@@ -17,6 +17,9 @@ class SDLWindow : public Window {
 
     virtual void init(const WindowProps &props) override;
 
+    virtual int getWidth() const override;
+    virtual int getHeight() const override;
+
     virtual void
     setMouseEventCallback(const EventCallbackFn<MouseEvent> &callback) override;
 

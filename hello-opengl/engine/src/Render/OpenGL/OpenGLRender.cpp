@@ -12,6 +12,10 @@ void OpenGLRender::setClearColor(float r, float g, float b, float a) {
     GL_CHECK();
 }
 
+void OpenGLRender::setViewport(uint16_t width, uint16_t height) {
+    glViewport(0, 0, width, height);
+}
+
 void OpenGLRender::clear() {
     glClear(GL_COLOR_BUFFER_BIT);
     GL_CHECK();

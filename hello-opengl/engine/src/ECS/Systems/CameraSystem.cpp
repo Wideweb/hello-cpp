@@ -11,7 +11,8 @@ void CameraSystem::exec(std::vector<std::shared_ptr<Entity>> &entities) {
     for (auto entity : entities) {
         if (entity->hasComponent<CameraComponent>()) {
             auto location = entity->getComponent<LocationComponent>();
-            app.getCamera().setPosition(location->x - 600 / 4, 0);
+            float width = static_cast<float>(app.getWindow().getWidth());
+            app.getCamera().setPosition(location->x - width / 4, 0);
         }
     }
 }

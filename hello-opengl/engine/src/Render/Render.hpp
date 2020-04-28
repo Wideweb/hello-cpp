@@ -9,6 +9,7 @@ namespace Engine {
 class Render {
   public:
     virtual ~Render() = default;
+    virtual void setViewport(uint16_t width, uint16_t height) = 0;
     virtual void setClearColor(float r, float g, float b, float a) = 0;
     virtual void clear() = 0;
     virtual void drawLines(std::shared_ptr<Shader> shader,

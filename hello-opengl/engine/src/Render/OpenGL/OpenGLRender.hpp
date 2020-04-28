@@ -9,6 +9,7 @@ class OpenGLRender : public Render {
   public:
     OpenGLRender();
     virtual ~OpenGLRender();
+    virtual void setViewport(uint16_t width, uint16_t height) override;
     virtual void setClearColor(float r, float g, float b, float a) override;
     virtual void clear() override;
     virtual void drawLines(std::shared_ptr<Shader> shader,
