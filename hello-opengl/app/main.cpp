@@ -13,8 +13,37 @@
 #include "RigitBodyComponent.hpp"
 #include "SequenceTask.hpp"
 #include "SlopeComponent.hpp"
+#include "TextureComponent.hpp"
 #include "UntilFail.hpp"
 #include "VelocityComponent.hpp"
+
+const std::string textureVertexShader = R"(#version 330 core
+                                    layout (location = 0) in vec3 a_position;
+                                    layout (location = 1) in vec2 a_texCoord;
+
+                                    uniform mat4 MVP;
+
+                                    out vec2 v_texCoord;
+                                    
+                                    void main()
+                                    {
+                                      gl_Position = MVP * vec4(a_position, 1.0f);
+                                      v_texCoord = a_texCoord;
+                                    }
+                                    )";
+
+const std::string textureFragmentShader = R"(#version 330 core
+                                    in vec2 v_texCoord;
+
+                                    uniform sampler2D s_texture;
+
+                                    out vec4 v_color;
+                                    
+                                    void main()
+                                    {
+                                      v_color = texture(s_texture, v_texCoord);
+                                    }
+                                    )";
 
 const std::string morphingVertexShader = R"(#version 330 core
                                     layout (location = 0) in vec3 from_position;
@@ -67,11 +96,36 @@ class MyLayer : public Engine::Layer {
   private:
     std::shared_ptr<Engine::Shader> m_Shader;
     std::shared_ptr<Engine::Shader> m_MorphingShader;
+    std::shared_ptr<Engine::Shader> m_TextureShader;
     std::shared_ptr<Engine::Entity> m_Player;
     std::shared_ptr<Engine::Entity> m_Lift;
 
   public:
     virtual void onAttach() override {
+        ////////////////////////////////////////////////////////////////
+        // Texture /////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////
+        m_TextureShader.reset(
+            Engine::Shader::create(textureVertexShader, textureFragmentShader));
+
+        std::vector<float> textVetices = {
+            -1.0, -1.0, 0.0, 0.0, 1.0,
+
+            -1.0, 1.0,  0.0, 0.0, 0.0,
+
+            1.0,  1.0,  0.0, 1.0, 0.0,
+
+            1.0,  -1.0, 0.0, 1.0, 1.0,
+        };
+
+        std::vector<uint32_t> textIndexes = {0, 1, 2, 0, 2, 3};
+
+        auto mill = addEntity("mill");
+        mill->addComponent<Engine::LocationComponent>(200.0, 400.0, 0);
+        mill->addComponent<Engine::TextureComponent>("./assets/tank.png",
+                                                     textVetices, textIndexes,
+                                                     m_TextureShader, 100, 50);
+
         ////////////////////////////////////////////////////////////////
         // Morphing ////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////
@@ -93,17 +147,17 @@ class MyLayer : public Engine::Layer {
         };
 
         std::vector<float> to = {
-            0.0,  1.0,  0.0, 0.0, 0.0, 1.0,
+            0.0,  1.0,  0.0, 0.0, 1.0, 1.0,
 
-            -1.0, -1.0, 0.0, 0.0, 0.0, 1.0,
+            -1.0, -1.0, 0.0, 0.0, 1.0, 1.0,
 
-            1.0,  -1.0, 0.0, 0.0, 0.0, 1.0,
+            1.0,  -1.0, 0.0, 0.0, 1.0, 1.0,
 
-            0.0,  1.0,  0.0, 0.0, 0.0, 1.0,
+            0.0,  1.0,  0.0, 0.0, 1.0, 1.0,
 
-            0.0,  1.0,  0.0, 0.0, 0.0, 1.0,
+            0.0,  1.0,  0.0, 0.0, 1.0, 1.0,
 
-            1.0,  -1.0, 0.0, 0.0, 0.0, 1.0,
+            1.0,  -1.0, 0.0, 0.0, 1.0, 1.0,
         };
 
         std::vector<uint32_t> morphIndexes = {0, 1, 2, 3, 4, 5};

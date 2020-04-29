@@ -8,6 +8,7 @@
 #include "MoveSystem.hpp"
 #include "PhysicsSystem.hpp"
 #include "RenderSystem.hpp"
+#include "TextureSystem.hpp"
 #include <vector>
 
 namespace Engine {
@@ -21,6 +22,7 @@ SystemStack::SystemStack() {
     m_Systems.push_back(new CameraSystem());
     m_Systems.push_back(new RenderSystem());
     m_Systems.push_back(new MorphingSystem());
+    m_Systems.push_back(new TextureSystem());
 }
 
 void SystemStack::exec(std::vector<std::shared_ptr<Entity>> &entities) {

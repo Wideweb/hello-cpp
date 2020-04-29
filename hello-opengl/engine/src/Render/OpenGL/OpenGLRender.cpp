@@ -39,4 +39,16 @@ void OpenGLRender::drawTriangles(std::shared_ptr<Shader> shader,
     GL_CHECK();
 }
 
+void OpenGLRender::drawTexture(std::shared_ptr<Shader> shader,
+                               std::shared_ptr<VertexArray> vertexArray,
+                               std::shared_ptr<Texture> texture) {
+    shader->bind();
+    texture->bind();
+    vertexArray->bind();
+    glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(),
+                   GL_UNSIGNED_INT, nullptr);
+
+    texture->unbind();
+}
+
 } // namespace Engine

@@ -19,12 +19,15 @@ set(SOURCE_LIB
     src/Render/Shader.cpp
     src/Render/VertexArray.cpp
     src/Render/Camera.cpp
+    src/Render/Texture.cpp
     src/Render/OpenGL/OpenGLBuffer.cpp
     src/Render/OpenGL/OpenGLRender.cpp
     src/Render/OpenGL/OpenGLShader.cpp
     src/Render/OpenGL/OpenGLVertexArray.cpp
+    src/Render/OpenGL/OpenGLTexture.cpp
     src/ECS/Components/RenderComponent.cpp
     src/ECS/Components/MorphingComponent.cpp
+    src/ECS/Components/TextureComponent.cpp
     src/ECS/SystemStack.cpp
     src/ECS/Systems/CameraSystem.cpp
     src/ECS/Systems/CollisionSystem.cpp
@@ -33,6 +36,7 @@ set(SOURCE_LIB
     src/ECS/Systems/PhysicsSystem.cpp
     src/ECS/Systems/RenderSystem.cpp
     src/ECS/Systems/MorphingSystem.cpp
+    src/ECS/Systems/TextureSystem.cpp
     src/ECS/Systems/AISystem.cpp
 )	
 

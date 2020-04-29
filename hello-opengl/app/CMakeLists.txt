@@ -10,3 +10,5 @@ set(SOURCE_EXE main.cpp)
 add_executable(app ${SOURCE_EXE})
 
 target_link_libraries(app PRIVATE engine)
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${OUTPUT_DIRECTORY})

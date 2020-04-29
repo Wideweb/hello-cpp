@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Shader.hpp"
+#include "Texture.hpp"
 #include "VertexArray.hpp"
 #include <memory>
 
@@ -16,6 +17,9 @@ class Render {
                            std::shared_ptr<VertexArray> vertexArray) = 0;
     virtual void drawTriangles(std::shared_ptr<Shader> shader,
                                std::shared_ptr<VertexArray> vertexArray) = 0;
+    virtual void drawTexture(std::shared_ptr<Shader> shader,
+                             std::shared_ptr<VertexArray> vertexArray,
+                             std::shared_ptr<Texture> texture) = 0;
 
     static Render *create();
 };
