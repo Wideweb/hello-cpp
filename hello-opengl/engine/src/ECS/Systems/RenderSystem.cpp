@@ -21,11 +21,6 @@ void RenderSystem::exec(std::vector<std::shared_ptr<Entity>> &entities) {
 
             float x = (c_location->x - camera.x) / windowWidth * 2.0 - 1;
             float y = (c_location->y - camera.y) / windowHeight * 2.0 - 1;
-            float anlge = c_location->angleRad;
-            float cos = std::cos(anlge);
-            float sin = std::sin(anlge);
-            float tx = x * cos + y * sin;
-            float ty = y * cos - x * sin;
 
             float scaleX = c_render->width / windowWidth;
             float scaleY = c_render->height / windowHeight;

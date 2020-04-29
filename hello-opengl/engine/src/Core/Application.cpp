@@ -1,5 +1,7 @@
 #include "Application.hpp"
 #include <chrono>
+#include <cmath>
+#include <iostream>
 #include <thread>
 
 namespace Engine {
@@ -26,11 +28,12 @@ void Application::initialize() {
 }
 
 void Application::run() {
+    m_Render->setClearColor(0.0, 0.0, 0.0, 1.0);
+
     while (m_Running) {
         m_Window->readInput();
         m_Input->update();
 
-        m_Render->setClearColor(0.0, 0.0, 0.0, 1.0);
         m_Render->clear();
 
         for (auto layer : m_LayerStack) {
@@ -39,7 +42,6 @@ void Application::run() {
         }
 
         m_Window->swapBuffers();
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
 }
 

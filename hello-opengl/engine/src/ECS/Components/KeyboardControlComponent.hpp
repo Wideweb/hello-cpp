@@ -1,21 +1,18 @@
 #pragma once
 
 #include "Entity.hpp"
-#include <string>
+#include "Input.hpp"
 
 namespace Engine {
 
 class KeyboardControlComponent : public Component {
   public:
-    std::string upKey;
-    std::string downKey;
-    std::string rightKey;
-    std::string leftKey;
-    std::string shootKey;
+    KeyCode upKey;
+    KeyCode rightKey;
+    KeyCode leftKey;
 
-    KeyboardControlComponent(std::string upKey, std::string rightKey,
-                             std::string downKey, std::string leftKey,
-                             std::string shootKey) {}
+    KeyboardControlComponent(KeyCode upKey, KeyCode rightKey, KeyCode leftKey)
+        : upKey(upKey), rightKey(rightKey), leftKey(leftKey) {}
 };
 
 } // namespace Engine

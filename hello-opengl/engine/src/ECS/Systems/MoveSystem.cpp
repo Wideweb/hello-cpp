@@ -13,8 +13,8 @@ void MoveSystem ::exec(std::vector<std::shared_ptr<Entity>> &entities) {
             auto c_velocity = entity->getComponent<VelocityComponent>();
             auto c_location = entity->getComponent<LocationComponent>();
 
-            c_location->x += c_velocity->x;
-            c_location->y += c_velocity->y;
+            c_location->x += c_velocity->x * app.getTime().getDelta();
+            c_location->y += c_velocity->y * app.getTime().getDelta();
         }
     }
 }

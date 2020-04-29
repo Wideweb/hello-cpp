@@ -5,6 +5,7 @@
 #include "Layer.hpp"
 #include "Render.hpp"
 #include "SystemStack.hpp"
+#include "Time.hpp"
 #include "Window.hpp"
 #include <memory>
 
@@ -20,6 +21,7 @@ class Application {
     std::unique_ptr<Camera> m_Camera;
     std::vector<Layer *> m_LayerStack;
     SystemStack m_SystemStack;
+    Time m_Time;
 
     bool m_Running = true;
 
@@ -39,6 +41,7 @@ class Application {
     Input &getInput() { return *m_Input; }
     Render &getRender() { return *m_Render; }
     Camera &getCamera() { return *m_Camera; }
+    Time &getTime() { return m_Time; }
 
     static Application &get() { return *s_Instance; }
 };

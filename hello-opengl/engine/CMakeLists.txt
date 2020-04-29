@@ -13,6 +13,7 @@ set(SOURCE_LIB
     src/Core/SDL/SDLWindow.cpp
     src/Core/SDL/SDLInput.cpp
     src/Core/Layer.cpp
+    src/Core/Time.cpp
     src/Render/Buffer.cpp
     src/Render/Render.cpp
     src/Render/Shader.cpp

@@ -4,6 +4,7 @@
 #include "CameraComponent.hpp"
 #include "CollisionComponent.hpp"
 #include "EntryPoint.hpp"
+#include "KeyboardControlComponent.hpp"
 #include "LocationComponent.hpp"
 #include "MoveTask.hpp"
 #include "ObstacleComponent.hpp"
@@ -197,30 +198,17 @@ class MyLayer : public Engine::Layer {
 
         m_Player = addEntity("player");
         m_Player->addComponent<Engine::CameraComponent>();
-        m_Player->addComponent<Engine::LocationComponent>(250.0, 150.0, 0);
-        m_Player->addComponent<Engine::VelocityComponent>(2, 0);
+        m_Player->addComponent<Engine::LocationComponent>(250.0, 300.0, 0);
+        m_Player->addComponent<Engine::VelocityComponent>(0, 0);
         m_Player->addComponent<Engine::CollisionComponent>(25, 25);
         m_Player->addComponent<Engine::RigitBodyComponent>(1);
         m_Player->addComponent<Engine::RenderComponent>(vertices, indexes,
                                                         m_Shader, 25, 25);
+        m_Player->addComponent<Engine::KeyboardControlComponent>(
+            Engine::KeyCode::Space, Engine::KeyCode::D, Engine::KeyCode::A);
     }
 
-    virtual void onUpdate() override {
-        auto &input = Engine::Application::get().getInput();
-        auto velocity = m_Player->getComponent<Engine::VelocityComponent>();
-
-        if (input.IsKeyPressed(Engine::KeyCode::A)) {
-            velocity->x = -3;
-        } else if (input.IsKeyPressed(Engine::KeyCode::D)) {
-            velocity->x = 3;
-        } else {
-            velocity->x = 0;
-        }
-
-        if (input.IsKeyPressed(Engine::KeyCode::Space)) {
-            velocity->y = 4;
-        }
-    }
+    virtual void onUpdate() override {}
 
     virtual void onMouseEvent(Engine::MouseEvent &e) override {
         if (e.type == Engine::EventType::MouseDown) {

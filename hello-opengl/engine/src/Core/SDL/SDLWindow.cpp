@@ -43,9 +43,13 @@ void SDLWindow::init(const WindowProps &props) {
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 
+    SDL_SetHint(SDL_HINT_RENDER_VSYNC, "0");
+
     m_Window = SDL_CreateWindow(
         "title", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, props.width,
         props.height, ::SDL_WINDOW_OPENGL | ::SDL_WINDOW_RESIZABLE);
+
+    SDL_SetHint(SDL_HINT_RENDER_VSYNC, "0");
 
     if (m_Window == nullptr) {
         const char *err_message = SDL_GetError();
