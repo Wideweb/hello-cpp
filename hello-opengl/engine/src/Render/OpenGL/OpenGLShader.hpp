@@ -17,10 +17,10 @@ class OpenGLShader : public Shader {
     virtual void bind() override;
     virtual void unbind() override;
 
-    virtual void SetFloat(const std::string &name, float value) override;
-    virtual void SetFloat2(const std::string &name, float value1,
+    virtual void setFloat(const std::string &name, float value) override;
+    virtual void setFloat2(const std::string &name, float value1,
                            float value2) override;
-    virtual void SetMatrix4(const std::string &name,
+    virtual void setMatrix4(const std::string &name,
                             const std::vector<float> &matrix) override;
 
   private:

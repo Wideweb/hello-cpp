@@ -6,6 +6,7 @@
 #include "EntryPoint.hpp"
 #include "KeyboardControlComponent.hpp"
 #include "LocationComponent.hpp"
+#include "MorphingComponent.hpp"
 #include "MoveTask.hpp"
 #include "ObstacleComponent.hpp"
 #include "RenderComponent.hpp"
@@ -14,6 +15,27 @@
 #include "SlopeComponent.hpp"
 #include "UntilFail.hpp"
 #include "VelocityComponent.hpp"
+
+const std::string morphingVertexShader = R"(#version 330 core
+                                    layout (location = 0) in vec3 from_position;
+                                    layout (location = 1) in vec3 from_color;
+                                    layout (location = 2) in vec3 to_position;
+                                    layout (location = 3) in vec3 to_color;
+
+                                    uniform mat4 MVP;
+                                    uniform float time;
+
+                                    out vec3 v_color;
+                                    
+                                    void main()
+                                    {
+                                      float t = (sin(time) + 1) / 2;
+                                      v_color = from_color + (to_color - from_color) * t;
+                                      vec3 a_position = from_position + (to_position - from_position) * t;
+
+                                      gl_Position = MVP * vec4(a_position, 1.0f);
+                                    }
+                                    )";
 
 const std::string vertexShader = R"(#version 330 core
                                     layout (location = 0) in vec3 a_position;
@@ -44,11 +66,57 @@ const std::string fragmentShader = R"(#version 330 core
 class MyLayer : public Engine::Layer {
   private:
     std::shared_ptr<Engine::Shader> m_Shader;
+    std::shared_ptr<Engine::Shader> m_MorphingShader;
     std::shared_ptr<Engine::Entity> m_Player;
     std::shared_ptr<Engine::Entity> m_Lift;
 
   public:
     virtual void onAttach() override {
+        ////////////////////////////////////////////////////////////////
+        // Morphing ////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////
+        m_MorphingShader.reset(
+            Engine::Shader::create(morphingVertexShader, fragmentShader));
+
+        std::vector<float> from = {
+            -1.0, 1.0,  0.0, 0.0, 0.0, 1.0,
+
+            -1.0, -1.0, 0.0, 0.0, 0.0, 1.0,
+
+            1.0,  -1.0, 0.0, 0.0, 0.0, 1.0,
+
+            -1.0, 1.0,  0.0, 0.0, 0.0, 1.0,
+
+            1.0,  1.0,  0.0, 0.0, 0.0, 1.0,
+
+            1.0,  -1.0, 0.0, 0.0, 0.0, 1.0,
+        };
+
+        std::vector<float> to = {
+            0.0,  1.0,  0.0, 0.0, 0.0, 1.0,
+
+            -1.0, -1.0, 0.0, 0.0, 0.0, 1.0,
+
+            1.0,  -1.0, 0.0, 0.0, 0.0, 1.0,
+
+            0.0,  1.0,  0.0, 0.0, 0.0, 1.0,
+
+            0.0,  1.0,  0.0, 0.0, 0.0, 1.0,
+
+            1.0,  -1.0, 0.0, 0.0, 0.0, 1.0,
+        };
+
+        std::vector<uint32_t> morphIndexes = {0, 1, 2, 3, 4, 5};
+
+        auto morphing = addEntity("morphing");
+        morphing->addComponent<Engine::LocationComponent>(300.0, 350.0, 0);
+        morphing->addComponent<Engine::MorphingComponent>(
+            from, to, morphIndexes, m_MorphingShader, 50, 50);
+
+        ////////////////////////////////////////////////////////////////
+        // Other ///////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////
+
         m_Shader.reset(Engine::Shader::create(vertexShader, fragmentShader));
 
         std::vector<float> vertices = {

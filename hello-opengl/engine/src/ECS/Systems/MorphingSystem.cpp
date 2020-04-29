@@ -1,22 +1,24 @@
-#include "RenderSystem.hpp"
+#include "MorphingSystem.hpp"
 #include "Application.hpp"
 #include "LocationComponent.hpp"
-#include "RenderComponent.hpp"
+#include "MorphingComponent.hpp"
 #include "cmath"
+#include "iostream"
 
 namespace Engine {
 
-void RenderSystem::exec(std::vector<std::shared_ptr<Entity>> &entities) {
+void MorphingSystem::exec(std::vector<std::shared_ptr<Entity>> &entities) {
     auto &render = Application::get().getRender();
     auto &window = Application::get().getWindow();
     auto &camera = Application::get().getCamera();
+    auto &time = Application::get().getTime();
 
     float windowWidth = static_cast<float>(window.getWidth());
     float windowHeight = static_cast<float>(window.getHeight());
 
     for (auto entity : entities) {
-        if (entity->hasComponent<RenderComponent>()) {
-            auto c_render = entity->getComponent<RenderComponent>();
+        if (entity->hasComponent<MorphingComponent>()) {
+            auto c_render = entity->getComponent<MorphingComponent>();
             auto c_location = entity->getComponent<LocationComponent>();
 
             float x = (c_location->x - camera.x) / windowWidth * 2.0 - 1;
@@ -33,6 +35,7 @@ void RenderSystem::exec(std::vector<std::shared_ptr<Entity>> &entities) {
 
                                         x,      y,      0.0f, 1.0f};
 
+            c_render->shader->setFloat("time", time.getTotalSeconds());
             c_render->shader->setMatrix4("MVP", model);
             render.drawTriangles(c_render->shader, c_render->vertexArray);
         }

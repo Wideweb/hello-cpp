@@ -4,6 +4,7 @@
 #include "CollisionSystem.hpp"
 #include "ControlSystem.hpp"
 #include "EntityManager.hpp"
+#include "MorphingSystem.hpp"
 #include "MoveSystem.hpp"
 #include "PhysicsSystem.hpp"
 #include "RenderSystem.hpp"
@@ -19,6 +20,7 @@ SystemStack::SystemStack() {
     m_Systems.push_back(new MoveSystem());
     m_Systems.push_back(new CameraSystem());
     m_Systems.push_back(new RenderSystem());
+    m_Systems.push_back(new MorphingSystem());
 }
 
 void SystemStack::exec(std::vector<std::shared_ptr<Entity>> &entities) {

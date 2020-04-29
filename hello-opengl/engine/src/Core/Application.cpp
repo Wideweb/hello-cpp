@@ -25,12 +25,16 @@ void Application::initialize() {
         std::bind(&Application::onMouseEvent, this, std::placeholders::_1));
     m_Window->setWindowEventCallback(
         std::bind(&Application::onWindowEvent, this, std::placeholders::_1));
+    m_Time.init();
 }
 
 void Application::run() {
     m_Render->setClearColor(0.0, 0.0, 0.0, 1.0);
+    m_Time.tick();
 
     while (m_Running) {
+        m_Time.tick();
+
         m_Window->readInput();
         m_Input->update();
 

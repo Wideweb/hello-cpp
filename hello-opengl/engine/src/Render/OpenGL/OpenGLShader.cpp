@@ -112,14 +112,15 @@ GLuint OpenGLShader::compileShader(GLenum type, const std::string &source) {
     return shader;
 }
 
-void OpenGLShader::SetFloat(const std::string &name, float value) {
+void OpenGLShader::setFloat(const std::string &name, float value) {
     bind();
     GLint location = glGetUniformLocation(m_Program, name.c_str());
     GL_CHECK();
     glUniform1f(location, value);
     GL_CHECK();
 }
-void OpenGLShader::SetFloat2(const std::string &name, float value1,
+
+void OpenGLShader::setFloat2(const std::string &name, float value1,
                              float value2) {
     bind();
     GLint location = glGetUniformLocation(m_Program, name.c_str());
@@ -128,7 +129,7 @@ void OpenGLShader::SetFloat2(const std::string &name, float value1,
     GL_CHECK();
 }
 
-void OpenGLShader::SetMatrix4(const std::string &name,
+void OpenGLShader::setMatrix4(const std::string &name,
                               const std::vector<float> &matrix) {
     bind();
     GLint location = glGetUniformLocation(m_Program, name.c_str());
