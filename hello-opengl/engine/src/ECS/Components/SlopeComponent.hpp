@@ -4,12 +4,13 @@
 
 namespace Engine {
 
+enum class SlopeType { Left = 0, Right = 1 };
+
 class SlopeComponent : public Component {
   public:
-    bool left;
-    bool right;
+    SlopeType type;
 
-    SlopeComponent(float left) : left(left), right(!left) {}
+    SlopeComponent(SlopeType type) : type(type) {}
 };
 
 } // namespace Engine

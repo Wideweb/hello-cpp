@@ -129,6 +129,7 @@ class MyLayer : public Engine::Layer {
         ////////////////////////////////////////////////////////////////
         // Morphing ////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////
+
         m_MorphingShader.reset(
             Engine::Shader::create(morphingVertexShader, fragmentShader));
 
@@ -168,7 +169,7 @@ class MyLayer : public Engine::Layer {
             from, to, morphIndexes, m_MorphingShader, 50, 50);
 
         ////////////////////////////////////////////////////////////////
-        // Other ///////////////////////////////////////////////////////
+        // Lift ////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////
 
         m_Shader.reset(Engine::Shader::create(vertexShader, fragmentShader));
@@ -179,47 +180,11 @@ class MyLayer : public Engine::Layer {
             -1.0, 1.0,  0.0, 0.0, 0.0, 1.0,
 
             1.0,  -1.0, 0.0, 0.0, 0.0, 1.0,
-        };
-
-        std::vector<uint32_t> indexes = {0, 1, 2};
-
-        auto entity3 = addEntity("box");
-        entity3->addComponent<Engine::LocationComponent>(400.0, 75.0, 0);
-        entity3->addComponent<Engine::ObstacleComponent>();
-        entity3->addComponent<Engine::SlopeComponent>(true);
-        entity3->addComponent<Engine::CollisionComponent>(50, 50);
-        entity3->addComponent<Engine::RenderComponent>(vertices, indexes,
-                                                       m_Shader, 50, 50);
-
-        vertices = {
-            -1.0, -1.0, 0.0, 0.0, 0.0, 1.0,
-
-            1.0,  1.0,  0.0, 0.0, 0.0, 1.0,
-
-            1.0,  -1.0, 0.0, 0.0, 0.0, 1.0,
-        };
-
-        indexes = {0, 1, 2};
-
-        auto entity5 = addEntity("box");
-        entity5->addComponent<Engine::LocationComponent>(300.0, 75.0, 0);
-        entity5->addComponent<Engine::ObstacleComponent>();
-        entity5->addComponent<Engine::SlopeComponent>(false);
-        entity5->addComponent<Engine::CollisionComponent>(50, 50);
-        entity5->addComponent<Engine::RenderComponent>(vertices, indexes,
-                                                       m_Shader, 50, 50);
-
-        vertices = {
-            -1.0, -1.0, 0.0, 0.0, 0.0, 1.0,
-
-            -1.0, 1.0,  0.0, 0.0, 0.0, 1.0,
-
-            1.0,  -1.0, 0.0, 0.0, 0.0, 1.0,
 
             1.0,  1.0,  0.0, 0.0, 0.0, 1.0,
         };
 
-        indexes = {0, 1, 2, 1, 3, 2};
+        std::vector<uint32_t> indexes = {0, 1, 2, 1, 3, 2};
 
         m_Lift = addEntity("lift");
         m_Lift->addComponent<Engine::LocationComponent>(350.0, 75.0, 0);
@@ -250,6 +215,73 @@ class MyLayer : public Engine::Layer {
                                                new Engine::MoveTask())})));
 
         m_Lift->addComponent<Engine::AIComponent>(behaviourTree);
+
+        ////////////////////////////////////////////////////////////////
+        // Player //////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////
+
+        vertices = {
+            -1.0, -1.0, 0.0, 0.0, 1.0, 0.0,
+
+            -1.0, 1.0,  0.0, 0.0, 1.0, 0.0,
+
+            1.0,  -1.0, 0.0, 0.0, 1.0, 0.0,
+
+            1.0,  1.0,  0.0, 0.0, 1.0, 0.0,
+        };
+
+        indexes = {0, 1, 2, 1, 3, 2};
+
+        m_Player = addEntity("player");
+        m_Player->addComponent<Engine::CameraComponent>();
+        m_Player->addComponent<Engine::LocationComponent>(250.0, 300.0, 0);
+        m_Player->addComponent<Engine::VelocityComponent>(0, 0);
+        m_Player->addComponent<Engine::CollisionComponent>(25, 25);
+        m_Player->addComponent<Engine::RigitBodyComponent>(1);
+        m_Player->addComponent<Engine::RenderComponent>(vertices, indexes,
+                                                        m_Shader, 25, 25);
+        m_Player->addComponent<Engine::KeyboardControlComponent>(
+            Engine::KeyCode::Space, Engine::KeyCode::D, Engine::KeyCode::A);
+
+        ////////////////////////////////////////////////////////////////
+        // Other ///////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////
+
+        vertices = {
+            -1.0, -1.0, 0.0, 0.0, 0.0, 1.0,
+
+            -1.0, 1.0,  0.0, 0.0, 0.0, 1.0,
+
+            1.0,  -1.0, 0.0, 0.0, 0.0, 1.0,
+        };
+
+        indexes = {0, 1, 2};
+
+        auto entity3 = addEntity("box");
+        entity3->addComponent<Engine::LocationComponent>(400.0, 75.0, 0);
+        entity3->addComponent<Engine::ObstacleComponent>();
+        entity3->addComponent<Engine::SlopeComponent>(Engine::SlopeType::Left);
+        entity3->addComponent<Engine::CollisionComponent>(50, 50);
+        entity3->addComponent<Engine::RenderComponent>(vertices, indexes,
+                                                       m_Shader, 50, 50);
+
+        vertices = {
+            -1.0, -1.0, 0.0, 0.0, 0.0, 1.0,
+
+            1.0,  1.0,  0.0, 0.0, 0.0, 1.0,
+
+            1.0,  -1.0, 0.0, 0.0, 0.0, 1.0,
+        };
+
+        indexes = {0, 1, 2};
+
+        auto entity5 = addEntity("box");
+        entity5->addComponent<Engine::LocationComponent>(300.0, 75.0, 0);
+        entity5->addComponent<Engine::ObstacleComponent>();
+        entity5->addComponent<Engine::SlopeComponent>(Engine::SlopeType::Right);
+        entity5->addComponent<Engine::CollisionComponent>(50, 50);
+        entity5->addComponent<Engine::RenderComponent>(vertices, indexes,
+                                                       m_Shader, 50, 50);
 
         vertices = {
             -1.0, -1.0, 0.0, 0.0, 0.0, 1.0,
@@ -283,7 +315,7 @@ class MyLayer : public Engine::Layer {
         auto entity6 = addEntity("box");
         entity6->addComponent<Engine::LocationComponent>(100.0, 75.0, 0);
         entity6->addComponent<Engine::ObstacleComponent>();
-        entity6->addComponent<Engine::SlopeComponent>(true);
+        entity6->addComponent<Engine::SlopeComponent>(Engine::SlopeType::Left);
         entity6->addComponent<Engine::CollisionComponent>(50, 50);
         entity6->addComponent<Engine::RenderComponent>(vertices, indexes,
                                                        m_Shader, 50, 50);
@@ -301,33 +333,10 @@ class MyLayer : public Engine::Layer {
         auto entity7 = addEntity("box");
         entity7->addComponent<Engine::LocationComponent>(200.0, 75.0, 0);
         entity7->addComponent<Engine::ObstacleComponent>();
-        entity7->addComponent<Engine::SlopeComponent>(false);
+        entity7->addComponent<Engine::SlopeComponent>(Engine::SlopeType::Right);
         entity7->addComponent<Engine::CollisionComponent>(50, 50);
         entity7->addComponent<Engine::RenderComponent>(vertices, indexes,
                                                        m_Shader, 50, 50);
-
-        vertices = {
-            -1.0, -1.0, 0.0, 0.0, 1.0, 0.0,
-
-            -1.0, 1.0,  0.0, 0.0, 1.0, 0.0,
-
-            1.0,  -1.0, 0.0, 0.0, 1.0, 0.0,
-
-            1.0,  1.0,  0.0, 0.0, 1.0, 0.0,
-        };
-
-        indexes = {0, 1, 2, 1, 3, 2};
-
-        m_Player = addEntity("player");
-        m_Player->addComponent<Engine::CameraComponent>();
-        m_Player->addComponent<Engine::LocationComponent>(250.0, 300.0, 0);
-        m_Player->addComponent<Engine::VelocityComponent>(0, 0);
-        m_Player->addComponent<Engine::CollisionComponent>(25, 25);
-        m_Player->addComponent<Engine::RigitBodyComponent>(1);
-        m_Player->addComponent<Engine::RenderComponent>(vertices, indexes,
-                                                        m_Shader, 25, 25);
-        m_Player->addComponent<Engine::KeyboardControlComponent>(
-            Engine::KeyCode::Space, Engine::KeyCode::D, Engine::KeyCode::A);
     }
 
     virtual void onUpdate() override {}

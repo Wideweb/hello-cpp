@@ -3,6 +3,21 @@
 
 namespace Engine {
 
+GLenum getBaseType(ShaderDataType type) {
+    switch (type) {
+    case ShaderDataType::Float:
+        return GL_FLOAT;
+    case ShaderDataType::Float2:
+        return GL_FLOAT;
+    case ShaderDataType::Float3:
+        return GL_FLOAT;
+    case ShaderDataType::Float4:
+        return GL_FLOAT;
+    default:
+        return GL_FLOAT;
+    }
+}
+
 OpenGLVertexArray::OpenGLVertexArray() { glGenVertexArrays(1, &m_RendererID); }
 
 OpenGLVertexArray::~OpenGLVertexArray() {}
@@ -29,7 +44,7 @@ void OpenGLVertexArray::addVertexBuffer(
         glEnableVertexAttribArray(index);
         GL_CHECK();
         glVertexAttribPointer(
-            index, element.getElementCount(), element.getBaseType(), GL_FALSE,
+            index, element.getElementCount(), getBaseType(element.type), GL_FALSE,
             layout.getStride(), reinterpret_cast<void *>(element.offset));
         GL_CHECK();
         index++;

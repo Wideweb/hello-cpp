@@ -111,7 +111,7 @@ void CollisionSystem::exec(std::vector<std::shared_ptr<Entity>> &entities) {
                     continue;
                 }
 
-                if (obstacleSlope->right) {
+                if (obstacleSlope->type == SlopeType::Right) {
                     if (fromRight && !fromUp) {
                         toRightSide();
                         continue;
@@ -136,7 +136,7 @@ void CollisionSystem::exec(std::vector<std::shared_ptr<Entity>> &entities) {
                     }
                 }
 
-                if (obstacleSlope->left) {
+                if (obstacleSlope->type == SlopeType::Left) {
                     if (fromLeft && !fromUp) {
                         toLeftSide();
                         continue;

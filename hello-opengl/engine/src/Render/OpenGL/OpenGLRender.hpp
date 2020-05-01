@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Render.hpp"
+#include "glad/glad.h"
 #include <memory>
 
 namespace Engine {

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "glad/glad.h"
 #include <string>
 #include <vector>
 
@@ -46,21 +45,6 @@ struct BufferElement {
             return 4;
         default:
             return 0;
-        }
-    }
-
-    GLenum getBaseType() const {
-        switch (type) {
-        case ShaderDataType::Float:
-            return GL_FLOAT;
-        case ShaderDataType::Float2:
-            return GL_FLOAT;
-        case ShaderDataType::Float3:
-            return GL_FLOAT;
-        case ShaderDataType::Float4:
-            return GL_FLOAT;
-        default:
-            return GL_FLOAT;
         }
     }
 };
