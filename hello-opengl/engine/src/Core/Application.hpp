@@ -1,10 +1,12 @@
 #pragma once
 
 #include "Camera.hpp"
+#include "EventHandler.hpp"
 #include "Input.hpp"
 #include "Layer.hpp"
 #include "Render.hpp"
 #include "SystemStack.hpp"
+#include "TextureManager.hpp"
 #include "Time.hpp"
 #include "Window.hpp"
 #include <memory>
@@ -19,6 +21,8 @@ class Application {
     std::unique_ptr<Input> m_Input;
     std::unique_ptr<Render> m_Render;
     std::unique_ptr<Camera> m_Camera;
+    std::unique_ptr<TextureManager> m_Texture;
+    std::unique_ptr<EventHandler> m_EventHandler;
     std::vector<Layer *> m_LayerStack;
     SystemStack m_SystemStack;
     Time m_Time;
@@ -42,6 +46,8 @@ class Application {
     Render &getRender() { return *m_Render; }
     Camera &getCamera() { return *m_Camera; }
     Time &getTime() { return m_Time; }
+    TextureManager &getTextures() { return *m_Texture; }
+    EventHandler &getEventHandler() { return *m_EventHandler; }
 
     static Application &get() { return *s_Instance; }
 };

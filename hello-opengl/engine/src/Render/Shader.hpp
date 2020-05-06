@@ -18,6 +18,12 @@ class Shader {
     virtual void setMatrix4(const std::string &name,
                             const std::vector<float> &matrix) = 0;
 
+    virtual void setMatrix2x3(const std::string &name,
+                              const std::vector<float> &matrix) = 0;
+
+    virtual void setMatrix2(const std::string &name,
+                            const std::vector<float> &matrix) = 0;
+
     static Shader *create(const std::string &vertexSrc,
                           const std::string &fragmentSrc);
 };

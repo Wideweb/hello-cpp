@@ -11,6 +11,7 @@ namespace Engine {
 
 void CollisionSystem::exec(std::vector<std::shared_ptr<Entity>> &entities) {
     auto &app = Application::get();
+    auto eventHandler = app.getEventHandler();
 
     for (auto entity : entities) {
         if (entity->hasComponent<CollisionComponent>()) {
@@ -64,6 +65,11 @@ void CollisionSystem::exec(std::vector<std::shared_ptr<Entity>> &entities) {
                 if (!hasCollision) {
                     continue;
                 }
+
+                BeginCollisionEvent event;
+                event.first = entity->getName();
+                event.second = obstacle->getName();
+                eventHandler.send<BeginCollisionEvent>(event);
 
                 const auto toTopSide = [&]() {
                     entityVelocity->y = 0;

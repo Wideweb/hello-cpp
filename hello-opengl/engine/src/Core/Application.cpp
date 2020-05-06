@@ -13,6 +13,8 @@ Application::Application() {
     m_Input = std::unique_ptr<Input>(Input::create());
     m_Render = std::unique_ptr<Render>(Render::create());
     m_Camera = std::unique_ptr<Camera>(new Camera());
+    m_Texture = std::unique_ptr<TextureManager>(new TextureManager());
+    m_EventHandler = std::unique_ptr<EventHandler>(new EventHandler());
 
     initialize();
 
@@ -20,7 +22,7 @@ Application::Application() {
 }
 
 void Application::initialize() {
-    m_Window->init({600, 600});
+    m_Window->init({960, 540});
     m_Window->setMouseEventCallback(
         std::bind(&Application::onMouseEvent, this, std::placeholders::_1));
     m_Window->setWindowEventCallback(
@@ -29,7 +31,7 @@ void Application::initialize() {
 }
 
 void Application::run() {
-    m_Render->setClearColor(0.0, 0.0, 0.0, 1.0);
+    m_Render->setClearColor(0.0, 0.1, 0.1, 1.0);
     m_Time.tick();
 
     while (m_Running) {

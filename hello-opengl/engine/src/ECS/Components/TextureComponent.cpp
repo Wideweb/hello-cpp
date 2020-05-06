@@ -2,14 +2,12 @@
 
 namespace Engine {
 
-TextureComponent::TextureComponent(const std::string &path,
+TextureComponent::TextureComponent(const std::string &name,
                                    std::vector<float> &vertices,
                                    std::vector<uint32_t> &indexes,
                                    std::shared_ptr<Engine::Shader> shader,
                                    int width, int height)
-    : shader(shader), width(width), height(height) {
-    texture.reset(Texture::create(path));
-
+    : name(name), shader(shader), width(width), height(height) {
     vertexArray.reset(Engine::VertexArray::create());
     vertexArray->bind();
 

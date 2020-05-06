@@ -14,6 +14,7 @@ set(SOURCE_LIB
     src/Core/SDL/SDLInput.cpp
     src/Core/Layer.cpp
     src/Core/Time.cpp
+    src/Core/TextureManager.cpp
     src/Render/Buffer.cpp
     src/Render/Render.cpp
     src/Render/Shader.cpp
@@ -38,6 +39,7 @@ set(SOURCE_LIB
     src/ECS/Systems/MorphingSystem.cpp
     src/ECS/Systems/TextureSystem.cpp
     src/ECS/Systems/AISystem.cpp
+    src/Math.cpp
 )	
 
 add_library(engine SHARED ${SOURCE_LIB})
@@ -49,6 +51,7 @@ target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/Core/SDL
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/Render
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/Render/OpenGL
+                                         ${CMAKE_CURRENT_SOURCE_DIR}/src/Events
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/ECS
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/ECS/Components
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/ECS/Systems

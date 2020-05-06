@@ -22,6 +22,10 @@ class OpenGLShader : public Shader {
                            float value2) override;
     virtual void setMatrix4(const std::string &name,
                             const std::vector<float> &matrix) override;
+    virtual void setMatrix2x3(const std::string &name,
+                              const std::vector<float> &matrix) override;
+    virtual void setMatrix2(const std::string &name,
+                            const std::vector<float> &matrix) override;
 
   private:
     void compile(const std::string &vertexSrc, const std::string &fragmentSrc);

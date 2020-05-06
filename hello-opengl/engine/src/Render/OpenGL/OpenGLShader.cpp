@@ -138,4 +138,22 @@ void OpenGLShader::setMatrix4(const std::string &name,
     GL_CHECK();
 }
 
+void OpenGLShader::setMatrix2x3(const std::string &name,
+                                const std::vector<float> &matrix) {
+    bind();
+    GLint location = glGetUniformLocation(m_Program, name.c_str());
+    GL_CHECK();
+    glUniformMatrix2x3fv(location, 1, GL_FALSE, matrix.data());
+    GL_CHECK();
+}
+
+void OpenGLShader::setMatrix2(const std::string &name,
+                              const std::vector<float> &matrix) {
+    bind();
+    GLint location = glGetUniformLocation(m_Program, name.c_str());
+    GL_CHECK();
+    glUniformMatrix2fv(location, 1, GL_FALSE, matrix.data());
+    GL_CHECK();
+}
+
 } // namespace Engine
