@@ -234,15 +234,15 @@ class MyLayer : public Engine::Layer {
                                                             55.0 + i * 16);
             stairs->addComponent<Engine::TextureComponent>(
                 "stairs", textVertices, textIndexes, m_TextureShader, 50, 20);
-
-            auto stairsSlope = addEntity("stairs-slope");
-            std::vector<Engine::Vec2> collider = {
-                Engine::Vec2(-7, -8), Engine::Vec2(8, 8), Engine::Vec2(8, -8)};
-            stairsSlope->addComponent<Engine::LocationComponent>(350.0 + i * 16,
-                                                                 55.0 + i * 16);
-            stairsSlope->addComponent<Engine::ObstacleComponent>();
-            stairsSlope->addComponent<Engine::CollisionComponent>(collider);
         }
+
+        auto stairsSlope = addEntity("stairs-slope");
+        std::vector<Engine::Vec2> collider = {
+            Engine::Vec2(0, -5), Engine::Vec2(80, 75), Engine::Vec2(80, -5)};
+
+        stairsSlope->addComponent<Engine::LocationComponent>(340.0, 50.0);
+        stairsSlope->addComponent<Engine::ObstacleComponent>();
+        stairsSlope->addComponent<Engine::CollisionComponent>(collider);
 
         ////////////////////////////////////////////////////////////////
         // Texture - Grass //////////////////////////////////////////////
