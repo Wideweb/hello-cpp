@@ -1,173 +1,92 @@
 #include "CollisionSystem.hpp"
 #include "Application.hpp"
-#include "CollisionComponent.hpp"
 #include "LocationComponent.hpp"
 #include "ObstacleComponent.hpp"
-#include "SlopeComponent.hpp"
-#include "VelocityComponent.hpp"
 #include <cmath>
 
 namespace Engine {
 
-void CollisionSystem::exec(std::vector<std::shared_ptr<Entity>> &entities) {
+void CollisionSystem::exec(EntityManager &entities) {
     auto &app = Application::get();
     auto eventHandler = app.getEventHandler();
 
-    for (auto entity : entities) {
-        if (entity->hasComponent<CollisionComponent>()) {
-            auto entitylocation = entity->getComponent<LocationComponent>();
-            auto entityCollider = entity->getComponent<CollisionComponent>();
+    std::vector<CollisionShape> colliders;
+    for (auto &entity : entities.getAll()) {
 
-            if (entity->hasComponent<ObstacleComponent>()) {
-                continue;
-            }
-
-            auto entityVelocity = entity->getComponent<VelocityComponent>();
-
-            for (auto obstacle : entities) {
-                if (!obstacle->hasComponent<ObstacleComponent>()) {
-                    continue;
-                }
-
-                auto obstacleCollider =
-                    obstacle->getComponent<CollisionComponent>();
-                auto obstacleLocation =
-                    obstacle->getComponent<LocationComponent>();
-                auto obstacleSlope = obstacle->getComponent<SlopeComponent>();
-
-                float entityWidth = entityCollider->width;
-                float entityHeight = entityCollider->height;
-                float entityX = entitylocation->x - entityWidth / 2;
-                float entityY = entitylocation->y - entityHeight / 2;
-                float nextEntityX = entityX + entityVelocity->x;
-                float nextEntityY = entityY + entityVelocity->y;
-
-                float obstacleWidth = obstacleCollider->width;
-                float obstacleHeight = obstacleCollider->height;
-                float obstacleX = obstacleLocation->x - obstacleWidth / 2;
-                float obstacleY = obstacleLocation->y - obstacleHeight / 2;
-                float nextObstacleX = obstacleX;
-                float nextObstacleY = obstacleY;
-
-                if (obstacle->hasComponent<VelocityComponent>()) {
-                    auto obstacleVelocity =
-                        obstacle->getComponent<VelocityComponent>();
-                    nextObstacleX += obstacleVelocity->x;
-                    nextObstacleY += obstacleVelocity->y;
-                }
-
-                const bool hasCollision =
-                    (nextEntityX <= nextObstacleX + obstacleWidth) &&
-                    (nextEntityX + entityWidth >= nextObstacleX) &&
-                    (nextEntityY <= nextObstacleY + obstacleHeight) &&
-                    (nextEntityY + entityWidth >= nextObstacleY);
-
-                if (!hasCollision) {
-                    continue;
-                }
-
-                BeginCollisionEvent event;
-                event.first = entity->getName();
-                event.second = obstacle->getName();
-                eventHandler.send<BeginCollisionEvent>(event);
-
-                const auto toTopSide = [&]() {
-                    entityVelocity->y = 0;
-                    entitylocation->y =
-                        nextObstacleY + obstacleHeight + entityHeight / 2;
-                };
-
-                const auto headToBottomSide = [&]() {
-                    entityVelocity->y = 0;
-                    entitylocation->y = nextObstacleY - entityHeight / 2;
-                };
-
-                const auto toBottomSide = [&]() {
-                    entityVelocity->y = 0;
-                    entitylocation->y = nextObstacleY + entityHeight / 2;
-                };
-
-                const auto toLeftSide = [&]() {
-                    entityVelocity->x = 0;
-                    entitylocation->x = nextObstacleX - entityWidth / 2;
-                };
-
-                const auto toRightSide = [&]() {
-                    entityVelocity->x = 0;
-                    entitylocation->x =
-                        nextObstacleX + obstacleWidth + entityWidth / 2;
-                };
-
-                const bool fromUp = entityY + 1 >= obstacleY + obstacleHeight;
-                const bool fromBottom = entityY + entityHeight <= obstacleY + 1;
-                const bool fromLeft = entityX + entityWidth <= obstacleX;
-                const bool fromRight = entityX >= obstacleX + obstacleWidth;
-
-                if (!obstacleSlope) {
-                    if (fromUp) {
-                        toTopSide();
-                    } else if (fromBottom) {
-                        headToBottomSide();
-                    } else if (fromLeft) {
-                        toLeftSide();
-                    } else if (fromRight) {
-                        toRightSide();
-                    }
-
-                    continue;
-                }
-
-                if (obstacleSlope->type == SlopeType::Right) {
-                    if (fromRight && !fromUp) {
-                        toRightSide();
-                        continue;
-                    }
-
-                    float t = (nextEntityX + entityWidth - nextObstacleX) /
-                              obstacleWidth;
-
-                    if (t > 1 && t <= 1 + entityWidth / obstacleWidth) {
-                        t = 1;
-                    }
-
-                    if (t < 0 || t > 1) {
-                        continue;
-                    }
-
-                    const float y = nextObstacleY + t * obstacleHeight;
-
-                    if (nextEntityY < y) {
-                        entitylocation->y = y + entityHeight / 2;
-                        entityVelocity->y = 0;
-                    }
-                }
-
-                if (obstacleSlope->type == SlopeType::Left) {
-                    if (fromLeft && !fromUp) {
-                        toLeftSide();
-                        continue;
-                    }
-
-                    float t = (nextEntityX - nextObstacleX) / obstacleWidth;
-
-                    if (t < 0 && t > -entityWidth / obstacleWidth) {
-                        t = 0;
-                    }
-
-                    if (t < 0 || t > 1) {
-                        continue;
-                    }
-
-                    const float y = nextObstacleY + (1 - t) * obstacleHeight;
-
-                    if (nextEntityY < y) {
-                        entitylocation->y = y + entityHeight / 2;
-                        entityVelocity->y = 0;
-                    }
-                }
-            }
+        if (!entity->hasComponent<CollisionComponent>()) {
+            continue;
         }
+
+        auto collision = entity->getComponent<CollisionComponent>();
+        auto location = entity->getComponent<LocationComponent>();
+
+        Vec2 move(location->x, location->y);
+
+        if (entity->hasComponent<VelocityComponent>()) {
+            auto velocity = entity->getComponent<VelocityComponent>();
+            move = move + Vec2(velocity->x, velocity->y);
+        }
+
+        std::vector<Vec2> vertices;
+        std::transform(collision->vertices.begin(), collision->vertices.end(),
+                       std::back_inserter(vertices),
+                       [&](Vec2 &v) { return v + move; });
+
+        colliders.emplace_back(entity->getName(), vertices,
+                               entity->hasComponent<ObstacleComponent>());
     }
+
+    std::vector<CollisionResult> results =
+        m_CollisionDetection.detect(colliders);
+
+    for (auto &result : results) {
+        auto entity = entities.get(result.shape1);
+        auto location = entity->getComponent<LocationComponent>();
+        auto velocity = entity->getComponent<VelocityComponent>();
+
+        location->x -= result.mtv.x;
+        location->y -= result.mtv.y;
+
+        if (velocity->x * result.mtv.x < 0) {
+            location->x += velocity->x;
+            velocity->x = 0;
+        }
+
+        if (velocity->y * result.mtv.y > 0) {
+            location->y += velocity->y;
+            velocity->y = 0;
+        }
+
+        BeginCollisionEvent event;
+        event.first = result.shape1;
+        event.second = result.shape2;
+        eventHandler.send<BeginCollisionEvent>(event);
+    }
+
+    // for (size_t i = 0; i < entitiesToCheck.size() - 1; i++) {
+    //     auto thisEntity = entitiesToCheck[i];
+
+    //     for (size_t j = i + 1; j < entitiesToCheck.size(); j++) {
+    //         auto thatEntity = entitiesToCheck[j];
+
+    //         CollisionResult collision =
+    //             m_CollisionDetection.detect()
+    //                 thisCollider.checkCollision(thatCollider);
+
+    //         if (collision == CollisionResult::None) {
+    //             EndCollisionEvent event;
+    //             event.first = thatEntity->getName();
+    //             event.second = thisEntity->getName();
+    //             eventHandler.send<EndCollisionEvent>(event);
+    //             continue;
+    //         }
+
+    //         BeginCollisionEvent event;
+    //         event.first = thatEntity->getName();
+    //         event.second = thisEntity->getName();
+    //         eventHandler.send<BeginCollisionEvent>(event);
+    //     }
+    // }
 }
 
 } // namespace Engine

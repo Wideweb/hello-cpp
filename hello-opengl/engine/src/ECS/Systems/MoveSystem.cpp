@@ -5,10 +5,10 @@
 
 namespace Engine {
 
-void MoveSystem ::exec(std::vector<std::shared_ptr<Entity>> &entities) {
+void MoveSystem ::exec(EntityManager &entities) {
     auto &app = Application::get();
 
-    for (auto entity : entities) {
+    for (auto entity : entities.getAll()) {
         if (entity->hasComponent<VelocityComponent>()) {
             auto c_velocity = entity->getComponent<VelocityComponent>();
             auto c_location = entity->getComponent<LocationComponent>();

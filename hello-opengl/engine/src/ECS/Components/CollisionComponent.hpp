@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Entity.hpp"
+#include "Math.hpp"
 #include <string>
 
 namespace Engine {
@@ -17,9 +18,20 @@ struct EndCollisionEvent {
 
 class CollisionComponent : public Component {
   public:
-    int width;
-    int height;
-    CollisionComponent(int width, int height) : width(width), height(height) {}
+    std::vector<Vec2> vertices;
+
+    CollisionComponent(float width, float height) {
+        float wHalf = width / 2;
+        float hHalf = height / 2;
+
+        vertices.emplace_back(-wHalf, -hHalf);
+        vertices.emplace_back(-wHalf, hHalf);
+        vertices.emplace_back(wHalf, hHalf);
+        vertices.emplace_back(wHalf, -hHalf);
+    }
+
+    CollisionComponent(const std::vector<Vec2> &vertices)
+        : vertices(vertices) {}
 };
 
 } // namespace Engine

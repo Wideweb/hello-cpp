@@ -12,7 +12,7 @@ class Layer {
 
   public:
     std::shared_ptr<Entity> addEntity(std::string name);
-    std::vector<std::shared_ptr<Entity>> &getEntities();
+    EntityManager &getEntities();
 
     virtual void onAttach(){};
     virtual void onDetach(){};

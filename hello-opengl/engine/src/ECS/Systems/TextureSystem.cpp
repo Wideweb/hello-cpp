@@ -7,7 +7,7 @@
 
 namespace Engine {
 
-void TextureSystem::exec(std::vector<std::shared_ptr<Entity>> &entities) {
+void TextureSystem::exec(EntityManager &entities) {
     auto &render = Application::get().getRender();
     auto &window = Application::get().getWindow();
     auto &camera = Application::get().getCamera();
@@ -16,7 +16,7 @@ void TextureSystem::exec(std::vector<std::shared_ptr<Entity>> &entities) {
     float windowWidth = static_cast<float>(window.getWidth());
     float windowHeight = static_cast<float>(window.getHeight());
 
-    for (auto entity : entities) {
+    for (auto entity : entities.getAll()) {
         if (entity->hasComponent<TextureComponent>()) {
             auto c_texture = entity->getComponent<TextureComponent>();
             auto c_location = entity->getComponent<LocationComponent>();

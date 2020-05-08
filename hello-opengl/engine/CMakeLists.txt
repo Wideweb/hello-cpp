@@ -39,6 +39,9 @@ set(SOURCE_LIB
     src/ECS/Systems/MorphingSystem.cpp
     src/ECS/Systems/TextureSystem.cpp
     src/ECS/Systems/AISystem.cpp
+    src/Collision/CollisionDetection.cpp
+    src/Collision/BroadPhaseAlgorithm.cpp
+    src/Collision/NarrowPhaseAlgorithm.cpp
     src/Math.cpp
 )	
 
@@ -58,6 +61,8 @@ target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/AI/BehaviourTree
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/AI/BehaviourTree/Tasks
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/AI/BehaviourTree/TaskDecorators
+                                         ${CMAKE_CURRENT_SOURCE_DIR}/src/Collision
+                                         ${CMAKE_CURRENT_SOURCE_DIR}/src/Collision/Shapes
                                          ${CMAKE_CURRENT_SOURCE_DIR}/external)
 
 find_package(SDL2 REQUIRED)

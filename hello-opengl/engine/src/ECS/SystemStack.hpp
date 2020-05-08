@@ -9,7 +9,7 @@ class SystemStack {
 
   public:
     SystemStack();
-    void exec(std::vector<std::shared_ptr<Entity>> &entities);
+    void exec(EntityManager &entities);
 };
 
 } // namespace Engine

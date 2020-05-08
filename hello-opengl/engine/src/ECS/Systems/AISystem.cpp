@@ -4,10 +4,10 @@
 
 namespace Engine {
 
-void AISystem::exec(std::vector<std::shared_ptr<Entity>> &entities) {
+void AISystem::exec(EntityManager &entities) {
     auto &app = Application::get();
 
-    for (auto entity : entities) {
+    for (auto entity : entities.getAll()) {
         if (entity->hasComponent<AIComponent>()) {
             auto ai = entity->getComponent<AIComponent>();
             ai->tree->update();

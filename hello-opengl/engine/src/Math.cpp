@@ -11,6 +11,18 @@ Vec2 Vec2::operator+(const Vec2 &vec) { return Vec2(x + vec.x, y + vec.y); }
 
 Vec2 Vec2::operator-(const Vec2 &vec) { return Vec2(x - vec.x, y - vec.y); }
 
+Vec2 Vec2::operator/(float value) { return Vec2(x / value, y / value); }
+
+Vec2 Vec2::operator*(float value) { return Vec2(x * value, y * value); }
+
+float Vec2::magnitude() { return std::sqrt(x * x + y * y); }
+
+Vec2 Vec2::unit() { return Vec2(x, y) / magnitude(); }
+
+Vec2 Vec2::normalL() { return Vec2(-x, y); }
+
+float Vec2::dot(const Vec2 &vec) { return x * vec.x + y * vec.y; }
+
 Mat2 Mat2::identity() {
     Mat2 matrix;
     matrix.col1.x = 1;

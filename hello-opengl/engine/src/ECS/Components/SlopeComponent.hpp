@@ -4,7 +4,7 @@
 
 namespace Engine {
 
-enum class SlopeType { Left = 0, Right = 1 };
+enum class SlopeType { None = 0, Left = 1, Right = 2 };
 
 class SlopeComponent : public Component {
   public:

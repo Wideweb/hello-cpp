@@ -5,10 +5,10 @@
 
 namespace Engine {
 
-void PhysicsSystem::exec(std::vector<std::shared_ptr<Entity>> &entities) {
+void PhysicsSystem::exec(EntityManager &entities) {
     auto &app = Application::get();
 
-    for (auto entity : entities) {
+    for (auto entity : entities.getAll()) {
         if (entity->hasComponent<RigitBodyComponent>()) {
             auto c_rigitBody = entity->getComponent<RigitBodyComponent>();
             auto c_velocity = entity->getComponent<VelocityComponent>();

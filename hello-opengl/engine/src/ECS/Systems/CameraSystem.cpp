@@ -5,10 +5,10 @@
 
 namespace Engine {
 
-void CameraSystem::exec(std::vector<std::shared_ptr<Entity>> &entities) {
+void CameraSystem::exec(EntityManager &entities) {
     auto &app = Application::get();
 
-    for (auto entity : entities) {
+    for (auto entity : entities.getAll()) {
         if (entity->hasComponent<CameraComponent>()) {
             auto c_location = entity->getComponent<LocationComponent>();
             auto c_camera = entity->getComponent<CameraComponent>();

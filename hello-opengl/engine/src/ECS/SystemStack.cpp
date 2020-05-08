@@ -25,7 +25,7 @@ SystemStack::SystemStack() {
     m_Systems.push_back(new TextureSystem());
 }
 
-void SystemStack::exec(std::vector<std::shared_ptr<Entity>> &entities) {
+void SystemStack::exec(EntityManager &entities) {
     for (auto system : m_Systems) {
         system->exec(entities);
     }

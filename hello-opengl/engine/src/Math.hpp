@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 
 namespace Engine {
@@ -13,6 +15,13 @@ struct Vec2 {
 
     Vec2 operator+(const Vec2 &vec);
     Vec2 operator-(const Vec2 &vec);
+    Vec2 operator/(float value);
+    Vec2 operator*(float value);
+
+    float magnitude();
+    Vec2 unit();
+    Vec2 normalL();
+    float dot(const Vec2 &vec);
 };
 
 struct Mat2 {

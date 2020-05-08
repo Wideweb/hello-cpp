@@ -6,10 +6,10 @@
 
 namespace Engine {
 
-void ControlSystem::exec(std::vector<std::shared_ptr<Entity>> &entities) {
+void ControlSystem::exec(EntityManager &entities) {
     auto &input = Application::get().getInput();
 
-    for (auto entity : entities) {
+    for (auto entity : entities.getAll()) {
         if (entity->hasComponent<KeyboardControlComponent>()) {
             auto keyboard = entity->getComponent<KeyboardControlComponent>();
             auto velocity = entity->getComponent<VelocityComponent>();

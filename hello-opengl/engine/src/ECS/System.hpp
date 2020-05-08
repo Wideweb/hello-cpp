@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Entity.hpp"
+#include "EntityManager.hpp"
 #include <vector>
 
 namespace Engine {
 
 class System {
   public:
-    virtual void exec(std::vector<std::shared_ptr<Entity>> &entities) = 0;
+    virtual void exec(EntityManager &entities) = 0;
 };
 
 } // namespace Engine
