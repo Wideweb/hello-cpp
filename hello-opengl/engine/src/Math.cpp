@@ -19,7 +19,7 @@ float Vec2::magnitude() { return std::sqrt(x * x + y * y); }
 
 Vec2 Vec2::unit() { return Vec2(x, y) / magnitude(); }
 
-Vec2 Vec2::normalL() { return Vec2(-x, y); }
+Vec2 Vec2::normalL() { return Vec2(y, -x); }
 
 float Vec2::dot(const Vec2 &vec) { return x * vec.x + y * vec.y; }
 

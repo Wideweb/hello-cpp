@@ -60,8 +60,8 @@ NarrowPhaseAlgorithm::getAxis(const std::vector<Vec2> &corners) {
         axis.push_back(d.normalL().unit());
     }
 
-    Vec2 v1 = corners.front();
-    Vec2 v2 = corners.back();
+    Vec2 v1 = corners.back();
+    Vec2 v2 = corners.front();
     Vec2 d = v2 - v1;
     axis.push_back(d.normalL().unit());
 

@@ -127,6 +127,8 @@ class MyLayer : public Engine::Layer {
         textures.load("boy", "./assets/character.png");
         textures.load("background", "./assets/background.png");
         textures.load("front", "./assets/front.png");
+        textures.load("slope", "./assets/slope.png");
+        textures.load("slope-front", "./assets/slope-front.png");
 
         m_Shader.reset(Engine::Shader::create(vertexShader, fragmentShader));
 
@@ -147,7 +149,7 @@ class MyLayer : public Engine::Layer {
         std::vector<uint32_t> indexes = {0, 1, 2, 1, 3, 2};
 
         auto sky = addEntity("sky");
-        sky->addComponent<Engine::LocationComponent>(480.0, 480.0, true);
+        sky->addComponent<Engine::LocationComponent>(480.0, 470.0, true);
         sky->addComponent<Engine::RenderComponent>(vertices, indexes, m_Shader,
                                                    960, 150);
 
@@ -161,15 +163,30 @@ class MyLayer : public Engine::Layer {
             1.0,  1.0,  0.0, 0.0, 0.17, 0.15,
         };
 
-        auto front = addEntity("front");
-        front->addComponent<Engine::LocationComponent>(480.0, 60.0, true);
-        front->addComponent<Engine::RenderComponent>(vertices, indexes,
-                                                     m_Shader, 960, 120);
+        auto frontFill = addEntity("frontFill");
+        frontFill->addComponent<Engine::LocationComponent>(400.0, 60.0);
+        frontFill->addComponent<Engine::RenderComponent>(vertices, indexes,
+                                                         m_Shader, 800, 120);
 
         auto ground = addEntity("ground");
-        ground->addComponent<Engine::LocationComponent>(500.0, 175.0, true);
+        ground->addComponent<Engine::LocationComponent>(400.0, 175.0);
         ground->addComponent<Engine::ObstacleComponent>();
-        ground->addComponent<Engine::CollisionComponent>(2000, 50);
+        ground->addComponent<Engine::CollisionComponent>(800, 50);
+
+        // 800 1030 915
+        // 200 90
+        auto slope = addEntity("slope");
+        std::vector<Engine::Vec2> collider = {
+            Engine::Vec2(0, 0), Engine::Vec2(0, -119), Engine::Vec2(235, -119)};
+
+        slope->addComponent<Engine::LocationComponent>(800, 200.0);
+        slope->addComponent<Engine::ObstacleComponent>();
+        slope->addComponent<Engine::CollisionComponent>(collider);
+
+        ground = addEntity("ground");
+        ground->addComponent<Engine::LocationComponent>(1430.0, 65.0);
+        ground->addComponent<Engine::ObstacleComponent>();
+        ground->addComponent<Engine::CollisionComponent>(800, 50);
 
         ////////////////////////////////////////////////////////////////
         // Textures ////////////////////////////////////////////////////
@@ -192,20 +209,37 @@ class MyLayer : public Engine::Layer {
         //////////////////////////////////////////////////////////////
         // Texture - Forest //////////////////////////////////////////
         //////////////////////////////////////////////////////////////
-        for (size_t i = 0; i < 5; i++) {
-            auto background = addEntity("background");
-            background->addComponent<Engine::LocationComponent>(400 + 800 * i,
-                                                                370.0);
-            background->addComponent<Engine::TextureComponent>(
-                "background", textVertices, textIndexes, m_TextureShader, 800,
-                275);
 
-            auto front = addEntity("front");
-            front->addComponent<Engine::LocationComponent>(400 + 800 * i,
-                                                           150.0);
-            front->addComponent<Engine::TextureComponent>(
-                "front", textVertices, textIndexes, m_TextureShader, 800, 65);
-        }
+        auto background = addEntity("background");
+        background->addComponent<Engine::LocationComponent>(400, 370.0);
+        background->addComponent<Engine::TextureComponent>(
+            "background", textVertices, textIndexes, m_TextureShader, 800, 275);
+
+        auto front = addEntity("front");
+        front->addComponent<Engine::LocationComponent>(400, 145.0);
+        front->addComponent<Engine::TextureComponent>(
+            "front", textVertices, textIndexes, m_TextureShader, 800, 75);
+
+        background = addEntity("background");
+        background->addComponent<Engine::LocationComponent>(1430, 260.0);
+        background->addComponent<Engine::TextureComponent>(
+            "background", textVertices, textIndexes, m_TextureShader, 800, 275);
+
+        front = addEntity("front");
+        front->addComponent<Engine::LocationComponent>(1430, 35.0);
+        front->addComponent<Engine::TextureComponent>(
+            "front", textVertices, textIndexes, m_TextureShader, 800, 75);
+
+        auto slopeBackground = addEntity("slopeBackground");
+        slopeBackground->addComponent<Engine::LocationComponent>(900, 300.0);
+        slopeBackground->addComponent<Engine::TextureComponent>(
+            "slope", textVertices, textIndexes, m_TextureShader, 310, 350);
+
+        auto slopeFront = addEntity("slopeFront");
+        slopeFront->addComponent<Engine::LocationComponent>(910, 80.0);
+        slopeFront->addComponent<Engine::TextureComponent>(
+            "slope-front", textVertices, textIndexes, m_TextureShader, 265,
+            160);
 
         ////////////////////////////////////////////////////////////////
         // Texture - Mill //////////////////////////////////////////////
@@ -221,37 +255,38 @@ class MyLayer : public Engine::Layer {
         ////////////////////////////////////////////////////////////////
         // Texture - Stairs ////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////
-        for (size_t i = 0; i < 5; i++) {
-            auto stairs = addEntity("stairs");
-            stairs->addComponent<Engine::LocationComponent>(350.0 + i * 16,
-                                                            205.0 + i * 16);
-            stairs->addComponent<Engine::TextureComponent>(
-                "stairs", textVertices, textIndexes, m_TextureShader, 50, 20);
-        }
+        // for (size_t i = 0; i < 5; i++) {
+        //     auto stairs = addEntity("stairs");
+        //     stairs->addComponent<Engine::LocationComponent>(350.0 + i * 16,
+        //                                                     205.0 + i * 16);
+        //     stairs->addComponent<Engine::TextureComponent>(
+        //         "stairs", textVertices, textIndexes, m_TextureShader, 50,
+        //         20);
+        // }
 
-        auto stairsSlope = addEntity("stairs-slope");
-        std::vector<Engine::Vec2> collider = {
-            Engine::Vec2(0, -5), Engine::Vec2(80, 75), Engine::Vec2(80, -5)};
+        // auto stairsSlope = addEntity("stairs-slope");
+        // collider = {Engine::Vec2(0, -5), Engine::Vec2(80, 75),
+        //             Engine::Vec2(80, -5)};
 
-        stairsSlope->addComponent<Engine::LocationComponent>(340.0, 200.0);
-        stairsSlope->addComponent<Engine::ObstacleComponent>();
-        stairsSlope->addComponent<Engine::CollisionComponent>(collider);
+        // stairsSlope->addComponent<Engine::LocationComponent>(340.0, 200.0);
+        // stairsSlope->addComponent<Engine::ObstacleComponent>();
+        // stairsSlope->addComponent<Engine::CollisionComponent>(collider);
 
         ////////////////////////////////////////////////////////////////
         // Texture - Grass //////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////
         auto grass = addEntity("grass");
-        grass->addComponent<Engine::LocationComponent>(500.0, 215.0);
+        grass->addComponent<Engine::LocationComponent>(500.0, 205.0);
         grass->addComponent<Engine::TextureComponent>(
             "grass-low", textVertices, textIndexes, m_TextureShader, 186, 56);
 
         auto grass2 = addEntity("grass");
-        grass2->addComponent<Engine::LocationComponent>(940.0, 192.0);
+        grass2->addComponent<Engine::LocationComponent>(1140.0, 92.0);
         grass2->addComponent<Engine::TextureComponent>(
             "grass-low", textVertices, textIndexes, m_TextureShader, 186, 56);
 
         auto grass3 = addEntity("grass");
-        grass3->addComponent<Engine::LocationComponent>(1300.0, 220.0);
+        grass3->addComponent<Engine::LocationComponent>(1400.0, 100.0);
         grass3->addComponent<Engine::TextureComponent>(
             "grass-low", textVertices, textIndexes, m_TextureShader, 186, 56);
 
@@ -259,39 +294,40 @@ class MyLayer : public Engine::Layer {
         // Texture - Lumberjack ////////////////////////////////////////
         ////////////////////////////////////////////////////////////////
         auto fireWood = addEntity("fireWood");
-        fireWood->addComponent<Engine::LocationComponent>(720.0, 215.0);
+        fireWood->addComponent<Engine::LocationComponent>(620.0, 215.0);
         fireWood->addComponent<Engine::TextureComponent>(
             "firewood", textVertices, textIndexes, m_TextureShader, 35, 15);
 
         auto fireWood2 = addEntity("fireWood");
-        fireWood2->addComponent<Engine::LocationComponent>(740.0, 215.0);
+        fireWood2->addComponent<Engine::LocationComponent>(640.0, 215.0);
         fireWood2->addComponent<Engine::TextureComponent>(
             "firewood", textVertices, textIndexes, m_TextureShader, 35, 15);
 
         auto lumberjack = addEntity("lumberjack");
-        lumberjack->addComponent<Engine::LocationComponent>(750.0, 230.0);
+        lumberjack->addComponent<Engine::LocationComponent>(650.0, 230.0);
         lumberjack->addComponent<Engine::TextureComponent>(
             "lumberjack", textVertices, textIndexes, m_TextureShader, 38, 58);
 
         auto lumberjackStumb = addEntity("lumberjack-stumb");
-        lumberjackStumb->addComponent<Engine::LocationComponent>(800.0, 210.0);
+        lumberjackStumb->addComponent<Engine::LocationComponent>(700.0, 210.0);
         lumberjackStumb->addComponent<Engine::TextureComponent>(
             "stumb-2", textVertices, textIndexes, m_TextureShader, 38, 32);
         lumberjackStumb->addComponent<Engine::ObstacleComponent>();
         lumberjackStumb->addComponent<Engine::CollisionComponent>(25, 32);
 
-        auto falledTree = addEntity("lumberjack-falled-tree");
-        falledTree->addComponent<Engine::LocationComponent>(940.0, 217.0);
-        falledTree->addComponent<Engine::TextureComponent>(
-            "falled-tree", textVertices, textIndexes, m_TextureShader, 166, 39);
-        falledTree->addComponent<Engine::ObstacleComponent>();
-        falledTree->addComponent<Engine::CollisionComponent>(145, 16);
+        // auto falledTree = addEntity("lumberjack-falled-tree");
+        // falledTree->addComponent<Engine::LocationComponent>(940.0, 217.0);
+        // falledTree->addComponent<Engine::TextureComponent>(
+        //     "falled-tree", textVertices, textIndexes, m_TextureShader, 166,
+        //     39);
+        // falledTree->addComponent<Engine::ObstacleComponent>();
+        // falledTree->addComponent<Engine::CollisionComponent>(145, 16);
 
         ////////////////////////////////////////////////////////////////
         // Texture - Home //////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////
         auto home = addEntity("home");
-        home->addComponent<Engine::LocationComponent>(1300.0, 280.0);
+        home->addComponent<Engine::LocationComponent>(1400.0, 160.0);
         home->addComponent<Engine::TextureComponent>(
             "home", textVertices, textIndexes, m_TextureShader, 240, 135);
 
@@ -299,7 +335,7 @@ class MyLayer : public Engine::Layer {
         // Texture - Grandmother ///////////////////////////////////////
         ////////////////////////////////////////////////////////////////
         auto grandmother = addEntity("grandmother");
-        grandmother->addComponent<Engine::LocationComponent>(1200.0, 220.0);
+        grandmother->addComponent<Engine::LocationComponent>(1300.0, 110.0);
         grandmother->addComponent<Engine::TextureComponent>(
             "grandmother", textVertices, textIndexes, m_TextureShader, 30, 45);
 
