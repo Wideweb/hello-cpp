@@ -6,8 +6,8 @@ TextureComponent::TextureComponent(const std::string &name,
                                    std::vector<float> &vertices,
                                    std::vector<uint32_t> &indexes,
                                    std::shared_ptr<Engine::Shader> shader,
-                                   int width, int height)
-    : name(name), shader(shader), width(width), height(height) {
+                                   int width, int height, Flip flip)
+    : name(name), shader(shader), width(width), height(height), flip(flip) {
     vertexArray.reset(Engine::VertexArray::create());
     vertexArray->bind();
 

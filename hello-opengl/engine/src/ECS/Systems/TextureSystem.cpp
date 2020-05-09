@@ -33,7 +33,7 @@ void TextureSystem::exec(EntityManager &entities) {
             Mat2x3 model = move * rotate * scale;
 
             Mat2 textureModel = Mat2::identity();
-            if (c_location->direction == Direction::Left) {
+            if (c_texture->flip == Flip::Y) {
                 textureModel = Mat2::flipY();
             }
 

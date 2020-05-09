@@ -19,8 +19,16 @@ void RenderSystem::exec(EntityManager &entities) {
             auto c_render = entity->getComponent<RenderComponent>();
             auto c_location = entity->getComponent<LocationComponent>();
 
-            float x = (c_location->x - camera.x) / windowWidth * 2.0 - 1;
-            float y = (c_location->y - camera.y) / windowHeight * 2.0 - 1;
+            float dx = c_location->x;
+            float dy = c_location->y;
+
+            if (!c_location->isStatic) {
+                dx -= camera.x;
+                dy -= camera.y;
+            }
+
+            float x = dx / windowWidth * 2.0 - 1;
+            float y = dy / windowHeight * 2.0 - 1;
 
             float scaleX = c_render->width / windowWidth;
             float scaleY = c_render->height / windowHeight;

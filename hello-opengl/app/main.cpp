@@ -114,19 +114,6 @@ class MyLayer : public Engine::Layer {
         auto &textures = app.getTextures();
 
         textures.load("stairs", "./assets/stairs.png");
-        textures.load("tree-trunk-1", "./assets/tree-trunk-1.png");
-        textures.load("tree-trunk-2", "./assets/tree-trunk-2.png");
-        textures.load("tree-trunk-3", "./assets/tree-trunk-3.png");
-        textures.load("tree-trunk-4", "./assets/tree-trunk-4.png");
-        textures.load("tree-trunk-5", "./assets/tree-trunk-5.png");
-        textures.load("tree-trunk-6", "./assets/tree-trunk-6.png");
-        textures.load("tree-trunk-7", "./assets/tree-trunk-7.png");
-        textures.load("tree-trunk-8", "./assets/tree-trunk-8.png");
-        textures.load("tree-trunk-9", "./assets/tree-trunk-9.png");
-        textures.load("tree-trunk-10", "./assets/tree-trunk-10.png");
-        textures.load("tree-trunk-11", "./assets/tree-trunk-11.png");
-        textures.load("tree-trunk-12", "./assets/tree-trunk-12.png");
-        textures.load("tree-crown-2", "./assets/tree-crown-2.png");
         textures.load("mill", "./assets/mill.png");
         textures.load("stairs", "./assets/stairs.png");
         textures.load("grass-low", "./assets/grass-low.png");
@@ -137,8 +124,9 @@ class MyLayer : public Engine::Layer {
         textures.load("home", "./assets/home.png");
         textures.load("grandmother", "./assets/grandmother.png");
         textures.load("tree-1", "./assets/tree-1.png");
-        textures.load("light", "./assets/light.png");
         textures.load("boy", "./assets/character.png");
+        textures.load("background", "./assets/background.png");
+        textures.load("front", "./assets/front.png");
 
         m_Shader.reset(Engine::Shader::create(vertexShader, fragmentShader));
 
@@ -159,12 +147,27 @@ class MyLayer : public Engine::Layer {
         std::vector<uint32_t> indexes = {0, 1, 2, 1, 3, 2};
 
         auto sky = addEntity("sky");
-        sky->addComponent<Engine::LocationComponent>(750.0, 480.0);
+        sky->addComponent<Engine::LocationComponent>(480.0, 480.0, true);
         sky->addComponent<Engine::RenderComponent>(vertices, indexes, m_Shader,
-                                                   1500, 150);
+                                                   960, 150);
+
+        vertices = {
+            -1.0, -1.0, 0.0, 0.0, 0.17, 0.15,
+
+            -1.0, 1.0,  0.0, 0.0, 0.17, 0.15,
+
+            1.0,  -1.0, 0.0, 0.0, 0.17, 0.15,
+
+            1.0,  1.0,  0.0, 0.0, 0.17, 0.15,
+        };
+
+        auto front = addEntity("front");
+        front->addComponent<Engine::LocationComponent>(480.0, 60.0, true);
+        front->addComponent<Engine::RenderComponent>(vertices, indexes,
+                                                     m_Shader, 960, 120);
 
         auto ground = addEntity("ground");
-        ground->addComponent<Engine::LocationComponent>(500.0, 25.0);
+        ground->addComponent<Engine::LocationComponent>(500.0, 175.0, true);
         ground->addComponent<Engine::ObstacleComponent>();
         ground->addComponent<Engine::CollisionComponent>(2000, 50);
 
@@ -175,13 +178,13 @@ class MyLayer : public Engine::Layer {
             Engine::Shader::create(textureVertexShader, textureFragmentShader));
 
         std::vector<float> textVertices = {
-            -1.0, -1.0, 0.0, 1.0, 1.0,
+            1.0,  -1.0, 0.0, 1.0, 1.0,
 
-            -1.0, 1.0,  0.0, 1.0, 0.0,
+            1.0,  1.0,  0.0, 1.0, 0.0,
 
-            1.0,  1.0,  0.0, 0.0, 0.0,
+            -1.0, 1.0,  0.0, 0.0, 0.0,
 
-            1.0,  -1.0, 0.0, 0.0, 1.0,
+            -1.0, -1.0, 0.0, 0.0, 1.0,
         };
 
         std::vector<uint32_t> textIndexes = {0, 1, 2, 0, 2, 3};
@@ -189,29 +192,19 @@ class MyLayer : public Engine::Layer {
         //////////////////////////////////////////////////////////////
         // Texture - Forest //////////////////////////////////////////
         //////////////////////////////////////////////////////////////
-        int treeX = -100;
-        for (size_t i = 0; i < 35; i++) {
-            std::stringstream name;
-            name << "tree-trunk-" << std::rand() % 12 + 1;
+        for (size_t i = 0; i < 5; i++) {
+            auto background = addEntity("background");
+            background->addComponent<Engine::LocationComponent>(400 + 800 * i,
+                                                                370.0);
+            background->addComponent<Engine::TextureComponent>(
+                "background", textVertices, textIndexes, m_TextureShader, 800,
+                275);
 
-            auto tree = addEntity("forest");
-            treeX += std::rand() % 60 + 20;
-            tree->addComponent<Engine::LocationComponent>(treeX, 300.0);
-            tree->addComponent<Engine::TextureComponent>(
-                name.str(), textVertices, textIndexes, m_TextureShader, 40,
-                252);
-
-            for (size_t i = 0; i < 5; i++) {
-                auto treeCrowm = addEntity("forest");
-                int treeCrownX = treeX - std::rand() % 120 + 60;
-                int treeCrownY = 420.0 - std::rand() % 60 + 30;
-
-                treeCrowm->addComponent<Engine::LocationComponent>(treeCrownX,
-                                                                   treeCrownY);
-                treeCrowm->addComponent<Engine::TextureComponent>(
-                    "tree-crown-2", textVertices, textIndexes, m_TextureShader,
-                    60, 60);
-            }
+            auto front = addEntity("front");
+            front->addComponent<Engine::LocationComponent>(400 + 800 * i,
+                                                           150.0);
+            front->addComponent<Engine::TextureComponent>(
+                "front", textVertices, textIndexes, m_TextureShader, 800, 65);
         }
 
         ////////////////////////////////////////////////////////////////
@@ -231,7 +224,7 @@ class MyLayer : public Engine::Layer {
         for (size_t i = 0; i < 5; i++) {
             auto stairs = addEntity("stairs");
             stairs->addComponent<Engine::LocationComponent>(350.0 + i * 16,
-                                                            55.0 + i * 16);
+                                                            205.0 + i * 16);
             stairs->addComponent<Engine::TextureComponent>(
                 "stairs", textVertices, textIndexes, m_TextureShader, 50, 20);
         }
@@ -240,7 +233,7 @@ class MyLayer : public Engine::Layer {
         std::vector<Engine::Vec2> collider = {
             Engine::Vec2(0, -5), Engine::Vec2(80, 75), Engine::Vec2(80, -5)};
 
-        stairsSlope->addComponent<Engine::LocationComponent>(340.0, 50.0);
+        stairsSlope->addComponent<Engine::LocationComponent>(340.0, 200.0);
         stairsSlope->addComponent<Engine::ObstacleComponent>();
         stairsSlope->addComponent<Engine::CollisionComponent>(collider);
 
@@ -248,17 +241,17 @@ class MyLayer : public Engine::Layer {
         // Texture - Grass //////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////
         auto grass = addEntity("grass");
-        grass->addComponent<Engine::LocationComponent>(500.0, 65.0);
+        grass->addComponent<Engine::LocationComponent>(500.0, 215.0);
         grass->addComponent<Engine::TextureComponent>(
             "grass-low", textVertices, textIndexes, m_TextureShader, 186, 56);
 
         auto grass2 = addEntity("grass");
-        grass2->addComponent<Engine::LocationComponent>(940.0, 42.0);
+        grass2->addComponent<Engine::LocationComponent>(940.0, 192.0);
         grass2->addComponent<Engine::TextureComponent>(
             "grass-low", textVertices, textIndexes, m_TextureShader, 186, 56);
 
         auto grass3 = addEntity("grass");
-        grass3->addComponent<Engine::LocationComponent>(1300.0, 70.0);
+        grass3->addComponent<Engine::LocationComponent>(1300.0, 220.0);
         grass3->addComponent<Engine::TextureComponent>(
             "grass-low", textVertices, textIndexes, m_TextureShader, 186, 56);
 
@@ -266,29 +259,29 @@ class MyLayer : public Engine::Layer {
         // Texture - Lumberjack ////////////////////////////////////////
         ////////////////////////////////////////////////////////////////
         auto fireWood = addEntity("fireWood");
-        fireWood->addComponent<Engine::LocationComponent>(720.0, 65.0);
+        fireWood->addComponent<Engine::LocationComponent>(720.0, 215.0);
         fireWood->addComponent<Engine::TextureComponent>(
             "firewood", textVertices, textIndexes, m_TextureShader, 35, 15);
 
         auto fireWood2 = addEntity("fireWood");
-        fireWood2->addComponent<Engine::LocationComponent>(740.0, 65.0);
+        fireWood2->addComponent<Engine::LocationComponent>(740.0, 215.0);
         fireWood2->addComponent<Engine::TextureComponent>(
             "firewood", textVertices, textIndexes, m_TextureShader, 35, 15);
 
         auto lumberjack = addEntity("lumberjack");
-        lumberjack->addComponent<Engine::LocationComponent>(750.0, 80.0);
+        lumberjack->addComponent<Engine::LocationComponent>(750.0, 230.0);
         lumberjack->addComponent<Engine::TextureComponent>(
             "lumberjack", textVertices, textIndexes, m_TextureShader, 38, 58);
 
         auto lumberjackStumb = addEntity("lumberjack-stumb");
-        lumberjackStumb->addComponent<Engine::LocationComponent>(800.0, 60.0);
+        lumberjackStumb->addComponent<Engine::LocationComponent>(800.0, 210.0);
         lumberjackStumb->addComponent<Engine::TextureComponent>(
             "stumb-2", textVertices, textIndexes, m_TextureShader, 38, 32);
         lumberjackStumb->addComponent<Engine::ObstacleComponent>();
         lumberjackStumb->addComponent<Engine::CollisionComponent>(25, 32);
 
         auto falledTree = addEntity("lumberjack-falled-tree");
-        falledTree->addComponent<Engine::LocationComponent>(940.0, 67.0);
+        falledTree->addComponent<Engine::LocationComponent>(940.0, 217.0);
         falledTree->addComponent<Engine::TextureComponent>(
             "falled-tree", textVertices, textIndexes, m_TextureShader, 166, 39);
         falledTree->addComponent<Engine::ObstacleComponent>();
@@ -298,7 +291,7 @@ class MyLayer : public Engine::Layer {
         // Texture - Home //////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////
         auto home = addEntity("home");
-        home->addComponent<Engine::LocationComponent>(1300.0, 130.0);
+        home->addComponent<Engine::LocationComponent>(1300.0, 280.0);
         home->addComponent<Engine::TextureComponent>(
             "home", textVertices, textIndexes, m_TextureShader, 240, 135);
 
@@ -306,7 +299,7 @@ class MyLayer : public Engine::Layer {
         // Texture - Grandmother ///////////////////////////////////////
         ////////////////////////////////////////////////////////////////
         auto grandmother = addEntity("grandmother");
-        grandmother->addComponent<Engine::LocationComponent>(1200.0, 70.0);
+        grandmother->addComponent<Engine::LocationComponent>(1200.0, 220.0);
         grandmother->addComponent<Engine::TextureComponent>(
             "grandmother", textVertices, textIndexes, m_TextureShader, 30, 45);
 
@@ -314,26 +307,18 @@ class MyLayer : public Engine::Layer {
         // Texture - Tree //////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////
         auto tree = addEntity("tree");
-        tree->addComponent<Engine::LocationComponent>(150.0, 130.0);
+        tree->addComponent<Engine::LocationComponent>(150.0, 280.0);
         tree->addComponent<Engine::TextureComponent>(
             "tree-1", textVertices, textIndexes, m_TextureShader, 170, 172);
         tree->addComponent<Engine::ObstacleComponent>();
         tree->addComponent<Engine::CollisionComponent>(20, 200);
 
         ////////////////////////////////////////////////////////////////
-        // Texture - Light //////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////
-        auto light = addEntity("light");
-        light->addComponent<Engine::LocationComponent>(450.0, 250.0);
-        light->addComponent<Engine::TextureComponent>(
-            "light", textVertices, textIndexes, m_TextureShader, 1634, 1080);
-
-        ////////////////////////////////////////////////////////////////
         // Player //////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////
         m_Player = addEntity("player");
-        m_Player->addComponent<Engine::CameraComponent>(0, 1500, -200);
-        m_Player->addComponent<Engine::LocationComponent>(250.0, 100.0);
+        m_Player->addComponent<Engine::CameraComponent>(0, 5000, -200);
+        m_Player->addComponent<Engine::LocationComponent>(250.0, 250.0);
         m_Player->addComponent<Engine::VelocityComponent>(0, 0);
         m_Player->addComponent<Engine::CollisionComponent>(14, 50);
         m_Player->addComponent<Engine::RigitBodyComponent>(1);

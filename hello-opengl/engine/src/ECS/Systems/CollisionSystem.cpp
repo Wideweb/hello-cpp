@@ -63,31 +63,6 @@ void CollisionSystem::exec(EntityManager &entities) {
         event.second = result.shape2;
         eventHandler.send<BeginCollisionEvent>(event);
     }
-
-    // for (size_t i = 0; i < entitiesToCheck.size() - 1; i++) {
-    //     auto thisEntity = entitiesToCheck[i];
-
-    //     for (size_t j = i + 1; j < entitiesToCheck.size(); j++) {
-    //         auto thatEntity = entitiesToCheck[j];
-
-    //         CollisionResult collision =
-    //             m_CollisionDetection.detect()
-    //                 thisCollider.checkCollision(thatCollider);
-
-    //         if (collision == CollisionResult::None) {
-    //             EndCollisionEvent event;
-    //             event.first = thatEntity->getName();
-    //             event.second = thisEntity->getName();
-    //             eventHandler.send<EndCollisionEvent>(event);
-    //             continue;
-    //         }
-
-    //         BeginCollisionEvent event;
-    //         event.first = thatEntity->getName();
-    //         event.second = thisEntity->getName();
-    //         eventHandler.send<BeginCollisionEvent>(event);
-    //     }
-    // }
 }
 
 } // namespace Engine
