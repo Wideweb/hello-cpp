@@ -44,17 +44,18 @@ void CollisionSystem::exec(EntityManager &entities) {
         auto location = entity->getComponent<LocationComponent>();
         auto velocity = entity->getComponent<VelocityComponent>();
 
-        location->x -= result.mtv.x;
-        location->y -= result.mtv.y;
+        Vec2 gravity(0, -1);
+        float cos = gravity.dot(result.mtv) /
+                    (gravity.magnitude() * result.mtv.magnitude());
 
-        if (velocity->x * result.mtv.x < 0) {
-            location->x += velocity->x;
-            velocity->x = 0;
-        }
-
-        if (velocity->y * result.mtv.y > 0) {
+        if (cos < -0.7) {
             location->y += velocity->y;
+            location->y += result.mtv.y;
             velocity->y = 0;
+        } else {
+            location->x += velocity->x;
+            location->x += result.mtv.x;
+            velocity->x = 0;
         }
 
         BeginCollisionEvent event;

@@ -40,7 +40,7 @@ Vec2 NarrowPhaseAlgorithm::collide(const CollisionShape &shape1,
             return Vec2(0, 0);
         }
 
-        float overlap = s1max > s2max ? (s1min - s2max) : (s1max - s2min);
+        float overlap = s1max > s2max ? (s2max - s1min) : (s2min - s1max);
         if (minOverlap > std::abs(overlap)) {
             minOverlap = std::abs(overlap);
             mtv = axis[i] * overlap;
@@ -56,13 +56,13 @@ NarrowPhaseAlgorithm::getAxis(const std::vector<Vec2> &corners) {
     for (size_t i = 0; i < corners.size() - 1; i++) {
         Vec2 v1 = corners[i];
         Vec2 v2 = corners[i + 1];
-        Vec2 d = v1 - v2;
+        Vec2 d = v2 - v1;
         axis.push_back(d.normalL().unit());
     }
 
     Vec2 v1 = corners.front();
     Vec2 v2 = corners.back();
-    Vec2 d = v1 - v2;
+    Vec2 d = v2 - v1;
     axis.push_back(d.normalL().unit());
 
     return axis;
