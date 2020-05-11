@@ -14,7 +14,7 @@ void PhysicsSystem::exec(EntityManager &entities) {
             auto c_velocity = entity->getComponent<VelocityComponent>();
 
             c_velocity->y -=
-                c_rigitBody->weight * app.getTime().getDeltaSeconds();
+                c_rigitBody->weight; // * app.getTime().getDeltaSeconds();
         }
     }
 }

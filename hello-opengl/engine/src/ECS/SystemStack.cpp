@@ -1,5 +1,6 @@
 #include "SystemStack.hpp"
 #include "AISystem.hpp"
+#include "AnimationSystem.hpp"
 #include "CameraSystem.hpp"
 #include "CollisionSystem.hpp"
 #include "ControlSystem.hpp"
@@ -22,6 +23,7 @@ SystemStack::SystemStack() {
     m_Systems.push_back(new CameraSystem());
     m_Systems.push_back(new RenderSystem());
     m_Systems.push_back(new MorphingSystem());
+    m_Systems.push_back(new AnimationSystem());
     m_Systems.push_back(new TextureSystem());
 }
 

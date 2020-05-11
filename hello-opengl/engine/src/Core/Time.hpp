@@ -12,7 +12,7 @@ class Time {
     void init();
     void tick();
 
-    float getDeltaSeconds() const { return 1; }
+    float getDeltaSeconds() const { return m_deltaTime; }
     float getTotalSeconds() const { return m_totalTime; }
 };
 

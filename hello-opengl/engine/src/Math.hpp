@@ -24,20 +24,6 @@ struct Vec2 {
     float dot(const Vec2 &vec);
 };
 
-struct Mat2 {
-    Vec2 col1;
-    Vec2 col2;
-
-    Mat2() {}
-
-    Mat2 operator*(const Mat2 &matrix);
-
-    std::vector<float> data();
-
-    static Mat2 identity();
-    static Mat2 flipY();
-};
-
 struct Mat2x3 {
     Vec2 col1;
     Vec2 col2;
@@ -50,10 +36,21 @@ struct Mat2x3 {
     std::vector<float> data();
 
     static Mat2x3 identity();
+    static Mat2x3 flipY();
     static Mat2x3 move(const Vec2 &vec);
     static Mat2x3 scale(float value);
     static Mat2x3 scale(float x, float y);
     static Mat2x3 rotate(float angle);
+};
+
+struct Rect {
+    float x;
+    float y;
+    float w;
+    float h;
+
+    Rect() {}
+    Rect(float x, float y, float w, float h) : x(x), y(y), w(w), h(h) {}
 };
 
 } // namespace Engine

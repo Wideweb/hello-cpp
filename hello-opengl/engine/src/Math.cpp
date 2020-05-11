@@ -23,25 +23,6 @@ Vec2 Vec2::normalL() { return Vec2(y, -x); }
 
 float Vec2::dot(const Vec2 &vec) { return x * vec.x + y * vec.y; }
 
-Mat2 Mat2::identity() {
-    Mat2 matrix;
-    matrix.col1.x = 1;
-    matrix.col2.y = 1;
-    return matrix;
-}
-
-Mat2 Mat2::flipY() {
-    auto matrix = Mat2::identity();
-    matrix.col1.x = -1;
-    return matrix;
-}
-
-std::vector<float> Mat2::data() {
-    return {col1.x, col2.x,
-
-            col1.y, col2.y};
-}
-
 Mat2x3 Mat2x3::operator*(const Mat2x3 &matrix) {
     Mat2x3 result;
 
@@ -67,6 +48,12 @@ Mat2x3 Mat2x3::identity() {
     Mat2x3 matrix;
     matrix.col1.x = 1;
     matrix.col2.y = 1;
+    return matrix;
+}
+
+Mat2x3 Mat2x3::flipY() {
+    auto matrix = Mat2x3::identity();
+    matrix.col1.x = -1;
     return matrix;
 }
 

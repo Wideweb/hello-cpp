@@ -2,6 +2,7 @@
 
 #include "Buffer.hpp"
 #include "Entity.hpp"
+#include "Math.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "VertexArray.hpp"
@@ -15,7 +16,9 @@ class TextureComponent : public Component {
   public:
     int width;
     int height;
+
     std::string name;
+    Rect source;
     Flip flip;
 
     std::shared_ptr<Engine::VertexArray> vertexArray;
@@ -23,10 +26,8 @@ class TextureComponent : public Component {
     std::shared_ptr<Engine::IndexBuffer> indexBuffer;
     std::shared_ptr<Engine::Shader> shader;
 
-    TextureComponent(const std::string &name, std::vector<float> &vertices,
-                     std::vector<uint32_t> &indexes,
-                     std::shared_ptr<Engine::Shader> shader, int width,
-                     int height, Flip flip = Flip::None);
+    TextureComponent(const std::string &name, const Rect &source, int width,
+                     int height, std::shared_ptr<Engine::Shader> shader);
 };
 
 } // namespace Engine
