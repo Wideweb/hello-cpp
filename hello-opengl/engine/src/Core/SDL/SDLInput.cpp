@@ -3,22 +3,22 @@
 
 namespace Engine {
 
-static SDL_KeyCode getSDLKeyCode(KeyCode code) {
+static SDL_Scancode getSDLScancode(KeyCode code) {
     switch (code) {
     case KeyCode::Space:
-        return SDLK_SPACE;
+        return SDL_SCANCODE_SPACE;
     case KeyCode::A:
-        return SDLK_a;
+        return SDL_SCANCODE_A;
     case KeyCode::D:
-        return SDLK_d;
+        return SDL_SCANCODE_D;
     case KeyCode::S:
-        return SDLK_s;
+        return SDL_SCANCODE_S;
     case KeyCode::W:
-        return SDLK_w;
+        return SDL_SCANCODE_W;
     case KeyCode::Escape:
-        return SDLK_ESCAPE;
+        return SDL_SCANCODE_ESCAPE;
     default:
-        return SDLK_UNKNOWN;
+        return SDL_SCANCODE_UNKNOWN;
     }
 }
 
@@ -26,7 +26,7 @@ void SDLInput::update() { SDL_PumpEvents(); }
 
 bool SDLInput::IsKeyPressed(KeyCode key) {
     const Uint8 *keystates = SDL_GetKeyboardState(NULL);
-    return keystates[SDL_GetScancodeFromKey(getSDLKeyCode(key))];
+    return keystates[getSDLScancode(key)];
 }
 
 } // namespace Engine

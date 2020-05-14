@@ -22,7 +22,6 @@
 #include "RigitBodyComponent.hpp"
 #include "SelectorTask.hpp"
 #include "SequenceTask.hpp"
-#include "SlopeComponent.hpp"
 #include "TextureComponent.hpp"
 #include "UntilFail.hpp"
 #include "VelocityComponent.hpp"
