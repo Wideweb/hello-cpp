@@ -40,6 +40,7 @@ set(SOURCE_LIB
     src/ECS/Systems/AnimationSystem.cpp
     src/ECS/Systems/TextureSystem.cpp
     src/ECS/Systems/AISystem.cpp
+    src/ECS/Systems/InteractionSystem.cpp
     src/Collision/CollisionDetection.cpp
     src/Collision/BroadPhaseAlgorithm.cpp
     src/Collision/NarrowPhaseAlgorithm.cpp

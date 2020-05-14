@@ -27,20 +27,29 @@ class Animation {
 };
 
 class AnimationComponent : public Component {
+  private:
+    std::string m_AnimationId;
+    std::map<std::string, Animation> m_Animaitions;
+
   public:
     int frameIndex = 0;
     float frameElapsedTime = 0.0;
 
-    std::string animationId;
-    std::map<std::string, Animation> animaitions;
-
     AnimationComponent(const Animation &wait, const Animation &move) {
-        animaitions["wait"] = wait;
-        animaitions["move"] = move;
-        animationId = "wait";
+        m_Animaitions["wait"] = wait;
+        m_Animaitions["move"] = move;
+        m_AnimationId = "wait";
     }
 
-    Animation &getCurrent() { return animaitions[animationId]; }
+    void play(std::string animationId) {
+        if (m_AnimationId != animationId) {
+            frameIndex = 0;
+            frameElapsedTime = 0;
+            m_AnimationId = animationId;
+        }
+    }
+
+    Animation &getCurrent() { return m_Animaitions[m_AnimationId]; }
 };
 
 } // namespace Engine

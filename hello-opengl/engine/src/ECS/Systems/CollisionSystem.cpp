@@ -1,7 +1,9 @@
 #include "CollisionSystem.hpp"
 #include "Application.hpp"
+#include "CollisionComponent.hpp"
 #include "LocationComponent.hpp"
 #include "ObstacleComponent.hpp"
+#include "VelocityComponent.hpp"
 #include <cmath>
 
 namespace Engine {
@@ -19,6 +21,8 @@ void CollisionSystem::exec(EntityManager &entities) {
 
         auto collision = entity->getComponent<CollisionComponent>();
         auto location = entity->getComponent<LocationComponent>();
+
+        collision->entity = nullptr;
 
         Vec2 move(location->x, location->y);
 
@@ -43,6 +47,7 @@ void CollisionSystem::exec(EntityManager &entities) {
         auto entity = entities.get(result.shape1);
         auto location = entity->getComponent<LocationComponent>();
         auto velocity = entity->getComponent<VelocityComponent>();
+        auto collision = entity->getComponent<CollisionComponent>();
 
         Vec2 gravity(0, -1);
         float cos = gravity.dot(result.mtv) /
@@ -57,6 +62,8 @@ void CollisionSystem::exec(EntityManager &entities) {
             location->x += result.mtv.x;
             velocity->x = 0;
         }
+
+        collision->entity = entities.get(result.shape2);
 
         BeginCollisionEvent event;
         event.first = result.shape1;

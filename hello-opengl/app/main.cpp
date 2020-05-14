@@ -4,19 +4,29 @@
 #include "BlackboardManager.hpp"
 #include "CameraComponent.hpp"
 #include "CollisionComponent.hpp"
+#include "ControllerTask.hpp"
 #include "EntryPoint.hpp"
+#include "FlyTask.hpp"
+#include "GroundComponent.hpp"
+#include "Inverter.hpp"
+#include "JumpTask.hpp"
 #include "KeyboardControlComponent.hpp"
 #include "LocationComponent.hpp"
 #include "MorphingComponent.hpp"
-#include "MoveTask.hpp"
+#include "MoveLeftTask.hpp"
+#include "MoveRightTask.hpp"
 #include "ObstacleComponent.hpp"
+#include "OnGroundTask.hpp"
+#include "ParallelTask.hpp"
 #include "RenderComponent.hpp"
 #include "RigitBodyComponent.hpp"
+#include "SelectorTask.hpp"
 #include "SequenceTask.hpp"
 #include "SlopeComponent.hpp"
 #include "TextureComponent.hpp"
 #include "UntilFail.hpp"
 #include "VelocityComponent.hpp"
+#include "WaitTask.hpp"
 #include <cstdlib>
 #include <iostream>
 #include <sstream>
@@ -169,10 +179,11 @@ class MyLayer : public Engine::Layer {
         frontFill->addComponent<Engine::RenderComponent>(vertices, indexes,
                                                          m_Shader, 800, 120);
 
-        auto ground = addEntity("ground");
+        auto ground = addEntity("ground-1");
         ground->addComponent<Engine::LocationComponent>(400.0, 175.0);
         ground->addComponent<Engine::ObstacleComponent>();
         ground->addComponent<Engine::CollisionComponent>(800, 50);
+        ground->addComponent<Engine::GroundComponent>();
 
         // 800 1030 915
         // 200 90
@@ -183,11 +194,13 @@ class MyLayer : public Engine::Layer {
         slope->addComponent<Engine::LocationComponent>(800, 200.0);
         slope->addComponent<Engine::ObstacleComponent>();
         slope->addComponent<Engine::CollisionComponent>(collider);
+        slope->addComponent<Engine::GroundComponent>();
 
-        ground = addEntity("ground");
+        ground = addEntity("ground-2");
         ground->addComponent<Engine::LocationComponent>(1430.0, 65.0);
         ground->addComponent<Engine::ObstacleComponent>();
         ground->addComponent<Engine::CollisionComponent>(800, 50);
+        ground->addComponent<Engine::GroundComponent>();
 
         ////////////////////////////////////////////////////////////////
         // Textures ////////////////////////////////////////////////////
@@ -302,6 +315,7 @@ class MyLayer : public Engine::Layer {
             "stumb-2", Engine::Rect(0, 0, 1, 1), 38, 32, m_TextureShader);
         lumberjackStumb->addComponent<Engine::ObstacleComponent>();
         lumberjackStumb->addComponent<Engine::CollisionComponent>(25, 32);
+        lumberjackStumb->addComponent<Engine::GroundComponent>();
 
         // auto falledTree = addEntity("lumberjack-falled-tree");
         // falledTree->addComponent<Engine::LocationComponent>(940.0, 217.0);
@@ -340,6 +354,39 @@ class MyLayer : public Engine::Layer {
         ////////////////////////////////////////////////////////////////
         // Player //////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////
+        m_Player = addEntity("player");
+
+        auto blackboard = std::make_shared<Engine::Blackboard>();
+        blackboard->setPtr("entity", m_Player.get());
+        blackboard->setFloat("speedX", 2.0);
+        blackboard->setFloat("speedY", 7.0);
+
+        // clang-format off
+        auto state = new Engine::BlackboardManager(
+            blackboard,
+            new Engine::SelectorTask({
+                new Engine::ParallelTask({
+                    new Engine::SequenceTask({
+                        new Engine::OnGroundTask(),
+                        new Engine::ControllerTask(Engine::KeyCode::Space),
+                        new Engine::JumpTask(),
+                    }),
+
+                    new Engine::SequenceTask({
+                        new Engine::ControllerTask(Engine::KeyCode::A),
+                        new Engine::MoveLeftTask(),
+                    }),
+
+                    new Engine::SequenceTask({
+                        new Engine::ControllerTask(Engine::KeyCode::D),
+                        new Engine::MoveRightTask(),
+                    }),
+                }),
+
+                new Engine::WaitTask()
+            })
+        );
+        // clang-format on
 
         float w = 54.0 / 340.0;
         float h = 54.0 / 270.0;
@@ -347,23 +394,25 @@ class MyLayer : public Engine::Layer {
         auto wait = Engine::Animation(0, w, 1, 0.35);
         auto move = Engine::Animation(0, w, 3, 0.35);
 
-        m_Player = addEntity("player");
+        m_Player->addComponent<Engine::AIComponent>(state);
         m_Player->addComponent<Engine::CameraComponent>(0, 5000, -200);
         m_Player->addComponent<Engine::LocationComponent>(250.0, 250.0);
         m_Player->addComponent<Engine::VelocityComponent>(0, 0);
         m_Player->addComponent<Engine::CollisionComponent>(14, 50);
-        m_Player->addComponent<Engine::RigitBodyComponent>(1);
+        m_Player->addComponent<Engine::RigitBodyComponent>(0.5);
         m_Player->addComponent<Engine::AnimationComponent>(wait, move);
         m_Player->addComponent<Engine::TextureComponent>(
             "characters", Engine::Rect(0, 0, w, h), 54, 54, m_TextureShader);
-        m_Player->addComponent<Engine::KeyboardControlComponent>(
-            Engine::KeyCode::Space, Engine::KeyCode::D, Engine::KeyCode::A);
 
         app.getEventHandler().add<Engine::BeginCollisionEvent>(
             std::bind(&MyLayer::beginCollision, this, std::placeholders::_1));
     }
 
     void beginCollision(Engine::BeginCollisionEvent &event) {
+        // std::cout << event.first << " " << event.second << std::endl;
+    }
+
+    void beginInte(Engine::BeginCollisionEvent &event) {
         // std::cout << event.first << " " << event.second << std::endl;
     }
 

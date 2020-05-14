@@ -3,6 +3,7 @@
 #include "Entity.hpp"
 #include "Math.hpp"
 #include <string>
+#include <memory>
 
 namespace Engine {
 
@@ -19,6 +20,7 @@ struct EndCollisionEvent {
 class CollisionComponent : public Component {
   public:
     std::vector<Vec2> vertices;
+    std::shared_ptr<Entity> entity;
 
     CollisionComponent(float width, float height) {
         float wHalf = width / 2;

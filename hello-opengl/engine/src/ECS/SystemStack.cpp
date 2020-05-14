@@ -5,6 +5,7 @@
 #include "CollisionSystem.hpp"
 #include "ControlSystem.hpp"
 #include "EntityManager.hpp"
+#include "InteractionSystem.hpp"
 #include "MorphingSystem.hpp"
 #include "MoveSystem.hpp"
 #include "PhysicsSystem.hpp"
@@ -25,6 +26,7 @@ SystemStack::SystemStack() {
     m_Systems.push_back(new MorphingSystem());
     m_Systems.push_back(new AnimationSystem());
     m_Systems.push_back(new TextureSystem());
+    m_Systems.push_back(new InteractionSystem());
 }
 
 void SystemStack::exec(EntityManager &entities) {

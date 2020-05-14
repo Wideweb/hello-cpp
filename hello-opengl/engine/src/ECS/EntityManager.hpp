@@ -23,7 +23,7 @@ class EntityManager {
 
     std::vector<std::shared_ptr<Entity>> &getAll() { return m_Entities; }
 
-    std::shared_ptr<Entity> &get(const std::string name) {
+    std::shared_ptr<Entity> get(const std::string name) {
         return m_EntitiesMap[name];
     }
 };

@@ -18,6 +18,7 @@ class SelectorTask : public Task {
 
         TaskStatus taskStatus = task->update(blackboard);
         if (taskStatus == TaskStatus::Success) {
+            taskIndex = 0;
             return TaskStatus::Success;
         }
 

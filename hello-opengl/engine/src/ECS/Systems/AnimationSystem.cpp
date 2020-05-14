@@ -17,19 +17,6 @@ void AnimationSystem::exec(EntityManager &entities) {
             auto animation = entity->getComponent<AnimationComponent>();
             auto velocity = entity->getComponent<VelocityComponent>();
 
-            // move to BTree
-            std::string animationId = "wait";
-            if (velocity->x != 0) {
-                animationId = "move";
-            }
-            // move to BTree
-
-            if (animationId != animation->animationId) {
-                animation->frameIndex = 0;
-                animation->frameElapsedTime = 0;
-                animation->animationId = animationId;
-            }
-
             Animation &current = animation->getCurrent();
 
             animation->frameElapsedTime += time;
