@@ -139,6 +139,7 @@ class MyLayer : public Engine::Layer {
         textures.load("front", "./assets/front.png");
         textures.load("slope", "./assets/slope.png");
         textures.load("slope-front", "./assets/slope-front.png");
+        textures.load("chickens", "./assets/chickens.png");
 
         m_Shader.reset(Engine::Shader::create(vertexShader, fragmentShader));
 
@@ -339,6 +340,49 @@ class MyLayer : public Engine::Layer {
         grandmother->addComponent<Engine::LocationComponent>(1300.0, 110.0);
         grandmother->addComponent<Engine::TextureComponent>(
             "grandmother", Engine::Rect(0, 0, 1, 1), 30, 45, m_TextureShader);
+
+        ////////////////////////////////////////////////////////////////
+        // Texture - Chicken ///////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////
+        {
+            auto chicken = addEntity("chicken");
+            auto move = Engine::Animation(0, 32.0 / 196.0, 3, 0.35);
+            auto wait = Engine::Animation(25.0 / 100.0, 32.0 / 196.0, 5, 0.7);
+
+            chicken->addComponent<Engine::LocationComponent>(1100.0, 110.0);
+            chicken->addComponent<Engine::AnimationComponent>(wait, move);
+            chicken->addComponent<Engine::TextureComponent>(
+                "chickens", Engine::Rect(0, 0, 32.0 / 196.0, 25.0 / 100.0), 32,
+                25, m_TextureShader);
+            chicken->addComponent<Engine::VelocityComponent>(0, 0);
+        }
+
+        {
+            auto chicken = addEntity("chicken");
+            auto move = Engine::Animation(0, 32.0 / 196.0, 3, 0.35);
+            auto wait = Engine::Animation(25.0 / 100.0, 32.0 / 196.0, 5, 0.7);
+
+            chicken->addComponent<Engine::LocationComponent>(1170.0, 115.0);
+            chicken->addComponent<Engine::AnimationComponent>(wait, move);
+            chicken->addComponent<Engine::TextureComponent>(
+                "chickens", Engine::Rect(0, 0, 32.0 / 196.0, 25.0 / 100.0), 32,
+                25, m_TextureShader);
+            chicken->addComponent<Engine::VelocityComponent>(0, 0);
+        }
+
+        {
+            auto chicken = addEntity("chicken");
+            auto move = Engine::Animation(0, 32.0 / 196.0, 3, 0.35);
+            auto wait = Engine::Animation(25.0 / 100.0, 32.0 / 196.0, 6, 0.7);
+
+            chicken->addComponent<Engine::LocationComponent>(1150.0, 120.0);
+            chicken->addComponent<Engine::AnimationComponent>(wait, move);
+            chicken->addComponent<Engine::TextureComponent>(
+                "chickens",
+                Engine::Rect(0, 25.0 * 2.0 / 100.0, 32.0 / 196.0, 25.0 / 100.0),
+                32, 25, m_TextureShader);
+            chicken->addComponent<Engine::VelocityComponent>(0, 0);
+        }
 
         ////////////////////////////////////////////////////////////////
         // Texture - Tree //////////////////////////////////////////////
