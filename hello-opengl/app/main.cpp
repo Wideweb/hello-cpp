@@ -347,7 +347,7 @@ class MyLayer : public Engine::Layer {
         {
             auto chicken = addEntity("chicken");
             auto move = Engine::Animation(0, 32.0 / 196.0, 3, 0.35);
-            auto wait = Engine::Animation(25.0 / 100.0, 32.0 / 196.0, 5, 0.7);
+            auto wait = Engine::Animation(25.0 / 100.0, 32.0 / 196.0, 5, 0.9);
 
             chicken->addComponent<Engine::LocationComponent>(1100.0, 110.0);
             chicken->addComponent<Engine::AnimationComponent>(wait, move);
@@ -373,7 +373,7 @@ class MyLayer : public Engine::Layer {
         {
             auto chicken = addEntity("chicken");
             auto move = Engine::Animation(0, 32.0 / 196.0, 3, 0.35);
-            auto wait = Engine::Animation(25.0 / 100.0, 32.0 / 196.0, 6, 0.7);
+            auto wait = Engine::Animation(25.0 / 100.0, 32.0 / 196.0, 6, 1.1);
 
             chicken->addComponent<Engine::LocationComponent>(1150.0, 120.0);
             chicken->addComponent<Engine::AnimationComponent>(wait, move);
