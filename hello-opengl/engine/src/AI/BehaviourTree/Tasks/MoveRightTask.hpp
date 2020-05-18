@@ -1,5 +1,6 @@
 #pragma once
 
+#include "FrameAnimationComponent.hpp"
 #include "LocationComponent.hpp"
 #include "Task.hpp"
 #include "TextureComponent.hpp"
@@ -20,7 +21,7 @@ class MoveRightTask : public Task {
         auto texture = entity->getComponent<TextureComponent>();
         texture->flip = Flip::Y;
 
-        auto animation = entity->getComponent<AnimationComponent>();
+        auto animation = entity->getComponent<FrameAnimationComponent>();
         animation->play("move");
 
         return TaskStatus::Success;

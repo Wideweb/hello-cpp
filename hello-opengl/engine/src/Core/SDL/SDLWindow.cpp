@@ -143,6 +143,10 @@ void SDLWindow::swapBuffers() { SDL_GL_SwapWindow(m_Window); }
 
 void *SDLWindow::getNaviteWindow() const { return m_Window; }
 
+void SDLWindow::getDrawableSize(int &width, int &height) const {
+    SDL_GL_GetDrawableSize(m_Window, &width, &height);
+}
+
 void SDLWindow::shutDown() {
     SDL_GL_DeleteContext(m_Context);
     SDL_DestroyWindow(m_Window);

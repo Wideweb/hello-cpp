@@ -3,7 +3,6 @@
 #include "AnimationSystem.hpp"
 #include "CameraSystem.hpp"
 #include "CollisionSystem.hpp"
-#include "ControlSystem.hpp"
 #include "EntityManager.hpp"
 #include "InteractionSystem.hpp"
 #include "MorphingSystem.hpp"
@@ -17,7 +16,6 @@ namespace Engine {
 
 SystemStack::SystemStack() {
     m_Systems.push_back(new AISystem());
-    m_Systems.push_back(new ControlSystem());
     m_Systems.push_back(new PhysicsSystem());
     m_Systems.push_back(new CollisionSystem());
     m_Systems.push_back(new MoveSystem());

@@ -1,5 +1,7 @@
 #include "AIComponent.hpp"
+#include "Animation.hpp"
 #include "AnimationComponent.hpp"
+#include "AnimationScene.hpp"
 #include "Application.hpp"
 #include "BlackboardManager.hpp"
 #include "CameraComponent.hpp"
@@ -7,22 +9,24 @@
 #include "ControllerTask.hpp"
 #include "EntryPoint.hpp"
 #include "FlyTask.hpp"
+#include "FrameAnimationComponent.hpp"
 #include "GroundComponent.hpp"
 #include "Inverter.hpp"
 #include "JumpTask.hpp"
-#include "KeyboardControlComponent.hpp"
 #include "LocationComponent.hpp"
 #include "MorphingComponent.hpp"
 #include "MoveLeftTask.hpp"
 #include "MoveRightTask.hpp"
 #include "ObstacleComponent.hpp"
 #include "OnGroundTask.hpp"
+#include "ParalaxScrollingComponent.hpp"
 #include "ParallelTask.hpp"
 #include "RenderComponent.hpp"
 #include "RigitBodyComponent.hpp"
 #include "SelectorTask.hpp"
 #include "SequenceTask.hpp"
 #include "TextureComponent.hpp"
+#include "TimeLine.hpp"
 #include "UntilFail.hpp"
 #include "VelocityComponent.hpp"
 #include "WaitTask.hpp"
@@ -140,6 +144,9 @@ class MyLayer : public Engine::Layer {
         textures.load("slope", "./assets/slope.png");
         textures.load("slope-front", "./assets/slope-front.png");
         textures.load("chickens", "./assets/chickens.png");
+        textures.load("props", "./assets/props.png");
+        textures.load("pit", "./assets/p.png");
+        textures.load("environment", "./assets/environment.png");
 
         m_Shader.reset(Engine::Shader::create(vertexShader, fragmentShader));
 
@@ -179,68 +186,141 @@ class MyLayer : public Engine::Layer {
         frontFill->addComponent<Engine::RenderComponent>(vertices, indexes,
                                                          m_Shader, 800, 120);
 
-        auto ground = addEntity("ground-1");
-        ground->addComponent<Engine::LocationComponent>(400.0, 175.0);
-        ground->addComponent<Engine::ObstacleComponent>();
-        ground->addComponent<Engine::CollisionComponent>(800, 50);
-        ground->addComponent<Engine::GroundComponent>();
-
-        // 800 1030 915
-        // 200 90
-        auto slope = addEntity("slope");
-        std::vector<Engine::Vec2> collider = {
-            Engine::Vec2(0, 0), Engine::Vec2(0, -119), Engine::Vec2(235, -119)};
-
-        slope->addComponent<Engine::LocationComponent>(800, 200.0);
-        slope->addComponent<Engine::ObstacleComponent>();
-        slope->addComponent<Engine::CollisionComponent>(collider);
-        slope->addComponent<Engine::GroundComponent>();
-
-        ground = addEntity("ground-2");
-        ground->addComponent<Engine::LocationComponent>(1430.0, 65.0);
-        ground->addComponent<Engine::ObstacleComponent>();
-        ground->addComponent<Engine::CollisionComponent>(800, 50);
-        ground->addComponent<Engine::GroundComponent>();
-
         ////////////////////////////////////////////////////////////////
         // Textures ////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////
         m_TextureShader.reset(
             Engine::Shader::create(textureVertexShader, textureFragmentShader));
 
+        // {
+        //     auto background = addEntity("background");
+        //     background->addComponent<Engine::LocationComponent>(240, 400.0);
+        //     background->addComponent<Engine::TextureComponent>(
+        //         "background", Engine::Rect(0, 0, 1, 1), 960, 330,
+        //         m_TextureShader);
+        //     background->addComponent<Engine::ParalaxScrollingComponent>(0.5);
+        // }
+
         //////////////////////////////////////////////////////////////
         // Texture - Forest //////////////////////////////////////////
         //////////////////////////////////////////////////////////////
+        {
 
-        auto background = addEntity("background");
-        background->addComponent<Engine::LocationComponent>(400, 370.0);
-        background->addComponent<Engine::TextureComponent>(
-            "background", Engine::Rect(0, 0, 1, 1), 800, 275, m_TextureShader);
+            auto background = addEntity("background");
+            background->addComponent<Engine::LocationComponent>(400, 370.0);
+            background->addComponent<Engine::TextureComponent>(
+                "background", Engine::Rect(0, 0, 1, 1), 800, 275,
+                m_TextureShader);
 
-        auto front = addEntity("front");
-        front->addComponent<Engine::LocationComponent>(400, 145.0);
-        front->addComponent<Engine::TextureComponent>(
-            "front", Engine::Rect(0, 0, 1, 1), 800, 75, m_TextureShader);
+            auto front = addEntity("front");
+            front->addComponent<Engine::LocationComponent>(400, 145.0);
+            front->addComponent<Engine::TextureComponent>(
+                "front", Engine::Rect(0, 0, 1, 1), 800, 75, m_TextureShader);
 
-        background = addEntity("background");
-        background->addComponent<Engine::LocationComponent>(1430, 260.0);
-        background->addComponent<Engine::TextureComponent>(
-            "background", Engine::Rect(0, 0, 1, 1), 800, 275, m_TextureShader);
+            auto ground = addEntity("ground");
+            ground->addComponent<Engine::LocationComponent>(400.0, 175.0);
+            ground->addComponent<Engine::ObstacleComponent>();
+            ground->addComponent<Engine::CollisionComponent>(800, 50);
+            ground->addComponent<Engine::GroundComponent>();
+        }
 
-        front = addEntity("front");
-        front->addComponent<Engine::LocationComponent>(1430, 35.0);
-        front->addComponent<Engine::TextureComponent>(
-            "front", Engine::Rect(0, 0, 1, 1), 800, 75, m_TextureShader);
+        {
+            auto slopeBackground = addEntity("slopeBackground");
+            slopeBackground->addComponent<Engine::LocationComponent>(900,
+                                                                     300.0);
+            slopeBackground->addComponent<Engine::TextureComponent>(
+                "slope", Engine::Rect(0, 0, 1, 1), 310, 350, m_TextureShader);
 
-        auto slopeBackground = addEntity("slopeBackground");
-        slopeBackground->addComponent<Engine::LocationComponent>(900, 300.0);
-        slopeBackground->addComponent<Engine::TextureComponent>(
-            "slope", Engine::Rect(0, 0, 1, 1), 310, 350, m_TextureShader);
+            auto slopeFront = addEntity("slopeFront");
+            slopeFront->addComponent<Engine::LocationComponent>(910, 80.0);
+            slopeFront->addComponent<Engine::TextureComponent>(
+                "slope-front", Engine::Rect(0, 0, 1, 1), 265, 160,
+                m_TextureShader);
 
-        auto slopeFront = addEntity("slopeFront");
-        slopeFront->addComponent<Engine::LocationComponent>(910, 80.0);
-        slopeFront->addComponent<Engine::TextureComponent>(
-            "slope-front", Engine::Rect(0, 0, 1, 1), 265, 160, m_TextureShader);
+            auto slope = addEntity("slope");
+            std::vector<Engine::Vec2> collider = {Engine::Vec2(0, 0),
+                                                  Engine::Vec2(0, -119),
+                                                  Engine::Vec2(235, -119)};
+
+            slope->addComponent<Engine::LocationComponent>(800, 200.0);
+            slope->addComponent<Engine::ObstacleComponent>();
+            slope->addComponent<Engine::CollisionComponent>(collider);
+            slope->addComponent<Engine::GroundComponent>();
+        }
+
+        {
+            auto background = addEntity("background");
+            background->addComponent<Engine::LocationComponent>(1430, 260.0);
+            background->addComponent<Engine::TextureComponent>(
+                "background", Engine::Rect(0, 0, 1, 1), 800, 275,
+                m_TextureShader);
+
+            auto front = addEntity("front");
+            front->addComponent<Engine::LocationComponent>(1430, 35.0);
+            front->addComponent<Engine::TextureComponent>(
+                "front", Engine::Rect(0, 0, 1, 1), 800, 75, m_TextureShader);
+
+            auto ground = addEntity("ground-2");
+            ground->addComponent<Engine::LocationComponent>(1430.0, 65.0);
+            ground->addComponent<Engine::ObstacleComponent>();
+            ground->addComponent<Engine::CollisionComponent>(800, 50);
+            ground->addComponent<Engine::GroundComponent>();
+        }
+
+        // {
+        //     auto paralaxFront = addEntity("paralaxFront");
+        //     paralaxFront->addComponent<Engine::LocationComponent>(
+        //         400 + 1280 / 2, -10.0);
+        //     paralaxFront->addComponent<Engine::TextureComponent>(
+        //         "front", Engine::Rect(0, 0, 1, 1), 1280, 120,
+        //         m_TextureShader);
+        //     paralaxFront->addComponent<Engine::ParalaxScrollingComponent>(2);
+        // }
+
+        {
+            std::vector<float> vertices = {
+                -1.0, -1.0, 0.0, 0.0, 0.06, 0.06,
+
+                -1.0, 1.0,  0.0, 0.0, 0.06, 0.06,
+
+                1.0,  -1.0, 0.0, 0.0, 0.06, 0.06,
+
+                1.0,  1.0,  0.0, 0.0, 0.06, 0.06,
+            };
+
+            auto pit = addEntity("pit");
+            pit->addComponent<Engine::LocationComponent>(1900.0, 90.0);
+            pit->addComponent<Engine::TextureComponent>(
+                "pit", Engine::Rect(0, 0, 1, 1), 180, 80, m_TextureShader);
+
+            // auto falledTree = addEntity("falled-tree");
+            // falledTree->addComponent<Engine::LocationComponent>(1900.0,
+            // 100.0); falledTree->addComponent<Engine::TextureComponent>(
+            //     "falled-tree", Engine::Rect(0, 0, 1, 1), 200, 30,
+            //     m_TextureShader);
+            // falledTree->addComponent<Engine::CollisionComponent>(145, 14);
+            // falledTree->addComponent<Engine::ObstacleComponent>();
+            // falledTree->addComponent<Engine::GroundComponent>();
+        }
+
+        {
+            auto background = addEntity("background");
+            background->addComponent<Engine::LocationComponent>(2230, 260.0);
+            background->addComponent<Engine::TextureComponent>(
+                "background", Engine::Rect(0, 0, 1, 1), 800, 275,
+                m_TextureShader);
+
+            auto front = addEntity("front");
+            front->addComponent<Engine::LocationComponent>(2230, 35.0);
+            front->addComponent<Engine::TextureComponent>(
+                "front", Engine::Rect(0, 0, 1, 1), 800, 75, m_TextureShader);
+
+            auto ground = addEntity("ground-3");
+            ground->addComponent<Engine::LocationComponent>(2230.0, 65.0);
+            ground->addComponent<Engine::ObstacleComponent>();
+            ground->addComponent<Engine::CollisionComponent>(800, 50);
+            ground->addComponent<Engine::GroundComponent>();
+        }
 
         ////////////////////////////////////////////////////////////////
         // Texture - Mill //////////////////////////////////////////////
@@ -346,24 +426,45 @@ class MyLayer : public Engine::Layer {
         ////////////////////////////////////////////////////////////////
         {
             auto chicken = addEntity("chicken");
-            auto move = Engine::Animation(0, 32.0 / 196.0, 3, 0.35);
-            auto wait = Engine::Animation(25.0 / 100.0, 32.0 / 196.0, 5, 0.9);
+            auto move = Engine::FrameAnimation(0, 32.0 / 196.0, 3, 0.35);
+            auto wait =
+                Engine::FrameAnimation(25.0 / 100.0, 32.0 / 196.0, 5, 0.9);
 
-            chicken->addComponent<Engine::LocationComponent>(1100.0, 110.0);
-            chicken->addComponent<Engine::AnimationComponent>(wait, move);
+            chicken->addComponent<Engine::LocationComponent>(400.0, 200.0);
+            chicken->addComponent<Engine::FrameAnimationComponent>(move, move);
             chicken->addComponent<Engine::TextureComponent>(
                 "chickens", Engine::Rect(0, 0, 32.0 / 196.0, 25.0 / 100.0), 32,
                 25, m_TextureShader);
             chicken->addComponent<Engine::VelocityComponent>(0, 0);
+
+            // clang-format off
+            Engine::AnimationScene scene({
+                Engine::TimeLine({
+                    Engine::Animation(Engine::AnimationProperty::X, 50.0, 1.0),
+                    Engine::Animation(Engine::AnimationProperty::Scale, 1.0, 1.0),
+                    Engine::Animation(Engine::AnimationProperty::Angle, 6.28, 1.0),
+                    Engine::Animation(Engine::AnimationProperty::Scale, -1.0, 1.0),
+                    Engine::Animation(Engine::AnimationProperty::X, -50.0, 1.0),
+                }),
+                Engine::TimeLine({
+                    Engine::Animation(Engine::AnimationProperty::Y, 100.0, 1.0),
+                    Engine::TimeLineGap(3.0),
+                    Engine::Animation(Engine::AnimationProperty::Y, -100.0, 1.0)
+                })
+            });
+            // clang-format on
+
+            chicken->addComponent<Engine::AnimationComponent>(scene);
         }
 
         {
             auto chicken = addEntity("chicken");
-            auto move = Engine::Animation(0, 32.0 / 196.0, 3, 0.35);
-            auto wait = Engine::Animation(25.0 / 100.0, 32.0 / 196.0, 5, 0.7);
+            auto move = Engine::FrameAnimation(0, 32.0 / 196.0, 3, 0.35);
+            auto wait =
+                Engine::FrameAnimation(25.0 / 100.0, 32.0 / 196.0, 5, 0.7);
 
             chicken->addComponent<Engine::LocationComponent>(1170.0, 115.0);
-            chicken->addComponent<Engine::AnimationComponent>(wait, move);
+            chicken->addComponent<Engine::FrameAnimationComponent>(wait, move);
             chicken->addComponent<Engine::TextureComponent>(
                 "chickens", Engine::Rect(0, 0, 32.0 / 196.0, 25.0 / 100.0), 32,
                 25, m_TextureShader);
@@ -372,11 +473,12 @@ class MyLayer : public Engine::Layer {
 
         {
             auto chicken = addEntity("chicken");
-            auto move = Engine::Animation(0, 32.0 / 196.0, 3, 0.35);
-            auto wait = Engine::Animation(25.0 / 100.0, 32.0 / 196.0, 6, 1.1);
+            auto move = Engine::FrameAnimation(0, 32.0 / 196.0, 3, 0.35);
+            auto wait =
+                Engine::FrameAnimation(25.0 / 100.0, 32.0 / 196.0, 6, 1.1);
 
             chicken->addComponent<Engine::LocationComponent>(1150.0, 120.0);
-            chicken->addComponent<Engine::AnimationComponent>(wait, move);
+            chicken->addComponent<Engine::FrameAnimationComponent>(wait, move);
             chicken->addComponent<Engine::TextureComponent>(
                 "chickens",
                 Engine::Rect(0, 25.0 * 2.0 / 100.0, 32.0 / 196.0, 25.0 / 100.0),
@@ -393,6 +495,64 @@ class MyLayer : public Engine::Layer {
             "tree-1", Engine::Rect(0, 0, 1, 1), 170, 172, m_TextureShader);
         tree->addComponent<Engine::ObstacleComponent>();
         tree->addComponent<Engine::CollisionComponent>(20, 200);
+
+        ////////////////////////////////////////////////////////////////
+        // Texture - Apple //////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////
+        {
+            auto apple = addEntity("apple");
+            apple->addComponent<Engine::LocationComponent>(200.0, 250.0);
+            apple->addComponent<Engine::VelocityComponent>(0, 0);
+            apple->addComponent<Engine::TextureComponent>(
+                "props",
+                Engine::Rect(224.0 / 512, 211.0 / 256, 9.0 / 512.0,
+                             9.0 / 256.0),
+                9, 9, m_TextureShader);
+        }
+
+        {
+            auto apple = addEntity("apple");
+            apple->addComponent<Engine::LocationComponent>(200.0, 265.0);
+            apple->addComponent<Engine::VelocityComponent>(0, 0);
+            apple->addComponent<Engine::TextureComponent>(
+                "props",
+                Engine::Rect(224.0 / 512, 211.0 / 256, 9.0 / 512.0,
+                             9.0 / 256.0),
+                9, 9, m_TextureShader);
+        }
+
+        {
+            auto apple = addEntity("apple");
+            apple->addComponent<Engine::LocationComponent>(175.0, 270.0);
+            apple->addComponent<Engine::VelocityComponent>(0, 0);
+            apple->addComponent<Engine::TextureComponent>(
+                "props",
+                Engine::Rect(224.0 / 512, 211.0 / 256, 9.0 / 512.0,
+                             9.0 / 256.0),
+                9, 9, m_TextureShader);
+        }
+
+        {
+            auto apple = addEntity("apple");
+            apple->addComponent<Engine::LocationComponent>(120.0, 260.0);
+            apple->addComponent<Engine::VelocityComponent>(0, 0);
+            apple->addComponent<Engine::TextureComponent>(
+                "props",
+                Engine::Rect(224.0 / 512, 211.0 / 256, 9.0 / 512.0,
+                             9.0 / 256.0),
+                9, 9, m_TextureShader);
+        }
+
+        {
+            auto apple = addEntity("apple");
+            apple->addComponent<Engine::LocationComponent>(100.0, 250.0);
+            apple->addComponent<Engine::VelocityComponent>(0, 0);
+            apple->addComponent<Engine::TextureComponent>(
+                "props",
+                Engine::Rect(224.0 / 512, 211.0 / 256, 9.0 / 512.0,
+                             9.0 / 256.0),
+                9, 9, m_TextureShader);
+        }
 
         ////////////////////////////////////////////////////////////////
         // Player //////////////////////////////////////////////////////
@@ -434,8 +594,8 @@ class MyLayer : public Engine::Layer {
         float w = 54.0 / 340.0;
         float h = 54.0 / 270.0;
 
-        auto wait = Engine::Animation(0, w, 1, 0.35);
-        auto move = Engine::Animation(0, w, 3, 0.35);
+        auto wait = Engine::FrameAnimation(0, w, 1, 0.35);
+        auto move = Engine::FrameAnimation(0, w, 3, 0.35);
 
         m_Player->addComponent<Engine::AIComponent>(state);
         m_Player->addComponent<Engine::CameraComponent>(0, 5000, -200);
@@ -443,10 +603,60 @@ class MyLayer : public Engine::Layer {
         m_Player->addComponent<Engine::VelocityComponent>(0, 0);
         m_Player->addComponent<Engine::CollisionComponent>(14, 50);
         m_Player->addComponent<Engine::RigitBodyComponent>(0.5);
-        m_Player->addComponent<Engine::AnimationComponent>(wait, move);
+        m_Player->addComponent<Engine::FrameAnimationComponent>(wait, move);
         m_Player->addComponent<Engine::TextureComponent>(
             "characters", Engine::Rect(0, 0, w, h), 54, 54, m_TextureShader);
 
+        ////////////////////////////////////////////////////////////////
+        // Paralax /////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////
+        {
+            auto paralaxFront = addEntity("paralaxFront");
+            paralaxFront->addComponent<Engine::LocationComponent>(400, 20);
+            paralaxFront->addComponent<Engine::TextureComponent>(
+                "environment",
+                Engine::Rect(995.0 / 1987, 560.0 / 936, 50.0 / 1987,
+                             60.0 / 936),
+                50, 60, m_TextureShader);
+            paralaxFront->addComponent<Engine::ParalaxScrollingComponent>(2);
+        }
+
+        {
+            auto paralaxFront = addEntity("paralaxFront");
+            paralaxFront->addComponent<Engine::LocationComponent>(900, 300);
+            paralaxFront->addComponent<Engine::TextureComponent>(
+                "environment",
+                Engine::Rect(1090.0 / 1987, 145.0 / 936, 35.0 / 1987,
+                             400.0 / 936),
+                60, 800, m_TextureShader);
+            paralaxFront->addComponent<Engine::ParalaxScrollingComponent>(2);
+        }
+
+        {
+            auto paralaxFront = addEntity("paralaxFront");
+            paralaxFront->addComponent<Engine::LocationComponent>(1500, 300);
+            paralaxFront->addComponent<Engine::TextureComponent>(
+                "environment",
+                Engine::Rect(935.0 / 1987, 140.0 / 936, 65.0 / 1987,
+                             405.0 / 936),
+                60, 800, m_TextureShader);
+            paralaxFront->addComponent<Engine::ParalaxScrollingComponent>(2);
+        }
+
+        {
+            auto paralaxFront = addEntity("paralaxFront");
+            paralaxFront->addComponent<Engine::LocationComponent>(1700, 300);
+            paralaxFront->addComponent<Engine::TextureComponent>(
+                "environment",
+                Engine::Rect(1005.0 / 1987, 140.0 / 936, 25.0 / 1987,
+                             405.0 / 936),
+                60, 800, m_TextureShader);
+            paralaxFront->addComponent<Engine::ParalaxScrollingComponent>(2);
+        }
+
+        ////////////////////////////////////////////////////////////////
+        // Events //////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////
         app.getEventHandler().add<Engine::BeginCollisionEvent>(
             std::bind(&MyLayer::beginCollision, this, std::placeholders::_1));
     }
@@ -465,7 +675,7 @@ class MyLayer : public Engine::Layer {
         if (e.type == Engine::EventType::MouseDown) {
             auto location = m_Player->getComponent<Engine::LocationComponent>();
             auto velocity = m_Player->getComponent<Engine::VelocityComponent>();
-            location->x = 250;
+            location->x = 1550;
             location->y = 300;
             velocity->y = 0;
         }

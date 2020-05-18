@@ -8,6 +8,8 @@ class LocationComponent : public Component {
   public:
     float x;
     float y;
+    float scale = 1.0;
+    float angle = 0.0;
     bool isStatic;
 
     LocationComponent(float x, float y, bool isStatic = false)

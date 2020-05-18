@@ -45,6 +45,8 @@ class Window {
     virtual int getWidth() const = 0;
     virtual int getHeight() const = 0;
 
+    virtual void getDrawableSize(int &width, int &height) const = 0;
+
     virtual void
     setMouseEventCallback(const EventCallbackFn<MouseEvent> &callback) = 0;
     virtual void

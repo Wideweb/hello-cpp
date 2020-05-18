@@ -20,6 +20,8 @@ class SDLWindow : public Window {
     virtual int getWidth() const override;
     virtual int getHeight() const override;
 
+    virtual void getDrawableSize(int &width, int &height) const override;
+
     virtual void
     setMouseEventCallback(const EventCallbackFn<MouseEvent> &callback) override;
 

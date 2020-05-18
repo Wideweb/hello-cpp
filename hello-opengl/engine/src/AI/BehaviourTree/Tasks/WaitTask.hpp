@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AnimationComponent.hpp"
+#include "FrameAnimationComponent.hpp"
 #include "Task.hpp"
 #include "VelocityComponent.hpp"
 #include <iostream>
@@ -13,13 +13,11 @@ class WaitTask : public Task {
 
     TaskStatus update(std::shared_ptr<Blackboard> blackboard) override {
         auto entity = blackboard->getPtr<Entity>("entity");
-        auto animation = entity->getComponent<AnimationComponent>();
+        auto animation = entity->getComponent<FrameAnimationComponent>();
         animation->play("wait");
 
         auto velocity = entity->getComponent<VelocityComponent>();
         velocity->x = 0;
-
-        std::cout << "wait" << std::endl;
 
         return TaskStatus::Success;
     }

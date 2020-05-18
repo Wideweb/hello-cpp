@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(SOURCE_LIB 
-    external/glad/glad.c
+    vendor/glad/glad.c
     src/Core/Application.cpp
     src/Core/Window.cpp
     src/Core/Input.cpp
@@ -32,7 +32,6 @@ set(SOURCE_LIB
     src/ECS/SystemStack.cpp
     src/ECS/Systems/CameraSystem.cpp
     src/ECS/Systems/CollisionSystem.cpp
-    src/ECS/Systems/ControlSystem.cpp
     src/ECS/Systems/MoveSystem.cpp
     src/ECS/Systems/PhysicsSystem.cpp
     src/ECS/Systems/RenderSystem.cpp
@@ -65,8 +64,13 @@ target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/AI/BehaviourTree/TaskDecorators
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/Collision
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/Collision/Shapes
-                                         ${CMAKE_CURRENT_SOURCE_DIR}/external)
+                                         ${CMAKE_CURRENT_SOURCE_DIR}/src/Animation
+                                         ${CMAKE_CURRENT_SOURCE_DIR}/src/ImGui/ImGuiLayer
+                                         ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
 
 find_package(SDL2 REQUIRED)
 target_include_directories(engine PUBLIC /usr/local/Cellar/sdl2/2.0.12_1/include)
 target_link_libraries(engine PRIVATE SDL2::SDL2)
+
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui)
+target_link_libraries(engine PRIVATE imgui)

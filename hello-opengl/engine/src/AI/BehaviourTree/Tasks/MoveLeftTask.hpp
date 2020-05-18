@@ -4,6 +4,7 @@
 #include "Task.hpp"
 #include "TextureComponent.hpp"
 #include "VelocityComponent.hpp"
+#include "FrameAnimationComponent.hpp"
 
 namespace Engine {
 
@@ -20,7 +21,7 @@ class MoveLeftTask : public Task {
         auto texture = entity->getComponent<TextureComponent>();
         texture->flip = Flip::None;
 
-        auto animation = entity->getComponent<AnimationComponent>();
+        auto animation = entity->getComponent<FrameAnimationComponent>();
         animation->play("move");
 
         return TaskStatus::Success;
