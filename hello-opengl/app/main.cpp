@@ -120,7 +120,6 @@ class MyLayer : public Engine::Layer {
     std::shared_ptr<Engine::Shader> m_MorphingShader;
     std::shared_ptr<Engine::Shader> m_TextureShader;
     std::shared_ptr<Engine::Entity> m_Player;
-    std::shared_ptr<Engine::Entity> m_Lift;
 
   public:
     virtual void onAttach() override {
@@ -192,15 +191,6 @@ class MyLayer : public Engine::Layer {
         m_TextureShader.reset(
             Engine::Shader::create(textureVertexShader, textureFragmentShader));
 
-        // {
-        //     auto background = addEntity("background");
-        //     background->addComponent<Engine::LocationComponent>(240, 400.0);
-        //     background->addComponent<Engine::TextureComponent>(
-        //         "background", Engine::Rect(0, 0, 1, 1), 960, 330,
-        //         m_TextureShader);
-        //     background->addComponent<Engine::ParalaxScrollingComponent>(0.5);
-        // }
-
         //////////////////////////////////////////////////////////////
         // Texture - Forest //////////////////////////////////////////
         //////////////////////////////////////////////////////////////
@@ -267,16 +257,6 @@ class MyLayer : public Engine::Layer {
             ground->addComponent<Engine::GroundComponent>();
         }
 
-        // {
-        //     auto paralaxFront = addEntity("paralaxFront");
-        //     paralaxFront->addComponent<Engine::LocationComponent>(
-        //         400 + 1280 / 2, -10.0);
-        //     paralaxFront->addComponent<Engine::TextureComponent>(
-        //         "front", Engine::Rect(0, 0, 1, 1), 1280, 120,
-        //         m_TextureShader);
-        //     paralaxFront->addComponent<Engine::ParalaxScrollingComponent>(2);
-        // }
-
         {
             std::vector<float> vertices = {
                 -1.0, -1.0, 0.0, 0.0, 0.06, 0.06,
@@ -293,14 +273,14 @@ class MyLayer : public Engine::Layer {
             pit->addComponent<Engine::TextureComponent>(
                 "pit", Engine::Rect(0, 0, 1, 1), 180, 80, m_TextureShader);
 
-            // auto falledTree = addEntity("falled-tree");
-            // falledTree->addComponent<Engine::LocationComponent>(1900.0,
-            // 100.0); falledTree->addComponent<Engine::TextureComponent>(
-            //     "falled-tree", Engine::Rect(0, 0, 1, 1), 200, 30,
-            //     m_TextureShader);
-            // falledTree->addComponent<Engine::CollisionComponent>(145, 14);
-            // falledTree->addComponent<Engine::ObstacleComponent>();
-            // falledTree->addComponent<Engine::GroundComponent>();
+            auto falledTree = addEntity("falled-tree");
+            falledTree->addComponent<Engine::LocationComponent>(1900.0, 100.0);
+            falledTree->addComponent<Engine::TextureComponent>(
+                "falled-tree", Engine::Rect(0, 0, 1, 1), 200, 30,
+                m_TextureShader);
+            falledTree->addComponent<Engine::CollisionComponent>(145, 14);
+            falledTree->addComponent<Engine::ObstacleComponent>();
+            falledTree->addComponent<Engine::GroundComponent>();
         }
 
         {
@@ -321,37 +301,6 @@ class MyLayer : public Engine::Layer {
             ground->addComponent<Engine::CollisionComponent>(800, 50);
             ground->addComponent<Engine::GroundComponent>();
         }
-
-        ////////////////////////////////////////////////////////////////
-        // Texture - Mill //////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////
-        // auto mill = addEntity("mill");
-        // mill->addComponent<Engine::LocationComponent>(200.0, 235.0, 0);
-        // mill->addComponent<Engine::TextureComponent>("mill",
-        //                                              textVertices,
-        //                                              textIndexes,
-        //                                              m_TextureShader, 330,
-        //                                              350);
-
-        ////////////////////////////////////////////////////////////////
-        // Texture - Stairs ////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////
-        // for (size_t i = 0; i < 5; i++) {
-        //     auto stairs = addEntity("stairs");
-        //     stairs->addComponent<Engine::LocationComponent>(350.0 + i * 16,
-        //                                                     205.0 + i * 16);
-        //     stairs->addComponent<Engine::TextureComponent>(
-        //         "stairs", textVertices, textIndexes, m_TextureShader, 50,
-        //         20);
-        // }
-
-        // auto stairsSlope = addEntity("stairs-slope");
-        // collider = {Engine::Vec2(0, -5), Engine::Vec2(80, 75),
-        //             Engine::Vec2(80, -5)};
-
-        // stairsSlope->addComponent<Engine::LocationComponent>(340.0, 200.0);
-        // stairsSlope->addComponent<Engine::ObstacleComponent>();
-        // stairsSlope->addComponent<Engine::CollisionComponent>(collider);
 
         ////////////////////////////////////////////////////////////////
         // Texture - Grass //////////////////////////////////////////////
