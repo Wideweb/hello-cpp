@@ -13,8 +13,11 @@ class TimeLine {
     float m_Step = 0.0;
 
   public:
+    TimeLine() {}
     TimeLine(const std::vector<Animation> &animations)
         : m_Animaitions(animations) {}
+
+    void add(const Animation &animation) { m_Animaitions.push_back(animation); }
 
     AnimationStep step(float deltaTime) {
         Animation &animation = getCurrent();

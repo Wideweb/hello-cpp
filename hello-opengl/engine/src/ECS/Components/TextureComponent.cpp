@@ -4,7 +4,7 @@ namespace Engine {
 
 TextureComponent::TextureComponent(const std::string &name, const Rect &source,
                                    int width, int height,
-                                   std::shared_ptr<Engine::Shader> shader)
+                                   const std::string &shader)
     : name(name), source(source), width(width), height(height), shader(shader) {
     vertexArray.reset(Engine::VertexArray::create());
     vertexArray->bind();

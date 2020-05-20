@@ -23,6 +23,10 @@ Vec2 Vec2::normalL() { return Vec2(y, -x); }
 
 float Vec2::dot(const Vec2 &vec) { return x * vec.x + y * vec.y; }
 
+Vec3::Vec3() {}
+
+Vec3::Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
+
 Mat2x3 Mat2x3::operator*(const Mat2x3 &matrix) {
     Mat2x3 result;
 

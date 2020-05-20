@@ -1,0 +1,10 @@
+timeLine 
+animation x 50 1
+animation scale 1 1
+animation angle 6.28 1
+animation scale -1 1
+animation x -50 1
+timeLine
+animation y 100 1
+gap 3
+animation y -100 1

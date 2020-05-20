@@ -1,6 +1,7 @@
 #include "RenderSystem.hpp"
 #include "Application.hpp"
 #include "LocationComponent.hpp"
+#include "ParalaxScrollingComponent.hpp"
 #include "RenderComponent.hpp"
 #include "cmath"
 
@@ -10,6 +11,7 @@ void RenderSystem::exec(EntityManager &entities) {
     auto &render = Application::get().getRender();
     auto &window = Application::get().getWindow();
     auto &camera = Application::get().getCamera();
+    auto &shaders = Application::get().getShaders();
 
     float windowWidth = static_cast<float>(window.getWidth());
     float windowHeight = static_cast<float>(window.getHeight());
@@ -19,13 +21,15 @@ void RenderSystem::exec(EntityManager &entities) {
             auto c_render = entity->getComponent<RenderComponent>();
             auto c_location = entity->getComponent<LocationComponent>();
 
-            float dx = c_location->x;
-            float dy = c_location->y;
+            float paralaxScale = 1.0;
 
-            if (!c_location->isStatic) {
-                dx -= camera.x;
-                dy -= camera.y;
+            if (entity->hasComponent<ParalaxScrollingComponent>()) {
+                auto pralax = entity->getComponent<ParalaxScrollingComponent>();
+                paralaxScale = pralax->scale;
             }
+
+            float dx = c_location->x - camera.x * paralaxScale;
+            float dy = c_location->y - camera.y * paralaxScale;
 
             float x = dx / windowWidth * 2.0 - 1;
             float y = dy / windowHeight * 2.0 - 1;
@@ -41,8 +45,10 @@ void RenderSystem::exec(EntityManager &entities) {
 
                                         x,      y,      0.0f, 1.0f};
 
-            c_render->shader->setMatrix4("MVP", model);
-            render.drawTriangles(c_render->shader, c_render->vertexArray);
+            auto shader = shaders.get(c_render->shader);
+
+            shader->setMatrix4("MVP", model);
+            render.drawTriangles(shader, c_render->vertexArray);
         }
     }
 }

@@ -2,6 +2,7 @@
 
 #include "Buffer.hpp"
 #include "Entity.hpp"
+#include "Math.hpp"
 #include "Shader.hpp"
 #include "VertexArray.hpp"
 
@@ -15,12 +16,14 @@ class RenderComponent : public Component {
     std::shared_ptr<Engine::VertexArray> vertexArray;
     std::shared_ptr<Engine::VertexBuffer> vertexBuffer;
     std::shared_ptr<Engine::IndexBuffer> indexBuffer;
-    std::shared_ptr<Engine::Shader> shader;
+    std::string shader;
 
-    RenderComponent(std::vector<float> &vertices,
-                    std::vector<uint32_t> &indexes,
-                    std::shared_ptr<Engine::Shader> shader, int width,
-                    int height);
+    RenderComponent(int width, int height, Vec3 color,
+                    const std::string &shader);
+
+  private:
+    void init(std::vector<float> &vertices, std::vector<uint32_t> &indexes,
+              const std::string &shader, int width, int height);
 };
 
 } // namespace Engine

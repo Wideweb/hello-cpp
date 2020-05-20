@@ -11,25 +11,25 @@ OpenGLTexture::OpenGLTexture(const std::string &path) { load(path); }
 
 bool OpenGLTexture::load(const std::string &path) {
     std::vector<std::byte> fileInMemory;
-    std::ifstream fin(path.data(), std::ios_base::binary);
+    std::ifstream in(path.data(), std::ios_base::binary);
 
-    if (!fin) {
+    if (!in) {
         return false;
     }
 
-    fin.seekg(0, std::ios_base::end);
-    size_t fileSize = static_cast<size_t>(fin.tellg());
+    in.seekg(0, std::ios_base::end);
+    size_t fileSize = static_cast<size_t>(in.tellg());
     fileInMemory.resize(fileSize);
-    fin.seekg(0, std::ios_base::beg);
+    in.seekg(0, std::ios_base::beg);
 
-    if (!fin) {
+    if (!in) {
         return false;
     }
 
-    fin.read(reinterpret_cast<char *>(fileInMemory.data()),
-             static_cast<std::streamsize>(fileInMemory.size()));
+    in.read(reinterpret_cast<char *>(fileInMemory.data()),
+            static_cast<std::streamsize>(fileInMemory.size()));
 
-    if (!fin.good()) {
+    if (!in.good()) {
         return false;
     }
 

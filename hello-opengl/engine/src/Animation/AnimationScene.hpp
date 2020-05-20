@@ -10,8 +10,11 @@ class AnimationScene {
     std::vector<TimeLine> m_TimeLines;
 
   public:
+    AnimationScene() {}
     AnimationScene(const std::vector<TimeLine> &timeLines)
         : m_TimeLines(timeLines) {}
+
+    void add(const TimeLine &timeLine) { m_TimeLines.push_back(timeLine); }
 
     std::vector<AnimationStep> step(float deltaTime) {
         std::vector<AnimationStep> steps;

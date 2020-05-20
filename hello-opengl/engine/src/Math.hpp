@@ -24,6 +24,15 @@ struct Vec2 {
     float dot(const Vec2 &vec);
 };
 
+struct Vec3 {
+    float x = 0;
+    float y = 0;
+    float z = 0;
+
+    Vec3();
+    Vec3(float x, float y, float z);
+};
+
 struct Mat2x3 {
     Vec2 col1;
     Vec2 col2;

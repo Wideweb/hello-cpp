@@ -24,10 +24,10 @@ class TextureComponent : public Component {
     std::shared_ptr<Engine::VertexArray> vertexArray;
     std::shared_ptr<Engine::VertexBuffer> vertexBuffer;
     std::shared_ptr<Engine::IndexBuffer> indexBuffer;
-    std::shared_ptr<Engine::Shader> shader;
+    std::string shader;
 
     TextureComponent(const std::string &name, const Rect &source, int width,
-                     int height, std::shared_ptr<Engine::Shader> shader);
+                     int height, const std::string &shader);
 };
 
 } // namespace Engine

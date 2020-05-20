@@ -15,6 +15,9 @@ set(SOURCE_LIB
     src/Core/Layer.cpp
     src/Core/Time.cpp
     src/Core/TextureManager.cpp
+    src/Core/ShaderManager.cpp
+    src/Core/File.cpp
+    src/Core/Loader.cpp
     src/Render/Buffer.cpp
     src/Render/Render.cpp
     src/Render/Shader.cpp

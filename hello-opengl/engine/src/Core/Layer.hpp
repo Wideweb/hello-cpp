@@ -8,11 +8,17 @@ namespace Engine {
 
 class Layer {
   private:
-    EntityManager m_EntityManager;
+    std::shared_ptr<EntityManager> m_EntityManager;
 
   public:
-    std::shared_ptr<Entity> addEntity(std::string name);
+    Layer();
+    virtual ~Layer() = default;
+
+    std::shared_ptr<Entity> addEntity(const std::string &name);
+    std::shared_ptr<Entity> getEntity(const std::string &name);
     EntityManager &getEntities();
+
+    void load(const std::string &configPath);
 
     virtual void onAttach(){};
     virtual void onDetach(){};

@@ -14,6 +14,7 @@ void TextureSystem::exec(EntityManager &entities) {
     auto &window = Application::get().getWindow();
     auto &camera = Application::get().getCamera();
     auto &textures = Application::get().getTextures();
+    auto &shaders = Application::get().getShaders();
 
     float windowWidth = static_cast<float>(window.getWidth());
     float windowHeight = static_cast<float>(window.getHeight());
@@ -64,10 +65,12 @@ void TextureSystem::exec(EntityManager &entities) {
                 textureModel = Mat2x3::move(Vec2(x, y)) * textureModel;
             }
 
-            texture->shader->setMatrix2x3("model", model.data());
-            texture->shader->setMatrix2x3("texture_model", textureModel.data());
+            auto shader = shaders.get(texture->shader);
 
-            render.drawTexture(texture->shader, texture->vertexArray,
+            shader->setMatrix2x3("model", model.data());
+            shader->setMatrix2x3("texture_model", textureModel.data());
+
+            render.drawTexture(shader, texture->vertexArray,
                                textures.get(texture->name));
         }
     }

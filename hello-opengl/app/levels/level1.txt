@@ -1,0 +1,106 @@
+img characters ./assets/textures/characters.png
+img background ./assets/textures/background.png
+img front ./assets/textures/front.png
+img slope ./assets/textures/slope.png
+img slope-front ./assets/textures/slope-front.png
+img chickens ./assets/textures/chickens.png
+img props ./assets/textures/props.png
+img environment ./assets/environment.png
+
+shader plain ./assets/shaders/plain-vertex-shader.glsl ./assets/shaders/plain-fragment-shader.glsl
+shader texture ./assets/shaders/texture-vertex-shader.glsl ./assets/shaders/texture-fragment-shader.glsl
+shader morphing ./assets/shaders/morphing-vertex-shader.glsl ./assets/shaders/plain-fragment-shader.glsl
+
+entity sky
+location 480 470
+render 960 150 0.0 0.06 0.06 plain
+paralaxScrolling 0
+
+entity underground
+location 400 60
+render 800 120 0.0 0.17 0.15 plain
+
+entity background1
+location 400.0  370.0
+texture background 0 0 1 1 800 275 texture
+
+entity front1
+location 400 145
+texture front 0 0 1 1 800 75 texture
+
+entity ground1
+location 400 175
+collisionRect 800 50
+obstacle
+ground
+
+entity background2
+location 900 300
+texture slope 0 0 1 1 310 350 texture
+
+entity front2
+location 910 80
+texture slope-front 0 0 1 1 265 160 texture
+
+entity ground2
+location 800 200
+colliderTriangle 0 0 0 -119 235 -119
+obstacle
+ground
+
+entity background3
+location 1430 260
+texture background 0 0 1 1 800 275 texture
+
+entity front3
+location 1430 35
+texture front 0 0 1 1 800 75 texture
+
+entity ground3
+location 1430 65
+collisionRect 800 50
+obstacle
+ground
+
+entity chicken
+location 400 200
+velocity 0 0
+texture chickens 0 0 0.1632 0.25 32 25 texture
+frameAnimation 0.25 0.1632 5 0.9 0 0.16 3 0.35
+animation ./assets/animations/demo.txt
+
+entity chicken1
+location 1170 115.0
+velocity 0 0
+texture chickens 0 0 0.1632 0.25 32 25 texture
+frameAnimation 0.25 0.1632 5 0.7 0 0.16 3 0.35
+
+entity chicken2
+location 1150 120.0
+velocity 0 0
+texture chickens 0 0.5 0.1632 0.25 32 25 texture
+frameAnimation 0.25 0.1632 6 1.1 0 0.16 3 0.35
+
+entity player
+location 250 250
+velocity 0 0
+collisionRect 14 50
+rigitBody 0.5
+texture characters 0 0 0.1588 0.2 54 54 texture
+frameAnimation 0 0.1588 1 0.35 0 0.1588 3 0.35
+camera 0 5000 -200
+
+entity paralaxFront1
+location 900 300
+texture environment 0.55 0.15 0.018 0.43 60 800 texture
+paralaxScrolling 2
+
+entity paralaxFront2
+location 1500 300
+texture environment 0.47 0.15 0.033 0.432 60 800 texture
+paralaxScrolling 2
+
+entity paralaxFront3
+location 1700 300
+texture environment 0.5 0.15 0.013 0.432 60 800 texture
+paralaxScrolling 2

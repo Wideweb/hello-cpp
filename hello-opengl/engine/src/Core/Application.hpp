@@ -5,6 +5,7 @@
 #include "Input.hpp"
 #include "Layer.hpp"
 #include "Render.hpp"
+#include "ShaderManager.hpp"
 #include "SystemStack.hpp"
 #include "TextureManager.hpp"
 #include "Time.hpp"
@@ -22,6 +23,7 @@ class Application {
     std::unique_ptr<Render> m_Render;
     std::unique_ptr<Camera> m_Camera;
     std::unique_ptr<TextureManager> m_Texture;
+    std::unique_ptr<ShaderManager> m_Shades;
     std::unique_ptr<EventHandler> m_EventHandler;
     std::vector<Layer *> m_LayerStack;
     SystemStack m_SystemStack;
@@ -47,6 +49,7 @@ class Application {
     Camera &getCamera() { return *m_Camera; }
     Time &getTime() { return m_Time; }
     TextureManager &getTextures() { return *m_Texture; }
+    ShaderManager &getShaders() { return *m_Shades; }
     EventHandler &getEventHandler() { return *m_EventHandler; }
 
     static Application &get() { return *s_Instance; }

@@ -14,6 +14,7 @@ Application::Application() {
     m_Render = std::unique_ptr<Render>(Render::create());
     m_Camera = std::unique_ptr<Camera>(new Camera());
     m_Texture = std::unique_ptr<TextureManager>(new TextureManager());
+    m_Shades = std::unique_ptr<ShaderManager>(new ShaderManager());
     m_EventHandler = std::unique_ptr<EventHandler>(new EventHandler());
 
     initialize();
