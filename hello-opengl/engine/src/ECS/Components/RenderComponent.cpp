@@ -23,15 +23,15 @@ RenderComponent::RenderComponent(int width, int height, Vec3 color,
 void RenderComponent::init(std::vector<float> &vertices,
                            std::vector<uint32_t> &indexes,
                            const std::string &shader, int width, int height) {
-    vertexArray.reset(Engine::VertexArray::create());
+    vertexArray.reset(VertexArray::create());
     vertexArray->bind();
 
-    vertexBuffer.reset(Engine::VertexBuffer::create(vertices));
-    indexBuffer.reset(Engine::IndexBuffer::create(indexes));
+    vertexBuffer.reset(VertexBuffer::create(vertices));
+    indexBuffer.reset(IndexBuffer::create(indexes));
 
-    Engine::BufferLayout layout = {
-        {Engine::ShaderDataType::Float3, "a_position"},
-        {Engine::ShaderDataType::Float3, "a_color"},
+    BufferLayout layout = {
+        {ShaderDataType::Float3, "a_position"},
+        {ShaderDataType::Float3, "a_color"},
     };
 
     vertexBuffer->setLayout(layout);

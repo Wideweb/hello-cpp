@@ -1,167 +1,172 @@
 #include "ImGuiLayer.hpp"
 #include "Application.hpp"
-#include "imgui.h"
+
+namespace Engine {
+
+const std::string vertexShader =
+    R"(
+    #version 330 core
+    layout(location = 0) in vec2 position;
+    layout(location = 1) in vec2 uv;
+    layout(location = 2) in vec4 color;
+
+    uniform mat3 model
+
+    out vec2 v_uv;
+    out vec4 v_color;
+
+    void main() {
+        v_uv = uv;
+        v_color = color;
+
+        vec2 pos = vec3(position, 1.0f) * model;
+        gl_Position = vec4(pos, 1.0f, 1.0f);
+    }
+)";
+
+const std::string fragmentShader =
+    R"(
+    #version 330 core
+    in vec2 v_uv;
+    in vec4 v_color;
+
+    uniform sampler2D s_texture;
+
+    void main() {
+        gl_FragColor = v_color * texture2D(s_texture, v_uv);
+    }
+)";
 
 void ImGuiLayer::onAttach() {
+    m_Shader.reset(Shader::create(vertexShader, fragmentShader));
+
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
 
     ImGuiIO &io = ImGui::GetIO();
     io.BackendPlatformName = "custom_micro_engine";
-
-    // clang-format off
-    io.KeyMap[ImGuiKey_Tab]        = SDL_SCANCODE_TAB;
-    io.KeyMap[ImGuiKey_LeftArrow]  = SDL_SCANCODE_LEFT;
-    io.KeyMap[ImGuiKey_RightArrow] = SDL_SCANCODE_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow]    = SDL_SCANCODE_UP;
-    io.KeyMap[ImGuiKey_DownArrow]  = SDL_SCANCODE_DOWN;
-    io.KeyMap[ImGuiKey_PageUp]     = SDL_SCANCODE_PAGEUP;
-    io.KeyMap[ImGuiKey_PageDown]   = SDL_SCANCODE_PAGEDOWN;
-    io.KeyMap[ImGuiKey_Home]       = SDL_SCANCODE_HOME;
-    io.KeyMap[ImGuiKey_End]        = SDL_SCANCODE_END;
-    io.KeyMap[ImGuiKey_Insert]     = SDL_SCANCODE_INSERT;
-    io.KeyMap[ImGuiKey_Delete]     = SDL_SCANCODE_DELETE;
-    io.KeyMap[ImGuiKey_Backspace]  = SDL_SCANCODE_BACKSPACE;
-    io.KeyMap[ImGuiKey_Space]      = SDL_SCANCODE_SPACE;
-    io.KeyMap[ImGuiKey_Enter]      = SDL_SCANCODE_RETURN;
-    io.KeyMap[ImGuiKey_Escape]     = SDL_SCANCODE_ESCAPE;
-    io.KeyMap[ImGuiKey_A]          = SDL_SCANCODE_A;
-    io.KeyMap[ImGuiKey_C]          = SDL_SCANCODE_C;
-    io.KeyMap[ImGuiKey_V]          = SDL_SCANCODE_V;
-    io.KeyMap[ImGuiKey_X]          = SDL_SCANCODE_X;
-    io.KeyMap[ImGuiKey_Y]          = SDL_SCANCODE_Y;
-    io.KeyMap[ImGuiKey_Z]          = SDL_SCANCODE_Z;
-    // clang-format on
-
-    io.RenderDrawListsFn =
-        imgui_to_engine_render; // Alternatively you can set this to
-                                // NULL and call ImGui::GetDrawData()
-                                // after ImGui::Render() to get the
-                                // same ImDrawData pointer.
-    io.SetClipboardTextFn = ImGui_ImplSdlGL3_SetClipboardText;
-    io.GetClipboardTextFn = ImGui_ImplSdlGL3_GetClipboardText;
-    io.ClipboardUserData = nullptr;
-
-    io.SetClipboardTextFn = ImGui_ImplSdlGL3_SetClipboardText;
-    io.GetClipboardTextFn = ImGui_ImplSdlGL3_GetClipboardText;
-    io.ClipboardUserData = nullptr;
+    io.RenderDrawListsFn = nullptr; // call ImGui::GetDrawData()
+                                    // after ImGui::Render() to get the
+                                    // same ImDrawData pointer.
 }
-
-void ImGuiLayer::onDetach() {
-    ImGui_ImplSdlGL3_InvalidateDeviceObjects();
-    ImGui::DestroyContext();
-}
-
-void ImGuiLayer::onUpdate() {}
 
 void ImGuiLayer::onRender() {
-    
+    auto &input = Application::get().getInput();
+    auto &time = Application::get().getTime();
+    auto &window = Application::get().getWindow();
 
     ImGuiIO &io = ImGui::GetIO();
 
-    if (io.Fonts->TexID == nullptr) {
-        ImGui_ImplSdlGL3_CreateDeviceObjects();
-    }
+    int dWidth, dHeight;
+    window.getDrawableSize(dWidth, dHeight);
+    int width = window.getWidth();
+    int height = window.getHeight();
 
-    // Setup display size (every frame to accommodate for window resizing)
-    int w, h;
-    int display_w, display_h;
-    SDL_GetWindowSize(window, &w, &h);
-    SDL_GL_GetDrawableSize(window, &display_w, &display_h);
-    io.DisplaySize = ImVec2(float(w), float(h));
-    io.DisplayFramebufferScale = ImVec2(w > 0 ? float(display_w / w) : 0.f,
-                                        h > 0 ? float(display_h / h) : 0.f);
+    io.DisplaySize = ImVec2(float(width), float(height));
+    io.DisplayFramebufferScale =
+        ImVec2(width > 0 ? float(dWidth / width) : 0.f,
+               height > 0 ? float(dHeight / height) : 0.f);
 
-    io.DeltaTime = Application::getTime()->getDeltaSeconds();
+    io.DeltaTime = time.getDeltaSeconds();
     if (io.DeltaTime <= 0) {
         io.DeltaTime = 0.00001f;
     }
 
-    // Setup inputs
-    // (we already got mouse wheel, keyboard keys & characters from
-    // SDL_PollEvent())
-    int mx, my;
-    Uint32 mouseMask = SDL_GetMouseState(&mx, &my);
-    if (SDL_GetWindowFlags(window) & SDL_WINDOW_MOUSE_FOCUS)
-        io.MousePos = ImVec2(float(mx), float(my));
-    else
-        io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
+    auto mouse = input.GetMousePosition();
+    io.MousePos = ImVec2(mouse.x, mouse.y);
 
-    io.MouseDown[0] =
-        g_MousePressed[0] || (mouseMask & SDL_BUTTON(SDL_BUTTON_LEFT)) !=
-                                 0; // If a mouse press event came, always pass
-                                    // it as "mouse held this frame", so we
-                                    // don't miss click-release events that are
-                                    // shorter than 1 frame.
-    io.MouseDown[1] =
-        g_MousePressed[1] || (mouseMask & SDL_BUTTON(SDL_BUTTON_RIGHT)) != 0;
-    io.MouseDown[2] =
-        g_MousePressed[2] || (mouseMask & SDL_BUTTON(SDL_BUTTON_MIDDLE)) != 0;
-    g_MousePressed[0] = g_MousePressed[1] = g_MousePressed[2] = false;
-
-    io.MouseWheel = g_MouseWheel;
-    g_MouseWheel = 0.0f;
-
-    // Hide OS mouse cursor if ImGui is drawing it
-    SDL_ShowCursor(io.MouseDrawCursor ? 0 : 1);
+    io.MouseDown[0] = input.IsMousePressed(MouseButton::Left);
+    io.MouseDown[1] = input.IsMousePressed(MouseButton::Right);
+    io.MouseDown[2] = input.IsMousePressed(MouseButton::Middle);
 
     // Start the frame. This call will update the io.WantCaptureMouse,
     // io.WantCaptureKeyboard flag that you can use to dispatch inputs (or not)
     // to your application.
     ImGui::NewFrame();
+
+    ImGui::Render();
+
+    draw(ImGui::GetDrawData());
 }
 
 void ImGuiLayer::onMouseEvent(MouseEvent &e) {}
 
 void ImGuiLayer::onWindowEvent(WindowEvent &e) {}
 
-bool ImGui_ImplSdlGL3_CreateDeviceObjects() {
-    const GLchar *vertex_shader =
-        //"#version 150\n"
-        "#if defined(GL_ES)\n"
-        "precision highp float;\n"
-        "#endif //GL_ES\n"
-        "uniform mat3 ProjMtx;\n"
-        "attribute vec2 Position;\n"
-        "attribute vec2 UV;\n"
-        "attribute vec4 Color;\n"
-        "varying vec2 Frag_UV;\n"
-        "varying vec4 Frag_Color;\n"
-        "void main()\n"
-        "{\n"
-        "	Frag_UV = UV;\n"
-        "	Frag_Color = Color;\n"
-        "	gl_Position = vec4(ProjMtx * vec3(Position.xy,1), 1);\n"
-        "}\n";
-
-    const GLchar *fragment_shader =
-        //"#version 150\n"
-        "#if defined(GL_ES)\n"
-        "precision highp float;\n"
-        "#endif //GL_ES\n"
-        "uniform sampler2D Texture;\n"
-        "varying vec2 Frag_UV;\n"
-        "varying vec4 Frag_Color;\n"
-        //"out vec4 Out_Color;\n"
-        "void main()\n"
-        "{\n"
-        "	gl_FragColor = Frag_Color * texture2D( Texture, Frag_UV);\n"
-        "}\n";
-
-    g_im_gui_shader =
-        new om::shader_gl_es20(vertex_shader, fragment_shader,
-                               {{0, "Position"}, {1, "UV"}, {2, "Color"}});
-
-    ImGui_ImplSdlGL3_CreateFontsTexture();
-
-    return true;
-}
-
-void ImGui_ImplSdlGL3_InvalidateDeviceObjects() {
+void ImGuiLayer::onDetach() {
     void *ptr = ImGui::GetIO().Fonts->TexID;
-    om::texture *texture = reinterpret_cast<om::texture *>(ptr);
-    om::g_engine->destroy_texture(texture);
-
-    delete g_im_gui_shader;
-    g_im_gui_shader = nullptr;
+    ImGui::DestroyContext();
 }
+
+void ImGuiLayer::draw(ImDrawData *drawData) {
+    auto &render = Application::get().getRender();
+    // Avoid rendering when minimized, scale coordinates for retina displays
+    // (screen coordinates != framebuffer coordinates)
+    ImGuiIO &io = ImGui::GetIO();
+    int fbWidth = int(io.DisplaySize.x * io.DisplayFramebufferScale.x);
+    int fbHeight = int(io.DisplaySize.y * io.DisplayFramebufferScale.y);
+    if (fbWidth == 0 || fbHeight == 0) {
+        return;
+    }
+    drawData->ScaleClipRects(io.DisplayFramebufferScale);
+
+    Mat2x3 model =
+        Mat2x3::scale(2.0f / io.DisplaySize.x, -2.0f / io.DisplaySize.y) *
+        Mat2x3::move(Vec2(-1.0f, 1.0f));
+
+    m_Shader->setMatrix2x3("model", model.data());
+
+    for (int n = 0; n < drawData->CmdListsCount; n++) {
+        const ImDrawList *cmdList = drawData->CmdLists[n];
+        const ImDrawIdx *idx_buffer_offset = nullptr;
+
+        std::shared_ptr<VertexArray> vertexArray(VertexArray::create());
+        vertexArray->bind();
+
+        BufferLayout layout = {
+            {ShaderDataType::Float2, "position"},
+            {ShaderDataType::Float2, "uv"},
+            {ShaderDataType::Float4, "color"},
+        };
+
+        std::vector<float> vertices;
+        for (const ImDrawVert &vertex : cmdList->VtxBuffer) {
+            vertices.push_back(vertex.pos.x);
+            vertices.push_back(vertex.pos.y);
+            vertices.push_back(vertex.uv.x);
+            vertices.push_back(vertex.uv.y);
+
+            float r = float(vertex.col & 8);
+            float g = float((vertex.col << 8) & 8);
+            float b = float((vertex.col << 16) & 8);
+            float a = float((vertex.col << 24) & 8);
+
+            vertices.push_back(r);
+            vertices.push_back(g);
+            vertices.push_back(b);
+            vertices.push_back(a);
+        }
+        std::shared_ptr<VertexBuffer> vertexBuffer(
+            VertexBuffer::create(vertices));
+
+        std::vector<uint32_t> indexes(cmdList->IdxBuffer.begin(),
+                                      cmdList->IdxBuffer.end());
+        std::shared_ptr<IndexBuffer> indexBuffer(IndexBuffer::create(indexes));
+
+        vertexBuffer->setLayout(layout);
+        vertexArray->addVertexBuffer(vertexBuffer);
+        vertexArray->setIndexBuffer(indexBuffer);
+
+        for (size_t i = 0; i < cmdList->CmdBuffer.Size; i++) {
+            const ImDrawCmd *pcmd = &cmdList->CmdBuffer[i];
+            assert(pcmd->UserCallback == nullptr); // we not use it
+
+            std::shared_ptr<Texture> texture(Texture::create(indexes));
+            om::texture *tex = reinterpret_cast<om::texture *>(pcmd->TextureId);
+
+            render.drawTexture(m_Shader, vertexArray, texture);
+        }
+    }
+}
+
+} // namespace Engine

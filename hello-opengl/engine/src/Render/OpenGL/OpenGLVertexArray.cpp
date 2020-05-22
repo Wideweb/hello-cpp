@@ -20,7 +20,9 @@ GLenum getBaseType(ShaderDataType type) {
 
 OpenGLVertexArray::OpenGLVertexArray() { glGenVertexArrays(1, &m_RendererID); }
 
-OpenGLVertexArray::~OpenGLVertexArray() {}
+OpenGLVertexArray::~OpenGLVertexArray() {
+    glDeleteVertexArrays(1, &m_RendererID);
+}
 
 void OpenGLVertexArray::bind() {
     GL_CHECK();
@@ -43,9 +45,10 @@ void OpenGLVertexArray::addVertexBuffer(
     for (const auto &element : layout) {
         glEnableVertexAttribArray(index);
         GL_CHECK();
-        glVertexAttribPointer(
-            index, element.getElementCount(), getBaseType(element.type), GL_FALSE,
-            layout.getStride(), reinterpret_cast<void *>(element.offset));
+        glVertexAttribPointer(index, element.getElementCount(),
+                              getBaseType(element.type), GL_FALSE,
+                              layout.getStride(),
+                              reinterpret_cast<void *>(element.offset));
         GL_CHECK();
         index++;
     }
