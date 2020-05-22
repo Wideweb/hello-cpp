@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Buffer.hpp"
+#include <memory>
 
 namespace Engine {
 

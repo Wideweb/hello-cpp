@@ -1,5 +1,6 @@
 #include "OpenGLBuffer.hpp"
 #include "Debug.hpp"
+#include <cassert>
 
 namespace Engine {
 

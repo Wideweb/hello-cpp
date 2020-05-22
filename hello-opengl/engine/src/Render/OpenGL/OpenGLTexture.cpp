@@ -1,9 +1,6 @@
 #include "OpenGLTexture.hpp"
 #include "Debug.hpp"
 #include "picopng.hpp"
-#include <fstream>
-#include <iostream>
-#include <vector>
 
 namespace Engine {
 

@@ -2,6 +2,8 @@
 #include "glad/glad.h"
 #include <iostream>
 #include <sstream>
+#include <string_view>
+#include <cassert>
 
 namespace Engine {
 
@@ -68,7 +70,7 @@ void SDLWindow::init(const WindowProps &props) {
 
     std::string_view platform = SDL_GetPlatform();
 
-    auto list = {"Windows"sv, "Mac OS X"sv};
+    auto list = {"Windows"sv, "Mac OS X"sv, "Linux"sv};
     auto it = find(begin(list), end(list), platform);
     if (it != end(list)) {
         gl_minor_ver = 3;
