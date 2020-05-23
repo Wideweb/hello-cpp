@@ -4,6 +4,7 @@
 #include "ControllerTask.hpp"
 #include "EntryPoint.hpp"
 #include "FlyTask.hpp"
+#include "ImGuiLayer.hpp"
 #include "Inverter.hpp"
 #include "JumpTask.hpp"
 #include "MoveLeftTask.hpp"
@@ -79,19 +80,23 @@ class MyLayer : public Engine::Layer {
     virtual void onUpdate() override {}
 
     virtual void onMouseEvent(Engine::MouseEvent &e) override {
-        if (e.type == Engine::EventType::MouseDown) {
-            auto location = m_Player->getComponent<Engine::LocationComponent>();
-            auto velocity = m_Player->getComponent<Engine::VelocityComponent>();
-            location->x = 1550;
-            location->y = 300;
-            velocity->y = 0;
-        }
+        // if (e.type == Engine::EventType::MouseDown) {
+        //     auto location =
+        //     m_Player->getComponent<Engine::LocationComponent>(); auto
+        //     velocity = m_Player->getComponent<Engine::VelocityComponent>();
+        //     location->x = 1550;
+        //     location->y = 300;
+        //     velocity->y = 0;
+        // }
     }
 };
 
 class MyApp : public Engine::Application {
   public:
-    MyApp() { addLayer(new MyLayer()); }
+    MyApp() {
+        addLayer(new MyLayer());
+        addLayer(new Engine::ImGuiLayer());
+    }
 
     virtual ~MyApp() {}
 };

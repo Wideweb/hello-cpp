@@ -46,6 +46,7 @@ set(SOURCE_LIB
     src/Collision/CollisionDetection.cpp
     src/Collision/BroadPhaseAlgorithm.cpp
     src/Collision/NarrowPhaseAlgorithm.cpp
+    src/ImGui/ImGuiLayer.cpp
     src/Math.cpp
 )	
 
@@ -68,7 +69,7 @@ target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/Collision
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/Collision/Shapes
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/Animation
-                                         ${CMAKE_CURRENT_SOURCE_DIR}/src/ImGui/ImGuiLayer
+                                         ${CMAKE_CURRENT_SOURCE_DIR}/src/ImGui
                                          ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
 
 find_package(SDL2 REQUIRED)

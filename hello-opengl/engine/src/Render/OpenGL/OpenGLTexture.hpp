@@ -10,6 +10,7 @@ class OpenGLTexture : public Texture {
     GLuint m_TextureID;
 
   public:
+    OpenGLTexture(const void *pixels, const size_t width, const size_t height);
     OpenGLTexture(const std::string &path);
     virtual ~OpenGLTexture();
 

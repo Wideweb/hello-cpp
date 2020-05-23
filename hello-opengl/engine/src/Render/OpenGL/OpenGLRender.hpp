@@ -21,6 +21,9 @@ class OpenGLRender : public Render {
     virtual void drawTexture(std::shared_ptr<Shader> shader,
                              std::shared_ptr<VertexArray> vertexArray,
                              std::shared_ptr<Texture> texture) override;
+    virtual void drawTexture(std::shared_ptr<Shader> shader,
+                             std::shared_ptr<VertexArray> vertexArray,
+                             Texture *texture) override;
 };
 
 } // namespace Engine

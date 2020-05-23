@@ -20,6 +20,9 @@ class Render {
     virtual void drawTexture(std::shared_ptr<Shader> shader,
                              std::shared_ptr<VertexArray> vertexArray,
                              std::shared_ptr<Texture> texture) = 0;
+    virtual void drawTexture(std::shared_ptr<Shader> shader,
+                             std::shared_ptr<VertexArray> vertexArray,
+                             Texture *texture) = 0;
 
     static Render *create();
 };

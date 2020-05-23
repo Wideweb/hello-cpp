@@ -10,7 +10,7 @@ const std::string vertexShader =
     layout(location = 1) in vec2 uv;
     layout(location = 2) in vec4 color;
 
-    uniform mat3 model
+    uniform mat2x3 model;
 
     out vec2 v_uv;
     out vec4 v_color;
@@ -32,8 +32,10 @@ const std::string fragmentShader =
 
     uniform sampler2D s_texture;
 
+    out vec4 f_color;
+
     void main() {
-        gl_FragColor = v_color * texture2D(s_texture, v_uv);
+        f_color = v_color * texture(s_texture, v_uv);
     }
 )";
 
@@ -45,10 +47,18 @@ void ImGuiLayer::onAttach() {
 
     ImGuiIO &io = ImGui::GetIO();
     io.BackendPlatformName = "custom_micro_engine";
-    io.RenderDrawListsFn = nullptr; // call ImGui::GetDrawData()
-                                    // after ImGui::Render() to get the
-                                    // same ImDrawData pointer.
+    io.RenderDrawListsFn = nullptr;
+
+    if (io.Fonts->TexID == nullptr) {
+        unsigned char *pixels = nullptr;
+        int width = 0;
+        int height = 0;
+        io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+        io.Fonts->TexID = Texture::create(pixels, width, height);
+    }
 }
+
+void ImGuiLayer::onUpdate() {}
 
 void ImGuiLayer::onRender() {
     auto &input = Application::get().getInput();
@@ -79,10 +89,37 @@ void ImGuiLayer::onRender() {
     io.MouseDown[1] = input.IsMousePressed(MouseButton::Right);
     io.MouseDown[2] = input.IsMousePressed(MouseButton::Middle);
 
-    // Start the frame. This call will update the io.WantCaptureMouse,
-    // io.WantCaptureKeyboard flag that you can use to dispatch inputs (or not)
-    // to your application.
     ImGui::NewFrame();
+
+    ImGui::SetNextWindowPos(ImVec2(0, 0));
+    ImGui::SetNextWindowSize(ImVec2(200, 0));
+
+    {
+        static float f = 0.0f;
+        static int counter = 0;
+
+        ImGui::Begin("Hello, world!"); // Create a window called "Hello, world!"
+                                       // and append into it.
+
+        ImGui::Text("This is some useful text."); // Display some text (you can
+                                                  // use a format strings too)
+
+        ImGui::SliderFloat(
+            "float", &f, 0.0f,
+            1.0f); // Edit 1 float using a slider from 0.0f to 1.0f
+
+        if (ImGui::Button("Button")) {
+            counter++;
+        }
+
+        ImGui::SameLine();
+        ImGui::Text("counter = %d", counter);
+
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
+                    1000.0f / ImGui::GetIO().Framerate,
+                    ImGui::GetIO().Framerate);
+        ImGui::End();
+    }
 
     ImGui::Render();
 
@@ -100,6 +137,7 @@ void ImGuiLayer::onDetach() {
 
 void ImGuiLayer::draw(ImDrawData *drawData) {
     auto &render = Application::get().getRender();
+
     // Avoid rendering when minimized, scale coordinates for retina displays
     // (screen coordinates != framebuffer coordinates)
     ImGuiIO &io = ImGui::GetIO();
@@ -111,8 +149,8 @@ void ImGuiLayer::draw(ImDrawData *drawData) {
     drawData->ScaleClipRects(io.DisplayFramebufferScale);
 
     Mat2x3 model =
-        Mat2x3::scale(2.0f / io.DisplaySize.x, -2.0f / io.DisplaySize.y) *
-        Mat2x3::move(Vec2(-1.0f, 1.0f));
+        Mat2x3::move(Vec2(-1.0f, 1.0f)) *
+        Mat2x3::scale(2.0f / io.DisplaySize.x, -2.0f / io.DisplaySize.y);
 
     m_Shader->setMatrix2x3("model", model.data());
 
@@ -136,10 +174,10 @@ void ImGuiLayer::draw(ImDrawData *drawData) {
             vertices.push_back(vertex.uv.x);
             vertices.push_back(vertex.uv.y);
 
-            float r = float(vertex.col & 8);
-            float g = float((vertex.col << 8) & 8);
-            float b = float((vertex.col << 16) & 8);
-            float a = float((vertex.col << 24) & 8);
+            float r = float(vertex.col & 255) / 255.0f;
+            float g = float((vertex.col >> 8) & 255) / 255.0f;
+            float b = float((vertex.col >> 16) & 255) / 255.0f;
+            float a = float((vertex.col >> 24) & 255) / 255.0f;
 
             vertices.push_back(r);
             vertices.push_back(g);
@@ -161,8 +199,7 @@ void ImGuiLayer::draw(ImDrawData *drawData) {
             const ImDrawCmd *pcmd = &cmdList->CmdBuffer[i];
             assert(pcmd->UserCallback == nullptr); // we not use it
 
-            std::shared_ptr<Texture> texture(Texture::create(indexes));
-            om::texture *tex = reinterpret_cast<om::texture *>(pcmd->TextureId);
+            auto texture(reinterpret_cast<Texture *>(pcmd->TextureId));
 
             render.drawTexture(m_Shader, vertexArray, texture);
         }

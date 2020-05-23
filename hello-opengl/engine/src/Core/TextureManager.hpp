@@ -13,6 +13,7 @@ class TextureManager {
 
   public:
     void load(const std::string &name, const std::string &path);
+    void add(const std::string &name, Texture *texture);
     std::shared_ptr<Texture> get(const std::string &name);
 };
 

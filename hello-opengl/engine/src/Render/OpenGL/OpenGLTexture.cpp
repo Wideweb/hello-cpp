@@ -4,6 +4,32 @@
 
 namespace Engine {
 
+OpenGLTexture::OpenGLTexture(const void *pixels, const size_t width,
+                             const size_t height) {
+    glGenTextures(1, &m_TextureID);
+    glBindTexture(GL_TEXTURE_2D, m_TextureID);
+
+    GLint mipmap_level = 0;
+    GLint border = 0;
+
+    // clang-format off
+    glTexImage2D(
+        GL_TEXTURE_2D,
+        mipmap_level,
+        GL_RGBA,
+        static_cast<GLsizei>(width),
+        static_cast<GLsizei>(height),
+        border,
+        GL_RGBA,
+        GL_UNSIGNED_BYTE,
+        pixels
+    );
+    // clang-format on
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+}
+
 OpenGLTexture::OpenGLTexture(const std::string &path) { load(path); }
 
 bool OpenGLTexture::load(const std::string &path) {

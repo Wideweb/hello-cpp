@@ -45,7 +45,10 @@ void Application::run() {
 
         for (auto layer : m_LayerStack) {
             layer->onUpdate();
-            m_SystemStack.exec(layer->getEntities());
+            if (!layer->getEntities().empty()) {
+                m_SystemStack.exec(layer->getEntities());
+            }
+            layer->onRender();
         }
 
         m_Window->swapBuffers();

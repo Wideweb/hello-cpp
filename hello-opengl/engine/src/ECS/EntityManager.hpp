@@ -26,6 +26,8 @@ class EntityManager {
     std::shared_ptr<Entity> get(const std::string name) {
         return m_EntitiesMap[name];
     }
+
+    bool empty() { return m_Entities.empty(); }
 };
 
 } // namespace Engine

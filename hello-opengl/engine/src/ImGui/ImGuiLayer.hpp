@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Layer.hpp"
-#include "imgui.h"
+#include "Shader.hpp"
+#include "imgui/imgui.h"
 
 namespace Engine {
 
