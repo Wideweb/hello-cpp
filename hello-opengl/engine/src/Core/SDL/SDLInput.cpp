@@ -5,6 +5,8 @@ namespace Engine {
 
 static SDL_Scancode getSDLScancode(KeyCode code) {
     switch (code) {
+    case KeyCode::Backspace:
+        return SDL_SCANCODE_BACKSPACE;
     case KeyCode::Space:
         return SDL_SCANCODE_SPACE;
     case KeyCode::A:
@@ -35,7 +37,7 @@ static int getSDLButton(MouseButton code) {
     }
 }
 
-void SDLInput::update() { SDL_PumpEvents(); }
+void SDLInput::update() {}
 
 bool SDLInput::IsKeyPressed(KeyCode key) {
     const Uint8 *keystates = SDL_GetKeyboardState(NULL);
@@ -51,5 +53,9 @@ Vec2 SDLInput::GetMousePosition() {
     SDL_GetMouseState(&x, &y);
     return Vec2(float(x), float(y));
 }
+
+void SDLInput::SetTextInput(const std::string &input) { m_TextInput = input; }
+
+std::string SDLInput::GetTextInput() { return m_TextInput; }
 
 } // namespace Engine

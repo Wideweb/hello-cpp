@@ -1,9 +1,10 @@
 #include "SDLWindow.hpp"
+#include "Application.hpp"
 #include "glad/glad.h"
+#include <cassert>
 #include <iostream>
 #include <sstream>
 #include <string_view>
-#include <cassert>
 
 namespace Engine {
 
@@ -118,6 +119,7 @@ void SDLWindow::setWindowEventCallback(
 }
 
 void SDLWindow::readInput() {
+    Application::get().getInput().SetTextInput("");
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) {
@@ -137,6 +139,8 @@ void SDLWindow::readInput() {
         } else if (e.type == SDL_MOUSEBUTTONDOWN) {
             MouseEvent event(e.motion.x, e.motion.y, EventType::MouseDown);
             m_mouseEventCallback(event);
+        } else if (e.type == SDL_TEXTINPUT) {
+            Application::get().getInput().SetTextInput(e.text.text);
         }
     }
 }

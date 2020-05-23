@@ -1,5 +1,6 @@
 #include "ImGuiLayer.hpp"
 #include "Application.hpp"
+#include "LocationComponent.hpp"
 
 namespace Engine {
 
@@ -56,6 +57,13 @@ void ImGuiLayer::onAttach() {
         io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
         io.Fonts->TexID = Texture::create(pixels, width, height);
     }
+
+    io.KeyMap[ImGuiKey_Backspace] = ImGuiKey_Backspace;
+
+    io.ClipboardUserData = nullptr;
+
+    entityId = std::string(1024, '\0');
+    texture = std::string(1024, '\0');
 }
 
 void ImGuiLayer::onUpdate() {}
@@ -64,6 +72,7 @@ void ImGuiLayer::onRender() {
     auto &input = Application::get().getInput();
     auto &time = Application::get().getTime();
     auto &window = Application::get().getWindow();
+    auto layer = Application::get().getLayers()[0];
 
     ImGuiIO &io = ImGui::GetIO();
 
@@ -89,6 +98,10 @@ void ImGuiLayer::onRender() {
     io.MouseDown[1] = input.IsMousePressed(MouseButton::Right);
     io.MouseDown[2] = input.IsMousePressed(MouseButton::Middle);
 
+    io.KeysDown[ImGuiKey_Backspace] = input.IsKeyPressed(KeyCode::Backspace);
+
+    io.AddInputCharactersUTF8(input.GetTextInput().data());
+
     ImGui::NewFrame();
 
     ImGui::SetNextWindowPos(ImVec2(0, 0));
@@ -98,24 +111,29 @@ void ImGuiLayer::onRender() {
         static float f = 0.0f;
         static int counter = 0;
 
-        ImGui::Begin("Hello, world!"); // Create a window called "Hello, world!"
-                                       // and append into it.
+        ImGui::Begin("Entity");
 
-        ImGui::Text("This is some useful text."); // Display some text (you can
-                                                  // use a format strings too)
+        ImGui::Text("Name: ");
+        ImGui::SameLine();
+        ImGui::InputText("id", entityId.data(), entityId.size());
 
-        ImGui::SliderFloat(
-            "float", &f, 0.0f,
-            1.0f); // Edit 1 float using a slider from 0.0f to 1.0f
+        if (entity != nullptr) {
+            auto location = entity->getComponent<LocationComponent>();
 
-        if (ImGui::Button("Button")) {
-            counter++;
+            ImGui::Text("Location: ");
+            ImGui::InputFloat("x", &location->x, 1.0f, 1.0f, "%.3f");
+            ImGui::InputFloat("y", &location->y, 1.0f, 1.0f, "%.3f");
         }
 
-        ImGui::SameLine();
-        ImGui::Text("counter = %d", counter);
+        if (ImGui::Button("Add")) {
+            entity = layer->addEntity(entityId);
+        }
 
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
+        if (ImGui::Button("Select")) {
+            entity = layer->getEntity(entityId.data());
+        }
+
+        ImGui::Text("%.3f ms/frame (%.1f FPS)",
                     1000.0f / ImGui::GetIO().Framerate,
                     ImGui::GetIO().Framerate);
         ImGui::End();

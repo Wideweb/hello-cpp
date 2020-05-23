@@ -51,6 +51,7 @@ class Application {
     TextureManager &getTextures() { return *m_Texture; }
     ShaderManager &getShaders() { return *m_Shades; }
     EventHandler &getEventHandler() { return *m_EventHandler; }
+    std::vector<Layer *> &getLayers() { return m_LayerStack; }
 
     static Application &get() { return *s_Instance; }
 };

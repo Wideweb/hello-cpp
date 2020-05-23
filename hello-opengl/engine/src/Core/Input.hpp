@@ -6,6 +6,7 @@ namespace Engine {
 
 enum class KeyCode {
     None = 0,
+    Backspace = 8,
     Space = 32,
     A = 65,
     D = 68,
@@ -23,6 +24,8 @@ class Input {
     virtual bool IsKeyPressed(KeyCode key) = 0;
     virtual bool IsMousePressed(MouseButton button) = 0;
     virtual Vec2 GetMousePosition() = 0;
+    virtual std::string GetTextInput() = 0;
+    virtual void SetTextInput(const std::string &) = 0;
 
     static Input *create();
 };

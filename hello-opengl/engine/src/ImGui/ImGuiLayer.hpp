@@ -10,6 +10,10 @@ class ImGuiLayer : public Layer {
   private:
     std::shared_ptr<Shader> m_Shader;
 
+    std::string texture;
+    std::string entityId;
+    std::shared_ptr<Entity> entity;
+
   public:
     virtual void onAttach() override;
     virtual void onDetach() override;
