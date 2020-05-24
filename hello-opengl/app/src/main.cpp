@@ -26,7 +26,7 @@ class MyLayer : public Engine::Layer {
 
   public:
     virtual void onAttach() override {
-        load("./levels/level1.txt");
+        load("./config/index.txt");
 
         auto &app = Engine::Application::get();
 

@@ -16,6 +16,7 @@ Application::Application() {
     m_Texture = std::unique_ptr<TextureManager>(new TextureManager());
     m_Shades = std::unique_ptr<ShaderManager>(new ShaderManager());
     m_EventHandler = std::unique_ptr<EventHandler>(new EventHandler());
+    // m_Sound = std::unique_ptr<SoundMixer>(SoundMixer::create());
 
     initialize();
 
@@ -56,8 +57,12 @@ void Application::run() {
 }
 
 void Application::onMouseEvent(MouseEvent &e) {
-    for (auto layer : m_LayerStack) {
+    for (size_t i = m_LayerStack.size() - 1; i > 0; i--) {
+        auto layer = m_LayerStack[i];
         layer->onMouseEvent(e);
+        if (e.handled) {
+            break;
+        }
     }
 }
 

@@ -6,6 +6,7 @@
 #include "Layer.hpp"
 #include "Render.hpp"
 #include "ShaderManager.hpp"
+#include "SoundMixer.hpp"
 #include "SystemStack.hpp"
 #include "TextureManager.hpp"
 #include "Time.hpp"
@@ -25,6 +26,7 @@ class Application {
     std::unique_ptr<TextureManager> m_Texture;
     std::unique_ptr<ShaderManager> m_Shades;
     std::unique_ptr<EventHandler> m_EventHandler;
+    std::unique_ptr<SoundMixer> m_Sound;
     std::vector<Layer *> m_LayerStack;
     SystemStack m_SystemStack;
     Time m_Time;

@@ -1,5 +1,5 @@
 #include "Window.hpp"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 namespace Engine {
 

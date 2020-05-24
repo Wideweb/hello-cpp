@@ -47,6 +47,9 @@ set(SOURCE_LIB
     src/Collision/BroadPhaseAlgorithm.cpp
     src/Collision/NarrowPhaseAlgorithm.cpp
     src/ImGui/ImGuiLayer.cpp
+    src/Sound/SoundMixer.cpp
+    src/Sound/SDL/SDLSoundBuffer.cpp
+    src/Sound/SDL/SDLSoundMixer.cpp
     src/Math.cpp
 )	
 
@@ -70,11 +73,14 @@ target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/Collision/Shapes
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/Animation
                                          ${CMAKE_CURRENT_SOURCE_DIR}/src/ImGui
+                                         ${CMAKE_CURRENT_SOURCE_DIR}/src/Sound
+                                         ${CMAKE_CURRENT_SOURCE_DIR}/src/Sound/SDL
                                          ${CMAKE_CURRENT_SOURCE_DIR}/vendor)
 
+
 find_package(SDL2 REQUIRED)
-target_include_directories(engine PUBLIC /usr/local/Cellar/sdl2/2.0.12_1/include)
-target_link_libraries(engine PRIVATE SDL2::SDL2)
+target_include_directories(engine PRIVATE ${SDL2_INCLUDE_DIRS})
+target_link_libraries(engine PRIVATE ${SDL2_LIBRARIES})
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui)
 target_link_libraries(engine PRIVATE imgui)

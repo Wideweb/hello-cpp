@@ -10,6 +10,9 @@ class ImGuiLayer : public Layer {
   private:
     std::shared_ptr<Shader> m_Shader;
 
+    float mouseOffsetX = 0;
+    float mouseOffsetY = 0;
+
     std::string texture;
     std::string entityId;
     std::shared_ptr<Entity> entity;

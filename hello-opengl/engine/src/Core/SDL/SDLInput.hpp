@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Input.hpp"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <string>
 
 namespace Engine {

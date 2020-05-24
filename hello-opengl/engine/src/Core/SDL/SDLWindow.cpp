@@ -134,10 +134,12 @@ void SDLWindow::readInput() {
             m_windowEventCallback(event);
             break;
         } else if (e.type == SDL_MOUSEMOTION) {
-            MouseEvent event(e.motion.x, e.motion.y, EventType::MouseMoved);
+            MouseEvent event(e.motion.x, m_Props.height - e.motion.y,
+                             EventType::MouseMoved);
             m_mouseEventCallback(event);
         } else if (e.type == SDL_MOUSEBUTTONDOWN) {
-            MouseEvent event(e.motion.x, e.motion.y, EventType::MouseDown);
+            MouseEvent event(e.motion.x, m_Props.height - e.motion.y,
+                             EventType::MouseDown);
             m_mouseEventCallback(event);
         } else if (e.type == SDL_TEXTINPUT) {
             Application::get().getInput().SetTextInput(e.text.text);

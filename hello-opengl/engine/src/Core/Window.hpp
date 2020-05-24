@@ -18,6 +18,7 @@ class MouseEvent {
     float x;
     float y;
     EventType type;
+    bool handled = false;
 
     MouseEvent(float x, float y, EventType type) : x(x), y(y), type(type) {}
 };

@@ -47,6 +47,25 @@ void Loader::load(const std::string &path) {
             shaders.load(id, vertext, fragment);
         }
 
+        if (attribute == "entities") {
+            std::string path;
+            in >> path;
+            loadEntities(path);
+        }
+
+        in >> std::ws;
+    }
+
+    in.close();
+}
+
+void Loader::loadEntities(const std::string &path) {
+    std::ifstream in(path, std::ios::in | std::ios::binary);
+    std::string attribute;
+
+    std::shared_ptr<Entity> entity;
+
+    while (!in.eof() && in >> attribute) {
         if (attribute == "entity") {
             std::string id;
             in >> id;

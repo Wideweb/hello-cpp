@@ -18,6 +18,7 @@ class Loader {
     void load(const std::string &path);
 
   private:
+    void loadEntities(const std::string &path);
     AnimationScene loadAnimation(const std::string &path);
 };
 

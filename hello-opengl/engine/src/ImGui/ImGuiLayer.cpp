@@ -1,6 +1,8 @@
 #include "ImGuiLayer.hpp"
 #include "Application.hpp"
 #include "LocationComponent.hpp"
+#include "ParalaxScrollingComponent.hpp"
+#include "TextureComponent.hpp"
 
 namespace Engine {
 
@@ -108,14 +110,11 @@ void ImGuiLayer::onRender() {
     ImGui::SetNextWindowSize(ImVec2(200, 0));
 
     {
-        static float f = 0.0f;
-        static int counter = 0;
-
         ImGui::Begin("Entity");
 
         ImGui::Text("Name: ");
         ImGui::SameLine();
-        ImGui::InputText("id", entityId.data(), entityId.size());
+        ImGui::InputText("", entityId.data(), entityId.size());
 
         if (entity != nullptr) {
             auto location = entity->getComponent<LocationComponent>();
@@ -143,8 +142,6 @@ void ImGuiLayer::onRender() {
 
     draw(ImGui::GetDrawData());
 }
-
-void ImGuiLayer::onMouseEvent(MouseEvent &e) {}
 
 void ImGuiLayer::onWindowEvent(WindowEvent &e) {}
 
@@ -220,6 +217,81 @@ void ImGuiLayer::draw(ImDrawData *drawData) {
             auto texture(reinterpret_cast<Texture *>(pcmd->TextureId));
 
             render.drawTexture(m_Shader, vertexArray, texture);
+        }
+    }
+}
+
+void ImGuiLayer::onMouseEvent(Engine::MouseEvent &e) {
+    ImGuiIO &io = ImGui::GetIO();
+    if (io.WantCaptureMouse) {
+        return;
+    }
+
+    e.handled = true;
+
+    auto &camera = Application::get().getCamera();
+    auto &input = Application::get().getInput();
+
+    if (e.type == Engine::EventType::MouseDown) {
+        bool found = false;
+        auto layer = Application::get().getLayers()[0];
+        auto entities = layer->getEntities().getAll();
+        for (size_t i = entities.size() - 1; i > 0; i--) {
+            auto entity_ = entities[i];
+            auto location = entity_->getComponent<LocationComponent>();
+
+            float paralaxScale = 1.0f;
+
+            if (entity_->hasComponent<ParalaxScrollingComponent>()) {
+                auto pralax =
+                    entity_->getComponent<ParalaxScrollingComponent>();
+                paralaxScale = pralax->scale;
+            }
+
+            if (entity_->hasComponent<TextureComponent>()) {
+                auto texture = entity_->getComponent<TextureComponent>();
+                float left = location->x - texture->width / 2;
+                float right = location->x + texture->width / 2;
+                float top = location->y + texture->height / 2;
+                float bottom = location->y - texture->height / 2;
+
+                int mY = e.y + camera.y * paralaxScale;
+                int mX = e.x + camera.x * paralaxScale;
+
+                if (mX > left && mX < right && mY > bottom && mY < top) {
+                    entity = entity_;
+                    std::string name = entity->getName();
+                    name.copy(entityId.data(), name.size());
+                    entityId[name.size()] = '\0';
+
+                    mouseOffsetX = location->x - mX;
+                    mouseOffsetY = location->y - mY;
+
+                    found = true;
+
+                    break;
+                }
+            }
+        }
+
+        if (!found) {
+            entity = nullptr;
+            entityId[0] = '\0';
+        }
+    }
+
+    if (entity != nullptr && e.type == Engine::EventType::MouseMoved) {
+        if (input.IsMousePressed(MouseButton::Left)) {
+            float paralaxScale = 1.0f;
+
+            if (entity->hasComponent<ParalaxScrollingComponent>()) {
+                auto pralax = entity->getComponent<ParalaxScrollingComponent>();
+                paralaxScale = pralax->scale;
+            }
+
+            auto location = entity->getComponent<LocationComponent>();
+            location->x = e.x + camera.x * paralaxScale + mouseOffsetX;
+            location->y = e.y + camera.y * paralaxScale + mouseOffsetY;
         }
     }
 }

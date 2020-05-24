@@ -1,16 +1,3 @@
-img characters ./assets/textures/characters.png
-img background ./assets/textures/background.png
-img front ./assets/textures/front.png
-img slope ./assets/textures/slope.png
-img slope-front ./assets/textures/slope-front.png
-img chickens ./assets/textures/chickens.png
-img props ./assets/textures/props.png
-img environment ./assets/environment.png
-
-shader plain ./assets/shaders/plain-vertex-shader.glsl ./assets/shaders/plain-fragment-shader.glsl
-shader texture ./assets/shaders/texture-vertex-shader.glsl ./assets/shaders/texture-fragment-shader.glsl
-shader morphing ./assets/shaders/morphing-vertex-shader.glsl ./assets/shaders/plain-fragment-shader.glsl
-
 entity sky
 location 480 470
 render 960 150 0.0 0.06 0.06 plain
