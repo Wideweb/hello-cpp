@@ -46,6 +46,7 @@ class Application {
     void addLayer(Layer *layer);
 
     Window &getWindow() { return *m_Window; }
+    SoundMixer &getSound() { return *m_Sound; }
     Input &getInput() { return *m_Input; }
     Render &getRender() { return *m_Render; }
     Camera &getCamera() { return *m_Camera; }

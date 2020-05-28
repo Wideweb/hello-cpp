@@ -9,6 +9,8 @@ class SoundMixer {
   public:
     virtual ~SoundMixer() = default;
 
+    virtual void init() = 0;
+
     static SoundMixer *create();
 
     virtual void add(std::string name, std::string path) = 0;

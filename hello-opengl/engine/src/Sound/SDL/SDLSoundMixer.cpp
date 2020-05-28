@@ -3,7 +3,9 @@
 
 namespace Engine {
 
-SDLSoundMixer::SDLSoundMixer() {
+SDLSoundMixer::SDLSoundMixer() {}
+
+void SDLSoundMixer::init() {
     m_DeviceSpec.freq = 48000;
     m_DeviceSpec.format = AUDIO_S16LSB;
     m_DeviceSpec.channels = 2;
@@ -12,15 +14,8 @@ SDLSoundMixer::SDLSoundMixer() {
     m_DeviceSpec.userdata = this;
 
     const char *defaultDeviceName = SDL_GetAudioDeviceName(0, SDL_FALSE);
-
-    int i, count = SDL_GetNumAudioDevices(0);
-
-    for (i = 0; i < count; ++i) {
-        SDL_Log("Audio device %d: %s", i, SDL_GetAudioDeviceName(i, 0));
-    }
-
-    m_Device = SDL_OpenAudioDevice(defaultDeviceName, 0, &m_DeviceSpec, nullptr,
-                                   SDL_AUDIO_ALLOW_ANY_CHANGE);
+    m_Device = SDL_OpenAudioDevice(defaultDeviceName, SDL_FALSE, &m_DeviceSpec,
+                                   nullptr, SDL_AUDIO_ALLOW_ANY_CHANGE);
 
     if (m_Device == 0) {
         std::cerr << "failed open audio device: " << SDL_GetError();

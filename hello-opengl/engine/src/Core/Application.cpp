@@ -16,7 +16,7 @@ Application::Application() {
     m_Texture = std::unique_ptr<TextureManager>(new TextureManager());
     m_Shades = std::unique_ptr<ShaderManager>(new ShaderManager());
     m_EventHandler = std::unique_ptr<EventHandler>(new EventHandler());
-    // m_Sound = std::unique_ptr<SoundMixer>(SoundMixer::create());
+    m_Sound = std::unique_ptr<SoundMixer>(SoundMixer::create());
 
     initialize();
 
@@ -29,6 +29,7 @@ void Application::initialize() {
         std::bind(&Application::onMouseEvent, this, std::placeholders::_1));
     m_Window->setWindowEventCallback(
         std::bind(&Application::onWindowEvent, this, std::placeholders::_1));
+    m_Sound->init();
     m_Time.init();
 }
 

@@ -71,6 +71,9 @@ class MyLayer : public Engine::Layer {
         ////////////////////////////////////////////////////////////////
         app.getEventHandler().add<Engine::BeginCollisionEvent>(
             std::bind(&MyLayer::beginCollision, this, std::placeholders::_1));
+
+        app.getSound().add("background", "./assets/music/background.wav");
+        app.getSound().play("background");
     }
 
     void beginCollision(Engine::BeginCollisionEvent &event) {
