@@ -28,6 +28,8 @@ class TextureComponent : public Component {
 
     TextureComponent(const std::string &name, const Rect &source, int width,
                      int height, const std::string &shader);
+
+    void update();
 };
 
 } // namespace Engine

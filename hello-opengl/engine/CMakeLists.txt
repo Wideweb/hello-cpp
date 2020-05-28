@@ -41,6 +41,7 @@ set(SOURCE_LIB
     src/ECS/Systems/MorphingSystem.cpp
     src/ECS/Systems/AnimationSystem.cpp
     src/ECS/Systems/TextureSystem.cpp
+    src/ECS/Systems/LightSystem.cpp
     src/ECS/Systems/AISystem.cpp
     src/ECS/Systems/InteractionSystem.cpp
     src/Collision/CollisionDetection.cpp

@@ -89,6 +89,8 @@ class VertexBuffer {
     virtual void setLayout(BufferLayout &layout) = 0;
     virtual const BufferLayout &getLayout() const = 0;
 
+    virtual void setVertices(const std::vector<float> &vertices) = 0;
+
     static VertexBuffer *create(const std::vector<float> &vertices);
 };
 

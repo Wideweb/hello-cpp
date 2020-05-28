@@ -2,6 +2,7 @@
 #include "Application.hpp"
 #include "FrameAnimationComponent.hpp"
 #include "LocationComponent.hpp"
+#include "MaterialComponent.hpp"
 #include "Math.hpp"
 #include "ParalaxScrollingComponent.hpp"
 #include "TextureComponent.hpp"
@@ -22,6 +23,7 @@ void TextureSystem::exec(EntityManager &entities) {
     for (auto entity : entities.getAll()) {
         if (entity->hasComponent<TextureComponent>()) {
             auto texture = entity->getComponent<TextureComponent>();
+            auto material = entity->getComponent<MaterialComponent>();
             auto location = entity->getComponent<LocationComponent>();
 
             float paralaxScale = 1.0;
@@ -69,6 +71,14 @@ void TextureSystem::exec(EntityManager &entities) {
 
             shader->setMatrix2x3("model", model.data());
             shader->setMatrix2x3("texture_model", textureModel.data());
+
+            shader->setFloat3("material.ambient", material->ambient.x,
+                              material->ambient.y, material->ambient.z);
+            shader->setFloat3("material.diffuse", material->diffuse.x,
+                              material->diffuse.y, material->diffuse.z);
+            shader->setFloat3("material.specular", material->specular.x,
+                              material->specular.y, material->specular.z);
+            shader->setFloat("material.shininess", material->shininess);
 
             render.drawTexture(shader, texture->vertexArray,
                                textures.get(texture->name));

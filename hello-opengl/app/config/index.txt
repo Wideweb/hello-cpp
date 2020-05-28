@@ -5,10 +5,10 @@ img slope ./assets/textures/slope.png
 img slope-front ./assets/textures/slope-front.png
 img chickens ./assets/textures/chickens.png
 img props ./assets/textures/props.png
-img environment ./assets/environment.png
+img environment ./assets/textures/environment.png
 
 shader plain ./assets/shaders/plain-vertex-shader.glsl ./assets/shaders/plain-fragment-shader.glsl
 shader texture ./assets/shaders/texture-vertex-shader.glsl ./assets/shaders/texture-fragment-shader.glsl
 shader morphing ./assets/shaders/morphing-vertex-shader.glsl ./assets/shaders/plain-fragment-shader.glsl
 
-entities ./levels/entities.txt
+entities ./config/entities.txt

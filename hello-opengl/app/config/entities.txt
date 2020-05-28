@@ -68,6 +68,13 @@ velocity 0 0
 texture chickens 0 0.5 0.1632 0.25 32 25 texture
 frameAnimation 0.25 0.1632 6 1.1 0 0.16 3 0.35
 
+entity fire1
+location 650 220.0
+velocity 0 0
+texture props 0.019 0.04 0.203 0.195 100 50 texture
+frameAnimation 0 0.203 3 0.4 0 0.195 3 0.4
+pointLight texture
+
 entity player
 location 250 250
 velocity 0 0
@@ -80,14 +87,17 @@ camera 0 5000 -200
 entity paralaxFront1
 location 900 300
 texture environment 0.55 0.15 0.018 0.43 60 800 texture
+material 0 0 0 0
 paralaxScrolling 2
 
 entity paralaxFront2
 location 1500 300
 texture environment 0.47 0.15 0.033 0.432 60 800 texture
+material 0 0 0 0
 paralaxScrolling 2
 
 entity paralaxFront3
 location 1700 300
 texture environment 0.5 0.15 0.013 0.432 60 800 texture
+material 0 0 0 0
 paralaxScrolling 2

@@ -17,6 +17,10 @@ OpenGLVertexBuffer::OpenGLVertexBuffer(const std::vector<float> &vertices)
 
 OpenGLVertexBuffer::~OpenGLVertexBuffer() { glDeleteBuffers(1, &m_RendererID); }
 
+void OpenGLVertexBuffer::setVertices(const std::vector<float> &vertices) {
+    m_Vertices = vertices;
+}
+
 void OpenGLVertexBuffer::bind() {
     glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
     GL_CHECK();

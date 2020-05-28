@@ -27,6 +27,18 @@ class EntityManager {
         return m_EntitiesMap[name];
     }
 
+    template <typename T>
+    std::vector<std::shared_ptr<Entity>> getByComponent() {
+        std::vector<std::shared_ptr<Entity>> result;
+        for (auto entity : m_Entities) {
+            if (entity->hasComponent<T>()) {
+                result.push_back(entity);
+            }
+        }
+
+        return result;
+    }
+
     bool empty() { return m_Entities.empty(); }
 };
 

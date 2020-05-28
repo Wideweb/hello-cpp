@@ -6,9 +6,11 @@
 #include "FrameAnimationComponent.hpp"
 #include "GroundComponent.hpp"
 #include "LocationComponent.hpp"
+#include "MaterialComponent.hpp"
 #include "Math.hpp"
 #include "ObstacleComponent.hpp"
 #include "ParalaxScrollingComponent.hpp"
+#include "PointLightComponent.hpp"
 #include "RenderComponent.hpp"
 #include "RigitBodyComponent.hpp"
 #include "TextureComponent.hpp"
@@ -133,6 +135,25 @@ void Loader::loadEntities(const std::string &path) {
             in >> shaderId;
 
             entity->addComponent<TextureComponent>(id, source, w, h, shaderId);
+            entity->addComponent<MaterialComponent>();
+        }
+
+        if (attribute == "material") {
+            float r, g, b, shininess;
+
+            in >> r >> g >> b >> shininess;
+
+            auto material = entity->getComponent<MaterialComponent>();
+            material->shininess = shininess;
+            material->ambient = Vec3(r, g, b);
+            material->diffuse = Vec3(r, g, b);
+            material->specular = Vec3(r, g, b);
+        }
+
+        if (attribute == "pointLight") {
+            std::string shaderId;
+            in >> shaderId;
+            entity->addComponent<PointLightComponent>(shaderId);
         }
 
         if (attribute == "animation") {

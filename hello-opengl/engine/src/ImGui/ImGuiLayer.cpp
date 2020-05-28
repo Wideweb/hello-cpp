@@ -2,6 +2,7 @@
 #include "Application.hpp"
 #include "LocationComponent.hpp"
 #include "ParalaxScrollingComponent.hpp"
+#include "PointLightComponent.hpp"
 #include "TextureComponent.hpp"
 
 namespace Engine {
@@ -118,10 +119,22 @@ void ImGuiLayer::onRender() {
 
         if (entity != nullptr) {
             auto location = entity->getComponent<LocationComponent>();
+            auto texture = entity->getComponent<TextureComponent>();
 
             ImGui::Text("Location: ");
             ImGui::InputFloat("x", &location->x, 1.0f, 1.0f, "%.3f");
             ImGui::InputFloat("y", &location->y, 1.0f, 1.0f, "%.3f");
+
+            ImGui::Text("Texture: ");
+            ImGui::InputInt("width", &texture->width, 1.0f, 1.0f);
+            ImGui::InputInt("height", &texture->height, 1.0f, 1.0f);
+
+            ImGui::Text("Texture source: ");
+            ImGui::InputFloat("left", &texture->source.x, 0.01f, 0.01f, "%.3f");
+            ImGui::InputFloat("top", &texture->source.y, 0.01f, 0.01f, "%.3f");
+            ImGui::InputFloat("w", &texture->source.w, 0.01f, 0.01f, "%.3f");
+            ImGui::InputFloat("h", &texture->source.h, 0.01f, 0.01f, "%.3f");
+            texture->update();
         }
 
         if (ImGui::Button("Add")) {
@@ -135,7 +148,51 @@ void ImGuiLayer::onRender() {
         ImGui::Text("%.3f ms/frame (%.1f FPS)",
                     1000.0f / ImGui::GetIO().Framerate,
                     ImGui::GetIO().Framerate);
+
         ImGui::End();
+
+        {
+            if (entity != nullptr) {
+                if (entity->hasComponent<PointLightComponent>()) {
+                    auto light = entity->getComponent<PointLightComponent>();
+
+                    ImGui::Begin("Point Light");
+
+                    ImGui::InputFloat("constant", &light->constant, 0.01f, 1.0f,
+                                      "%.3f");
+                    ImGui::InputFloat("linear", &light->linear, 0.01f, 1.0f,
+                                      "%.3f");
+                    ImGui::InputFloat("quadratic", &light->quadratic, 0.01f,
+                                      1.0f, "%.3f");
+
+                    ImGui::Text("ambient: ");
+                    ImGui::InputFloat("ar", &light->ambient.x, 0.01f, 0.01f,
+                                      "%.3f");
+                    ImGui::InputFloat("ag", &light->ambient.y, 0.01f, 0.01f,
+                                      "%.3f");
+                    ImGui::InputFloat("ab", &light->ambient.z, 0.01f, 0.01f,
+                                      "%.3f");
+
+                    ImGui::Text("diffuse: ");
+                    ImGui::InputFloat("dr", &light->diffuse.x, 0.01f, 0.01f,
+                                      "%.3f");
+                    ImGui::InputFloat("dg", &light->diffuse.y, 0.01f, 0.01f,
+                                      "%.3f");
+                    ImGui::InputFloat("db", &light->diffuse.z, 0.01f, 0.01f,
+                                      "%.3f");
+
+                    ImGui::Text("specular: ");
+                    ImGui::InputFloat("sr", &light->specular.x, 0.01f, 0.01f,
+                                      "%.3f");
+                    ImGui::InputFloat("sg", &light->specular.y, 0.01f, 0.01f,
+                                      "%.3f");
+                    ImGui::InputFloat("sb", &light->specular.z, 0.01f, 0.01f,
+                                      "%.3f");
+
+                    ImGui::End();
+                }
+            }
+        }
     }
 
     ImGui::Render();
