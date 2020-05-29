@@ -6,8 +6,8 @@ namespace Engine {
 
 class LocationComponent : public Component {
   public:
-    float x;
-    float y;
+    float x = 0;
+    float y = 0;
     float scale = 1.0;
     float angle = 0.0;
 

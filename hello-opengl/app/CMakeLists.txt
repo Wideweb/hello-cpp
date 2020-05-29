@@ -9,6 +9,7 @@ set(SOURCE_EXE
     src/main.cpp
     src/ScreenManager.cpp
     src/GameScreen.cpp
+    src/MenuScreen.cpp
 )	
 
 add_executable(app ${SOURCE_EXE})

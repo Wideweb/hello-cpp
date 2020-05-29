@@ -1,4 +1,5 @@
 #include "SDLInput.hpp"
+#include "Application.hpp"
 #include <iostream>
 
 namespace Engine {
@@ -49,9 +50,10 @@ bool SDLInput::IsMousePressed(MouseButton button) {
 }
 
 Vec2 SDLInput::GetMousePosition() {
+    int height = Application::get().getWindow().getHeight();
     int x, y;
     SDL_GetMouseState(&x, &y);
-    return Vec2(float(x), float(y));
+    return Vec2(float(x), height - float(y));
 }
 
 void SDLInput::SetTextInput(const std::string &input) { m_TextInput = input; }

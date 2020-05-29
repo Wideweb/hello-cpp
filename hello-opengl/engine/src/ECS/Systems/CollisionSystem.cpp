@@ -10,7 +10,7 @@ namespace Engine {
 
 void CollisionSystem::exec(EntityManager &entities) {
     auto &app = Application::get();
-    auto eventHandler = app.getEventHandler();
+    auto &eventHandler = app.getEventHandler();
 
     std::vector<CollisionShape> colliders;
     for (auto &entity : entities.getAll()) {
@@ -38,6 +38,10 @@ void CollisionSystem::exec(EntityManager &entities) {
 
         colliders.emplace_back(entity->getName(), vertices,
                                entity->hasComponent<ObstacleComponent>());
+    }
+
+    if (colliders.empty()) {
+        return;
     }
 
     std::vector<CollisionResult> results =

@@ -1,8 +1,6 @@
 #pragma once
 
-#include "Application.hpp"
-
-typedef Engine::Layer Context;
+#include "App.hpp"
 
 class Screen {
   public:

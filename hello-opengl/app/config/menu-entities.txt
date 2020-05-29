@@ -1,0 +1,4 @@
+entity start
+location 480 325
+texture start 0 0 1 1 256 64 texture
+pointLight texture

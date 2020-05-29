@@ -17,6 +17,7 @@ class Layer {
     std::shared_ptr<Entity> addEntity(const std::string &name);
     std::shared_ptr<Entity> getEntity(const std::string &name);
     EntityManager &getEntities();
+    void clear();
 
     void load(const std::string &configPath);
 

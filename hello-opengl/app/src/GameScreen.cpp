@@ -49,4 +49,4 @@ void GameScreen::load(Context *context) {
 
 void GameScreen::update() {}
 
-void GameScreen::unload(Context *context) {}
+void GameScreen::unload(Context *context) { context->clear(); }

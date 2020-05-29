@@ -1,4 +1,5 @@
 #include "GameScreen.hpp"
+#include "MenuScreen.hpp"
 #include "ScreenManager.hpp"
 
 #include "Application.hpp"
@@ -18,8 +19,9 @@ class AppLayer : public Engine::Layer {
     virtual void onAttach() override {
         m_ScreenManager.reset(new ScreenManager());
         m_ScreenManager->init(this);
+        m_ScreenManager->add("menu", new MenuScreen());
         m_ScreenManager->add("game", new GameScreen());
-        m_ScreenManager->goTo("game");
+        m_ScreenManager->goTo("menu");
     }
 
     virtual void onUpdate() override { m_ScreenManager->update(); }

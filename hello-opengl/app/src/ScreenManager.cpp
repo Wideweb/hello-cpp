@@ -8,12 +8,12 @@ ScreenManager::~ScreenManager() {}
 
 void ScreenManager::init(Context *context) { m_Context = context; }
 
-void ScreenManager::add(std::string screenId, Screen *screen) {
+void ScreenManager::add(const std::string &screenId, Screen *screen) {
     std::shared_ptr<Screen> ptr(screen);
     m_ScreenMap[screenId] = ptr;
 }
 
-void ScreenManager::goTo(std::string screenId) {
+void ScreenManager::goTo(const std::string &screenId) {
     auto newScreen = m_ScreenMap[screenId];
 
     if (m_Current) {

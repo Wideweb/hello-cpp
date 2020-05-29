@@ -15,6 +15,8 @@ std::shared_ptr<Entity> Layer::getEntity(const std::string &name) {
 
 EntityManager &Layer::getEntities() { return *m_EntityManager; }
 
+void Layer::clear() { m_EntityManager->clear(); }
+
 void Layer::load(const std::string &configPath) {
     Loader loader(m_EntityManager);
     loader.load(configPath);

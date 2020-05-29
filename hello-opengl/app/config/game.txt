@@ -13,4 +13,4 @@ shader plain ./assets/shaders/plain-vertex-shader.glsl ./assets/shaders/plain-fr
 shader texture ./assets/shaders/texture-vertex-shader.glsl ./assets/shaders/texture-fragment-shader.glsl
 shader morphing ./assets/shaders/morphing-vertex-shader.glsl ./assets/shaders/plain-fragment-shader.glsl
 
-entities ./config/entities.txt
+entities ./config/game-entities.txt

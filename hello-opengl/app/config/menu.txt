@@ -1,0 +1,8 @@
+img start ./assets/textures/start.png
+img exit ./assets/textures/exit.png
+
+shader plain ./assets/shaders/plain-vertex-shader.glsl ./assets/shaders/plain-fragment-shader.glsl
+shader texture ./assets/shaders/texture-vertex-shader.glsl ./assets/shaders/texture-fragment-shader.glsl
+shader morphing ./assets/shaders/morphing-vertex-shader.glsl ./assets/shaders/plain-fragment-shader.glsl
+
+entities ./config/menu-entities.txt

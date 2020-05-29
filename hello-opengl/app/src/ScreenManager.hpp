@@ -18,8 +18,8 @@ class ScreenManager {
 
     void init(Context *context);
     void update();
-    void add(std::string screenId, Screen *screen);
-    void goTo(std::string screenId);
+    void add(const std::string &screenId, Screen *screen);
+    void goTo(const std::string &screenId);
     void unload();
 
     static ScreenManager &get() { return *s_Instance; }

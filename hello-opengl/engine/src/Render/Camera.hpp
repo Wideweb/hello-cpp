@@ -9,8 +9,8 @@ class Camera {
     std::vector<float> m_ViewMatrix;
 
   public:
-    float x;
-    float y;
+    float x = 0;
+    float y = 0;
 
     virtual ~Camera() = default;
     void setPosition(float x, float y);

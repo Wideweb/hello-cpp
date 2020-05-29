@@ -40,6 +40,11 @@ class EntityManager {
     }
 
     bool empty() { return m_Entities.empty(); }
+
+    void clear() {
+        m_Entities.clear();
+        m_EntitiesMap.clear();
+    }
 };
 
 } // namespace Engine

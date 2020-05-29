@@ -8,7 +8,7 @@ namespace Engine {
 
 void InteractionSystem::exec(EntityManager &entities) {
     auto &app = Application::get();
-    auto eventHandler = app.getEventHandler();
+    auto &eventHandler = app.getEventHandler();
 
     for (auto entity : entities.getAll()) {
         if (!entity->hasComponent<InteractionComponent>()) {
