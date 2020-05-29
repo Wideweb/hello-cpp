@@ -1,3 +1,5 @@
+#pragma once
+
 #include "System.hpp"
 #include <vector>
 

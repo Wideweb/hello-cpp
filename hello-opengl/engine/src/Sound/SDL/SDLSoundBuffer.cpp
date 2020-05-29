@@ -31,12 +31,13 @@ SDLSoundBuffer::~SDLSoundBuffer() {
     m_Length = 0;
 }
 
-void SDLSoundBuffer::play(const Properties prop) {
+void SDLSoundBuffer::play(const Properties prop, float volume) {
     SDL_LockAudioDevice(m_Device);
 
     m_Index = 0;
     m_Playing = true;
     m_Looped = (prop == Properties::Looped);
+    m_Volume = volume;
 
     SDL_UnlockAudioDevice(m_Device);
 }

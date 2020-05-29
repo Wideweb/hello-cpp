@@ -34,9 +34,9 @@ void SDLSoundMixer::add(std::string name, std::string path) {
     SDL_UnlockAudioDevice(m_Device);
 }
 
-void SDLSoundMixer::play(std::string name) {
+void SDLSoundMixer::play(std::string name, float volume) {
     auto sound = m_SoundsMap[name];
-    sound->play(SoundBuffer::Properties::Once);
+    sound->play(SoundBuffer::Properties::Once, volume);
 }
 
 void SDLSoundMixer::audioCallback(void *userData, uint8_t *stream,
@@ -50,16 +50,16 @@ void SDLSoundMixer::audioCallback(void *userData, uint8_t *stream,
         }
 
         uint8_t *current = &sound->data()[sound->position()];
+        int volume = static_cast<int>(sound->volume() * SDL_MIX_MAXVOLUME);
 
         if (sound->rest() <= static_cast<uint32_t>(streamSize)) {
             // copy rest to buffer
             SDL_MixAudioFormat(stream, current, mixer->m_DeviceSpec.format,
-                               sound->rest(), SDL_MIX_MAXVOLUME);
+                               sound->rest(), volume);
             sound->move(sound->rest());
         } else {
             SDL_MixAudioFormat(stream, current, mixer->m_DeviceSpec.format,
-                               static_cast<uint32_t>(streamSize),
-                               SDL_MIX_MAXVOLUME);
+                               static_cast<uint32_t>(streamSize), volume);
             sound->move(static_cast<uint32_t>(streamSize));
         }
 

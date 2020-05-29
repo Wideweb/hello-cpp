@@ -30,6 +30,7 @@ void Loader::load(const std::string &path) {
     auto &app = Engine::Application::get();
     auto &textures = app.getTextures();
     auto &shaders = app.getShaders();
+    auto &sound = app.getSound();
 
     std::ifstream in(path, std::ios::in | std::ios::binary);
     std::string attribute;
@@ -41,6 +42,12 @@ void Loader::load(const std::string &path) {
             std::string id, src;
             in >> id >> src;
             textures.load(id, src);
+        }
+
+        if (attribute == "sound") {
+            std::string id, src;
+            in >> id >> src;
+            sound.add(id, src);
         }
 
         if (attribute == "shader") {

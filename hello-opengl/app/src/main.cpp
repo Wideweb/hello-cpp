@@ -1,103 +1,36 @@
-#include "AIComponent.hpp"
+#include "GameScreen.hpp"
+#include "ScreenManager.hpp"
+
 #include "Application.hpp"
-#include "BlackboardManager.hpp"
-#include "ControllerTask.hpp"
 #include "EntryPoint.hpp"
-#include "FlyTask.hpp"
 #include "ImGuiLayer.hpp"
-#include "Inverter.hpp"
-#include "JumpTask.hpp"
-#include "MoveLeftTask.hpp"
-#include "MoveRightTask.hpp"
-#include "OnGroundTask.hpp"
-#include "ParallelTask.hpp"
-#include "SelectorTask.hpp"
-#include "SequenceTask.hpp"
-#include "TimeLine.hpp"
-#include "UntilFail.hpp"
-#include "WaitTask.hpp"
+
 #include <cstdlib>
 #include <iostream>
+#include <memory>
 #include <sstream>
 
-class MyLayer : public Engine::Layer {
+class AppLayer : public Engine::Layer {
   private:
-    std::shared_ptr<Engine::Entity> m_Player;
+    std::shared_ptr<ScreenManager> m_ScreenManager;
 
   public:
     virtual void onAttach() override {
-        load("./config/index.txt");
-
-        auto &app = Engine::Application::get();
-
-        m_Player = getEntity("player");
-
-        auto blackboard = std::make_shared<Engine::Blackboard>();
-        blackboard->setPtr("entity", m_Player.get());
-        blackboard->setFloat("speedX", 2.0);
-        blackboard->setFloat("speedY", 7.0);
-
-        // clang-format off
-        auto state = new Engine::BlackboardManager(
-            blackboard,
-            new Engine::SelectorTask({
-                new Engine::ParallelTask({
-                    new Engine::SequenceTask({
-                        new Engine::OnGroundTask(),
-                        new Engine::ControllerTask(Engine::KeyCode::Space),
-                        new Engine::JumpTask(),
-                    }),
-
-                    new Engine::SequenceTask({
-                        new Engine::ControllerTask(Engine::KeyCode::A),
-                        new Engine::MoveLeftTask(),
-                    }),
-
-                    new Engine::SequenceTask({
-                        new Engine::ControllerTask(Engine::KeyCode::D),
-                        new Engine::MoveRightTask(),
-                    }),
-                }),
-
-                new Engine::WaitTask()
-            })
-        );
-        // clang-format on
-
-        m_Player->addComponent<Engine::AIComponent>(state);
-
-        ////////////////////////////////////////////////////////////////
-        // Events //////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////
-        app.getEventHandler().add<Engine::BeginCollisionEvent>(
-            std::bind(&MyLayer::beginCollision, this, std::placeholders::_1));
-
-        app.getSound().add("background", "./assets/music/background.wav");
-        app.getSound().play("background");
+        m_ScreenManager.reset(new ScreenManager());
+        m_ScreenManager->init(this);
+        m_ScreenManager->add("game", new GameScreen());
+        m_ScreenManager->goTo("game");
     }
 
-    void beginCollision(Engine::BeginCollisionEvent &event) {
-        // std::cout << event.first << " " << event.second << std::endl;
-    }
+    virtual void onUpdate() override { m_ScreenManager->update(); }
 
-    virtual void onUpdate() override {}
-
-    virtual void onMouseEvent(Engine::MouseEvent &e) override {
-        // if (e.type == Engine::EventType::MouseDown) {
-        //     auto location =
-        //     m_Player->getComponent<Engine::LocationComponent>(); auto
-        //     velocity = m_Player->getComponent<Engine::VelocityComponent>();
-        //     location->x = 1550;
-        //     location->y = 300;
-        //     velocity->y = 0;
-        // }
-    }
+    virtual void onDetach() override { m_ScreenManager->unload(); }
 };
 
 class MyApp : public Engine::Application {
   public:
     MyApp() {
-        addLayer(new MyLayer());
+        addLayer(new AppLayer());
         addLayer(new Engine::ImGuiLayer());
     }
 

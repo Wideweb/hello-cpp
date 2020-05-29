@@ -9,6 +9,7 @@ namespace Engine {
 class SDLSoundBuffer : public SoundBuffer {
   private:
     uint8_t *m_Buffer;
+    float m_Volume;
     uint32_t m_Length = 0;
     uint32_t m_Index = 0;
     SDL_AudioDeviceID m_Device;
@@ -20,7 +21,7 @@ class SDLSoundBuffer : public SoundBuffer {
                    SDL_AudioSpec deviceSpec);
     virtual ~SDLSoundBuffer();
 
-    virtual void play(const Properties) override;
+    virtual void play(const Properties, float volume) override;
     virtual void *getDevice() override;
 
     virtual bool isPlaying() override { return m_Playing; }
@@ -32,6 +33,7 @@ class SDLSoundBuffer : public SoundBuffer {
     virtual void move(int step) override { m_Index += step; }
     virtual uint32_t position() override { return m_Index; }
     virtual uint8_t *data() override { return m_Buffer; }
+    virtual float volume() override { return m_Volume; }
 };
 
 } // namespace Engine

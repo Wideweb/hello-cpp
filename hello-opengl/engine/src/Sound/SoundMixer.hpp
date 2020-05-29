@@ -14,7 +14,7 @@ class SoundMixer {
     static SoundMixer *create();
 
     virtual void add(std::string name, std::string path) = 0;
-    virtual void play(std::string name) = 0;
+    virtual void play(std::string name, float volume) = 0;
 };
 
 } // namespace Engine

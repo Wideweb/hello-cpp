@@ -5,9 +5,15 @@ project(App VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-set(SOURCE_EXE src/main.cpp)	
+set(SOURCE_EXE 
+    src/main.cpp
+    src/ScreenManager.cpp
+    src/GameScreen.cpp
+)	
 
 add_executable(app ${SOURCE_EXE})
+
+target_include_directories(app PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 target_link_libraries(app PRIVATE engine)
 

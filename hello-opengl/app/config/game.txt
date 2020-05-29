@@ -7,6 +7,8 @@ img chickens ./assets/textures/chickens.png
 img props ./assets/textures/props.png
 img environment ./assets/textures/environment.png
 
+sound background ./assets/music/background.wav
+
 shader plain ./assets/shaders/plain-vertex-shader.glsl ./assets/shaders/plain-fragment-shader.glsl
 shader texture ./assets/shaders/texture-vertex-shader.glsl ./assets/shaders/texture-fragment-shader.glsl
 shader morphing ./assets/shaders/morphing-vertex-shader.glsl ./assets/shaders/plain-fragment-shader.glsl
