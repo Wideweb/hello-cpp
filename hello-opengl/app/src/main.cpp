@@ -17,9 +17,13 @@ class AppLayer : public Engine::Layer {
 
   public:
     virtual void onAttach() override {
+        auto menu =
+            new Menu({MenuItem("start", MenuItemLinkType::Screen, "game"),
+                      MenuItem("exit", MenuItemLinkType::Exit)});
+
         m_ScreenManager.reset(new ScreenManager());
         m_ScreenManager->init(this);
-        m_ScreenManager->add("menu", new MenuScreen());
+        m_ScreenManager->add("menu", new MenuScreen(menu));
         m_ScreenManager->add("game", new GameScreen());
         m_ScreenManager->goTo("menu");
     }

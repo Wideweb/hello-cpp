@@ -10,11 +10,14 @@ set(SOURCE_EXE
     src/ScreenManager.cpp
     src/GameScreen.cpp
     src/MenuScreen.cpp
+    src/Menu/Menu.cpp
+    src/Menu/MenuItem.cpp
 )	
 
 add_executable(app ${SOURCE_EXE})
 
-target_include_directories(app PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_include_directories(app PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
+                                      ${CMAKE_CURRENT_SOURCE_DIR}/src/Menu)
 
 target_link_libraries(app PRIVATE engine)
 

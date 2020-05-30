@@ -57,6 +57,8 @@ void Application::run() {
     }
 }
 
+void Application::stop() { m_Running = false; }
+
 void Application::onMouseEvent(MouseEvent &e) {
     for (size_t i = m_LayerStack.size() - 1; i > 0; i--) {
         auto layer = m_LayerStack[i];
@@ -77,7 +79,7 @@ void Application::onWindowEvent(WindowEvent &e) {
     }
 
     if (e.type == EventType::WindowClosed) {
-        m_Running = false;
+        stop();
     }
 }
 

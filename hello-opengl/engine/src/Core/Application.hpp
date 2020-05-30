@@ -42,6 +42,7 @@ class Application {
 
     void initialize();
     void run();
+    void stop();
 
     void addLayer(Layer *layer);
 
