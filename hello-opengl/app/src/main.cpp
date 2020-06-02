@@ -1,5 +1,6 @@
 #include "GameScreen.hpp"
 #include "MenuScreen.hpp"
+#include "PauseScreen.hpp"
 #include "ScreenManager.hpp"
 
 #include "Application.hpp"
@@ -17,14 +18,20 @@ class AppLayer : public Engine::Layer {
 
   public:
     virtual void onAttach() override {
-        auto menu =
-            new Menu({MenuItem("start", MenuItemLinkType::Screen, "game"),
+        auto startMenu =
+            new Menu({MenuItem("new-game", MenuItemLinkType::Screen, "game"),
+                      MenuItem("exit", MenuItemLinkType::Exit)});
+
+        auto pauseMenu =
+            new Menu({MenuItem("resume", MenuItemLinkType::Screen, "game"),
+                      MenuItem("new-game", MenuItemLinkType::Screen, "game"),
                       MenuItem("exit", MenuItemLinkType::Exit)});
 
         m_ScreenManager.reset(new ScreenManager());
         m_ScreenManager->init(this);
-        m_ScreenManager->add("menu", new MenuScreen(menu));
+        m_ScreenManager->add("menu", new MenuScreen(startMenu));
         m_ScreenManager->add("game", new GameScreen());
+        m_ScreenManager->add("pause", new PauseScreen(pauseMenu));
         m_ScreenManager->goTo("menu");
     }
 

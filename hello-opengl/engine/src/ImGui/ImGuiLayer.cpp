@@ -3,6 +3,7 @@
 #include "LocationComponent.hpp"
 #include "ParalaxScrollingComponent.hpp"
 #include "PointLightComponent.hpp"
+#include "SpotLightComponent.hpp"
 #include "TextureComponent.hpp"
 
 namespace Engine {
@@ -95,7 +96,7 @@ void ImGuiLayer::onRender() {
     }
 
     auto mouse = input.GetMousePosition();
-    io.MousePos = ImVec2(mouse.x, mouse.y);
+    io.MousePos = ImVec2(mouse.x, height - mouse.y);
 
     io.MouseDown[0] = input.IsMousePressed(MouseButton::Left);
     io.MouseDown[1] = input.IsMousePressed(MouseButton::Right);
@@ -187,6 +188,62 @@ void ImGuiLayer::onRender() {
                     ImGui::InputFloat("sg", &light->specular.y, 0.01f, 0.01f,
                                       "%.3f");
                     ImGui::InputFloat("sb", &light->specular.z, 0.01f, 0.01f,
+                                      "%.3f");
+
+                    ImGui::End();
+                }
+            }
+        }
+
+        {
+            if (entity != nullptr) {
+                if (entity->hasComponent<SpotLightComponent>()) {
+                    auto light = entity->getComponent<SpotLightComponent>();
+
+                    ImGui::Begin("Spot Light");
+
+                    ImGui::InputFloat("constant", &light->constant, 0.01f, 1.0f,
+                                      "%.3f");
+                    ImGui::InputFloat("linear", &light->linear, 0.01f, 1.0f,
+                                      "%.3f");
+                    ImGui::InputFloat("quadratic", &light->quadratic, 0.01f,
+                                      1.0f, "%.3f");
+
+                    ImGui::Text("ambient: ");
+                    ImGui::InputFloat("ar", &light->ambient.x, 0.01f, 0.01f,
+                                      "%.3f");
+                    ImGui::InputFloat("ag", &light->ambient.y, 0.01f, 0.01f,
+                                      "%.3f");
+                    ImGui::InputFloat("ab", &light->ambient.z, 0.01f, 0.01f,
+                                      "%.3f");
+
+                    ImGui::Text("diffuse: ");
+                    ImGui::InputFloat("dr", &light->diffuse.x, 0.01f, 0.01f,
+                                      "%.3f");
+                    ImGui::InputFloat("dg", &light->diffuse.y, 0.01f, 0.01f,
+                                      "%.3f");
+                    ImGui::InputFloat("db", &light->diffuse.z, 0.01f, 0.01f,
+                                      "%.3f");
+
+                    ImGui::Text("specular: ");
+                    ImGui::InputFloat("sr", &light->specular.x, 0.01f, 0.01f,
+                                      "%.3f");
+                    ImGui::InputFloat("sg", &light->specular.y, 0.01f, 0.01f,
+                                      "%.3f");
+                    ImGui::InputFloat("sb", &light->specular.z, 0.01f, 0.01f,
+                                      "%.3f");
+
+                    ImGui::Text("direction: ");
+                    ImGui::InputFloat("dx", &light->direction.x, 0.01f, 0.01f,
+                                      "%.3f");
+                    ImGui::InputFloat("dy", &light->direction.y, 0.01f, 0.01f,
+                                      "%.3f");
+
+                    ImGui::Text("cut off: ");
+                    ImGui::InputFloat("in", &light->cutOff, 0.01f, 0.01f,
+                                      "%.3f");
+                    ImGui::Text("outer cut off: ");
+                    ImGui::InputFloat("out", &light->outerCutOff, 0.01f, 0.01f,
                                       "%.3f");
 
                     ImGui::End();

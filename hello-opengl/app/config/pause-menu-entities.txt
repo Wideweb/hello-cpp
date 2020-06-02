@@ -2,12 +2,16 @@ entity menu
 location 300 400
 texture menu 0 0 1 1 256 64 texture
 
+entity resume
+location 236 300
+texture resume 0 0 1 1 128 32 texture
+
 entity new-game
-location 300 300
+location 300 250
 texture new-game 0 0 1 1 256 32 texture
 
 entity exit
-location 236 250
+location 236 200
 texture exit 0 0 1 1 128 32 texture
 
 entity light

@@ -1,9 +1,37 @@
+entity clear
+location 480 270
+render 960 540 0.0 0.1 0.1 plain
+paralaxScrolling 0
+
 entity sky
 location 480 470
 render 960 150 0.0 0.06 0.06 plain
 paralaxScrolling 0
 
-entity underground
+entity sun
+location -900 450
+texture chickens 0 0 0.1632 0.25 32 25 texture
+pointLight 0.0 0.0 0.0 1 1 1 0.3 0.3 0.3 0.3 0.0 0.4
+
+entity background0
+location -400.0  370.0
+texture background 0 0 1 1 800 275 texture
+
+entity underground0
+location -400 60
+render 800 120 0.0 0.17 0.15 plain
+
+entity front0
+location -400 145
+texture front 0 0 1 1 800 75 texture
+
+entity ground0
+location -400 175
+collisionRect 800 50
+obstacle
+ground
+
+entity underground1
 location 400 60
 render 800 120 0.0 0.17 0.15 plain
 
@@ -49,31 +77,25 @@ collisionRect 800 50
 obstacle
 ground
 
-entity chicken
-location 400 200
-velocity 0 0
-texture chickens 0 0 0.1632 0.25 32 25 texture
-frameAnimation 0.25 0.1632 5 0.9 0 0.16 3 0.35
-animation ./assets/animations/demo.txt
+entity home
+location -640 275
+texture environment 0.448 0.107 -0.126 0.15 250 140 texture
+
+entity mom
+location -585 228
+texture characters 0.6888 0 -0.1588 0.2 54 54 texture
 
 entity chicken1
-location 1170 115.0
+location -460 225.0
 velocity 0 0
 texture chickens 0 0 0.1632 0.25 32 25 texture
 frameAnimation 0.25 0.1632 5 0.7 0 0.16 3 0.35
 
 entity chicken2
-location 1150 120.0
+location -430 220.0
 velocity 0 0
 texture chickens 0 0.5 0.1632 0.25 32 25 texture
 frameAnimation 0.25 0.1632 6 1.1 0 0.16 3 0.35
-
-entity fire1
-location 650 220.0
-velocity 0 0
-texture props 0.019 0.04 0.203 0.195 100 50 texture
-frameAnimation 0 0.203 3 0.4 0 0.195 3 0.4
-pointLight texture
 
 entity player
 location 250 250
@@ -82,7 +104,17 @@ collisionRect 14 50
 rigitBody 0.5
 texture characters 0 0 0.1588 0.2 54 54 texture
 frameAnimation 0 0.1588 1 0.35 0 0.1588 3 0.35
-camera 0 5000 -200
+camera -800 5000 -400
+spotLight 0.01 0.01 0.01 0.5 0.5 0.4 0.3 0.3 0.2 -1.0 0.0 1.5 1.0 0.1 1.0 0.8
+pointLight 0.0 0.0 0.0 0.8 0.8 0.8 0.0 0.0 0.0 -298 0.0 300
+
+entity wolf
+location 650 350.0
+velocity 0 0
+collisionRect 50 20
+rigitBody 0.5
+texture wolf 0 0 0.0993 0.273 120 70 texture
+frameAnimation 0.37 0.09 10 2 0 0.0993 5 0.5
 
 entity paralaxFront1
 location 900 300

@@ -41,7 +41,7 @@ void MenuItem::update() {
 
 void MenuItem::onMouseIn() {
     auto material = m_Entity->getComponent<Engine::MaterialComponent>();
-    float v = 0.5;
+    float v = 1;
 
     material->ambient.x = v;
     material->ambient.y = v;
@@ -57,7 +57,7 @@ void MenuItem::onMouseIn() {
 
 void MenuItem::onMouseOut() {
     auto material = m_Entity->getComponent<Engine::MaterialComponent>();
-    float v = 0.8;
+    float v = 0.5;
 
     material->ambient.x = v;
     material->ambient.y = v;

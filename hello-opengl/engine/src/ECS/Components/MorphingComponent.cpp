@@ -5,8 +5,8 @@ namespace Engine {
 MorphingComponent::MorphingComponent(std::vector<float> &from,
                                      std::vector<float> &to,
                                      std::vector<uint32_t> &indexes,
-                                     std::shared_ptr<Engine::Shader> shader,
-                                     int width, int height)
+                                     const std::string &shader, int width,
+                                     int height)
     : shader(shader), width(width), height(height) {
     vertexArray.reset(Engine::VertexArray::create());
     vertexArray->bind();

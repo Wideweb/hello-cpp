@@ -1,10 +1,11 @@
 #pragma once
 
+#include "FrameAnimationComponent.hpp"
 #include "LocationComponent.hpp"
+#include "SpotLightComponent.hpp"
 #include "Task.hpp"
 #include "TextureComponent.hpp"
 #include "VelocityComponent.hpp"
-#include "FrameAnimationComponent.hpp"
 
 namespace Engine {
 
@@ -20,6 +21,9 @@ class MoveLeftTask : public Task {
 
         auto texture = entity->getComponent<TextureComponent>();
         texture->flip = Flip::None;
+
+        auto light = entity->getComponent<SpotLightComponent>();
+        light->direction.x = -1;
 
         auto animation = entity->getComponent<FrameAnimationComponent>();
         animation->play("move");

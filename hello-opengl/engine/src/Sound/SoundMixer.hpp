@@ -15,6 +15,8 @@ class SoundMixer {
 
     virtual void add(std::string name, std::string path) = 0;
     virtual void play(std::string name, float volume) = 0;
+    virtual void stop() = 0;
+    virtual void clear() = 0;
 };
 
 } // namespace Engine

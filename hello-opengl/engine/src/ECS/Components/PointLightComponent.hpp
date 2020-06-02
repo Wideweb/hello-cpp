@@ -14,13 +14,11 @@ class PointLightComponent : public Component {
     float linear = 0;
     float quadratic = 0.4;
 
-    std::string shader;
-
-    PointLightComponent(const std::string &shader) : shader(shader) {
-        ambient = Vec3(0.0f, 0.0f, 0.0f);
-        diffuse = Vec3(0.5f, 0.5f, 0.5f);
-        specular = Vec3(1.0f, 0.3f, 0.3f);
-    }
+    PointLightComponent(const Vec3 &ambient, const Vec3 &diffuse,
+                        const Vec3 &specular, float constant, float linear,
+                        float quadratic)
+        : ambient(ambient), diffuse(diffuse), specular(specular),
+          constant(constant), linear(linear), quadratic(quadratic) {}
 };
 
 } // namespace Engine

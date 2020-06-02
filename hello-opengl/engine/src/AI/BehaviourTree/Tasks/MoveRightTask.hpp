@@ -2,6 +2,7 @@
 
 #include "FrameAnimationComponent.hpp"
 #include "LocationComponent.hpp"
+#include "SpotLightComponent.hpp"
 #include "Task.hpp"
 #include "TextureComponent.hpp"
 #include "VelocityComponent.hpp"
@@ -20,6 +21,9 @@ class MoveRightTask : public Task {
 
         auto texture = entity->getComponent<TextureComponent>();
         texture->flip = Flip::Y;
+
+        auto light = entity->getComponent<SpotLightComponent>();
+        light->direction.x = 1;
 
         auto animation = entity->getComponent<FrameAnimationComponent>();
         animation->play("move");

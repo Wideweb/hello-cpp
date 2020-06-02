@@ -15,12 +15,11 @@ class MorphingComponent : public Component {
     std::shared_ptr<Engine::VertexArray> vertexArray;
     std::shared_ptr<Engine::VertexBuffer> vertexBuffer;
     std::shared_ptr<Engine::IndexBuffer> indexBuffer;
-    std::shared_ptr<Engine::Shader> shader;
+    std::string shader;
 
     MorphingComponent(std::vector<float> &from, std::vector<float> &to,
-                      std::vector<uint32_t> &indexes,
-                      std::shared_ptr<Engine::Shader> shader, int width,
-                      int height);
+                      std::vector<uint32_t> &indexes, const std::string &shader,
+                      int width, int height);
 };
 
 } // namespace Engine

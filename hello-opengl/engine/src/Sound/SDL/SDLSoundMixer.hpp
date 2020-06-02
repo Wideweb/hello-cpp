@@ -25,6 +25,8 @@ class SDLSoundMixer : public SoundMixer {
 
     virtual void add(std::string name, std::string path) override;
     virtual void play(std::string name, float volume) override;
+    virtual void stop() override;
+    virtual void clear() override;
 
     static void audioCallback(void *, uint8_t *, int);
 };

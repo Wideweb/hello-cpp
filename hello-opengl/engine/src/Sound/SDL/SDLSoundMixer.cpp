@@ -39,6 +39,12 @@ void SDLSoundMixer::play(std::string name, float volume) {
     sound->play(SoundBuffer::Properties::Once, volume);
 }
 
+void SDLSoundMixer::stop() {
+    for (auto sound : m_Sounds) {
+        sound->stop();
+    }
+}
+
 void SDLSoundMixer::audioCallback(void *userData, uint8_t *stream,
                                   int streamSize) {
     std::fill_n(stream, streamSize, '\0');
@@ -71,6 +77,12 @@ void SDLSoundMixer::audioCallback(void *userData, uint8_t *stream,
             }
         }
     }
+}
+
+void SDLSoundMixer::clear() {
+    stop();
+    m_Sounds.clear();
+    m_SoundsMap.clear();
 }
 
 } // namespace Engine

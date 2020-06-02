@@ -35,23 +35,30 @@ void LightSystem::exec(EntityManager &entities) {
         float x = (location->x - camera.x) / windowWidth * 2.0 - 1;
         float y = (location->y - camera.y) / windowHeight * 2.0 - 1;
 
-        auto shader = shaders.get(light->shader);
+        auto shader1 = shaders.get("texture");
+        auto shader2 = shaders.get("plain");
+        std::vector<std::shared_ptr<Shader>> shaders = {shader1, shader2};
 
-        shader->setInt("pointLightsNumber", pointLights.size());
+        for (auto shader : shaders) {
+            shader->setInt("pointLightsNumber", pointLights.size());
 
-        auto iStr = std::to_string(i);
-        shader->setFloat2("pointLights[" + iStr + "].position", x, y);
-        shader->setFloat3("pointLights[" + iStr + "].ambient", light->ambient.x,
-                          light->ambient.y, light->ambient.z);
-        shader->setFloat3("pointLights[" + iStr + "].diffuse", light->diffuse.x,
-                          light->diffuse.y, light->diffuse.z);
-        shader->setFloat3("pointLights[" + iStr + "].specular",
-                          light->specular.x, light->specular.y,
-                          light->specular.z);
-        shader->setFloat("pointLights[" + iStr + "].constant", light->constant);
-        shader->setFloat("pointLights[" + iStr + "].linear", light->linear);
-        shader->setFloat("pointLights[" + iStr + "].quadratic",
-                         light->quadratic);
+            auto iStr = std::to_string(i);
+            shader->setFloat2("pointLights[" + iStr + "].position", x, y);
+            shader->setFloat3("pointLights[" + iStr + "].ambient",
+                              light->ambient.x, light->ambient.y,
+                              light->ambient.z);
+            shader->setFloat3("pointLights[" + iStr + "].diffuse",
+                              light->diffuse.x, light->diffuse.y,
+                              light->diffuse.z);
+            shader->setFloat3("pointLights[" + iStr + "].specular",
+                              light->specular.x, light->specular.y,
+                              light->specular.z);
+            shader->setFloat("pointLights[" + iStr + "].constant",
+                             light->constant);
+            shader->setFloat("pointLights[" + iStr + "].linear", light->linear);
+            shader->setFloat("pointLights[" + iStr + "].quadratic",
+                             light->quadratic);
+        }
     }
 }
 

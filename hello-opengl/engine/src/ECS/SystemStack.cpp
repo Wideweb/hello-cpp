@@ -10,6 +10,7 @@
 #include "MoveSystem.hpp"
 #include "PhysicsSystem.hpp"
 #include "RenderSystem.hpp"
+#include "SpotLightSystem.hpp"
 #include "TextureSystem.hpp"
 #include <vector>
 
@@ -25,6 +26,7 @@ SystemStack::SystemStack() {
     m_Systems.push_back(new MorphingSystem());
     m_Systems.push_back(new AnimationSystem());
     m_Systems.push_back(new LightSystem());
+    m_Systems.push_back(new SpotLightSystem());
     m_Systems.push_back(new TextureSystem());
     m_Systems.push_back(new InteractionSystem());
 }

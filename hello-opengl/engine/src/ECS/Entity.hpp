@@ -14,6 +14,8 @@ class Component {
     std::shared_ptr<Entity> m_Entity;
 
   public:
+    bool isActive = true;
+
     virtual ~Component() = default;
     const Entity &getOwner() const { return *m_Entity; }
 };

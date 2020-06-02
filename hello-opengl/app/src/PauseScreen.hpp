@@ -1,18 +1,15 @@
 #pragma once
 
+#include "App.hpp"
+#include "Menu.hpp"
 #include "Screen.hpp"
 
-#include "ECS.hpp"
-
-#include <memory>
-
-class GameScreen : public Screen {
+class PauseScreen : public Screen {
   private:
-    std::shared_ptr<Engine::Entity> m_Player;
-    bool m_FPressed = false;
+    std::shared_ptr<Menu> m_Menu;
 
   public:
-    GameScreen();
+    PauseScreen(Menu *menu);
 
     virtual void load(Context *context) override;
     virtual void update() override;

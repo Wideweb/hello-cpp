@@ -1,6 +1,7 @@
 #include "RenderSystem.hpp"
 #include "Application.hpp"
 #include "LocationComponent.hpp"
+#include "MaterialComponent.hpp"
 #include "ParalaxScrollingComponent.hpp"
 #include "RenderComponent.hpp"
 #include "cmath"
@@ -20,6 +21,7 @@ void RenderSystem::exec(EntityManager &entities) {
         if (entity->hasComponent<RenderComponent>()) {
             auto c_render = entity->getComponent<RenderComponent>();
             auto c_location = entity->getComponent<LocationComponent>();
+            auto c_material = entity->getComponent<MaterialComponent>();
 
             float paralaxScale = 1.0;
 
@@ -37,17 +39,23 @@ void RenderSystem::exec(EntityManager &entities) {
             float scaleX = c_render->width / windowWidth;
             float scaleY = c_render->height / windowHeight;
 
-            std::vector<float> model = {scaleX, 0.0f,   0.0f, 0.0f,
-
-                                        0.0f,   scaleY, 0.0f, 0.0f,
-
-                                        0.0f,   0.0f,   1.0f, 0.0f,
-
-                                        x,      y,      0.0f, 1.0f};
+            Mat2x3 scale = Mat2x3::scale(scaleX, scaleY);
+            Mat2x3 rotate = Mat2x3::rotate(c_location->angle);
+            Mat2x3 move = Mat2x3::move(Vec2(x, y));
+            Mat2x3 model = move * scale * rotate;
 
             auto shader = shaders.get(c_render->shader);
 
-            shader->setMatrix4("MVP", model);
+            shader->setMatrix2x3("model", model.data());
+
+            shader->setFloat3("material.ambient", c_material->ambient.x,
+                              c_material->ambient.y, c_material->ambient.z);
+            shader->setFloat3("material.diffuse", c_material->diffuse.x,
+                              c_material->diffuse.y, c_material->diffuse.z);
+            shader->setFloat3("material.specular", c_material->specular.x,
+                              c_material->specular.y, c_material->specular.z);
+            shader->setFloat("material.shininess", c_material->shininess);
+
             render.drawTriangles(shader, c_render->vertexArray);
         }
     }

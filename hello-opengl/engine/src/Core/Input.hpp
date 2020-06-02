@@ -12,6 +12,7 @@ enum class KeyCode {
     D = 68,
     S = 83,
     W = 87,
+    F = 70,
     Escape = 256,
 };
 

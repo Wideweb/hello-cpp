@@ -6,6 +6,7 @@ img slope-front ./assets/textures/slope-front.png
 img chickens ./assets/textures/chickens.png
 img props ./assets/textures/props.png
 img environment ./assets/textures/environment.png
+img wolf ./assets/textures/wolf.png
 
 sound background ./assets/music/background.wav
 

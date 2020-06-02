@@ -10,6 +10,7 @@ set(SOURCE_EXE
     src/ScreenManager.cpp
     src/GameScreen.cpp
     src/MenuScreen.cpp
+    src/PauseScreen.cpp
     src/Menu/Menu.cpp
     src/Menu/MenuItem.cpp
 )	

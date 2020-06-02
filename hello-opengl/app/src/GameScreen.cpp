@@ -1,6 +1,8 @@
 #include "GameScreen.hpp"
+#include "ScreenManager.hpp"
 
 #include "BehaviourTree.hpp"
+#include "ECS.hpp"
 
 GameScreen::GameScreen() {}
 
@@ -47,6 +49,27 @@ void GameScreen::load(Context *context) {
     app.getSound().play("background", 0.5);
 }
 
-void GameScreen::update() {}
+void GameScreen::update() {
+    auto &input = Engine::Application::get().getInput();
+
+    Engine::Vec2 pos = input.GetMousePosition();
+
+    if (input.IsKeyPressed(Engine::KeyCode::Escape)) {
+        ScreenManager::get().goTo("pause");
+    }
+
+    if (input.IsKeyPressed(Engine::KeyCode::F)) {
+        if (m_FPressed) {
+            return;
+        }
+        m_FPressed = true;
+        bool isAactive =
+            m_Player->getComponent<Engine::SpotLightComponent>()->isActive;
+        m_Player->getComponent<Engine::SpotLightComponent>()->isActive =
+            !isAactive;
+    } else {
+        m_FPressed = false;
+    }
+}
 
 void GameScreen::unload(Context *context) { context->clear(); }

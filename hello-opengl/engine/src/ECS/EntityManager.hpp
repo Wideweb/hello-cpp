@@ -31,7 +31,8 @@ class EntityManager {
     std::vector<std::shared_ptr<Entity>> getByComponent() {
         std::vector<std::shared_ptr<Entity>> result;
         for (auto entity : m_Entities) {
-            if (entity->hasComponent<T>()) {
+            if (entity->hasComponent<T>() &&
+                entity->getComponent<T>()->isActive) {
                 result.push_back(entity);
             }
         }

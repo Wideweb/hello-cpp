@@ -13,6 +13,7 @@
 #include "PointLightComponent.hpp"
 #include "RenderComponent.hpp"
 #include "RigitBodyComponent.hpp"
+#include "SpotLightComponent.hpp"
 #include "TextureComponent.hpp"
 #include "VelocityComponent.hpp"
 #include <fstream>
@@ -128,6 +129,7 @@ void Loader::loadEntities(const std::string &path) {
             in >> shaderId;
 
             entity->addComponent<RenderComponent>(w, h, color, shaderId);
+            entity->addComponent<MaterialComponent>();
         }
 
         if (attribute == "texture") {
@@ -158,9 +160,43 @@ void Loader::loadEntities(const std::string &path) {
         }
 
         if (attribute == "pointLight") {
-            std::string shaderId;
-            in >> shaderId;
-            entity->addComponent<PointLightComponent>(shaderId);
+            Vec3 ambient;
+            Vec3 diffuse;
+            Vec3 specular;
+            float constant;
+            float linear;
+            float quadratic;
+
+            in >> ambient.x >> ambient.y >> ambient.z;
+            in >> diffuse.x >> diffuse.y >> diffuse.z;
+            in >> specular.x >> specular.y >> specular.z;
+            in >> constant >> linear >> quadratic;
+
+            entity->addComponent<PointLightComponent>(
+                ambient, diffuse, specular, constant, linear, quadratic);
+        }
+
+        if (attribute == "spotLight") {
+            Vec3 ambient;
+            Vec3 diffuse;
+            Vec3 specular;
+            float constant;
+            float linear;
+            float quadratic;
+            Vec2 direction;
+            float cutOff;
+            float outerCutOff;
+
+            in >> ambient.x >> ambient.y >> ambient.z;
+            in >> diffuse.x >> diffuse.y >> diffuse.z;
+            in >> specular.x >> specular.y >> specular.z;
+            in >> constant >> linear >> quadratic;
+            in >> direction.x >> direction.y;
+            in >> cutOff >> outerCutOff;
+
+            entity->addComponent<SpotLightComponent>(
+                ambient, diffuse, specular, constant, linear, quadratic,
+                direction, cutOff, outerCutOff);
         }
 
         if (attribute == "animation") {
