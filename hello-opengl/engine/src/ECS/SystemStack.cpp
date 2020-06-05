@@ -11,6 +11,7 @@
 #include "PhysicsSystem.hpp"
 #include "RenderSystem.hpp"
 #include "SpotLightSystem.hpp"
+#include "SteeringSystem.hpp"
 #include "TextureSystem.hpp"
 #include <vector>
 
@@ -19,6 +20,7 @@ namespace Engine {
 SystemStack::SystemStack() {
     m_Systems.push_back(new AISystem());
     m_Systems.push_back(new PhysicsSystem());
+    m_Systems.push_back(new SteeringSystem());
     m_Systems.push_back(new CollisionSystem());
     m_Systems.push_back(new MoveSystem());
     m_Systems.push_back(new CameraSystem());

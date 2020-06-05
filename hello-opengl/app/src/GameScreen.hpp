@@ -9,6 +9,7 @@
 class GameScreen : public Screen {
   private:
     std::shared_ptr<Engine::Entity> m_Player;
+    std::shared_ptr<Engine::Entity> m_FlashLight;
     bool m_FPressed = false;
 
   public:

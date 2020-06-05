@@ -12,6 +12,8 @@ void GameScreen::load(Context *context) {
     auto &app = Engine::Application::get();
 
     m_Player = context->getEntity("player");
+    m_FlashLight = context->getEntity("player-flashlight");
+    m_FlashLight->getComponent<Engine::SpotLightComponent>()->isActive = false;
 
     auto blackboard = std::make_shared<Engine::Blackboard>();
     blackboard->setPtr("entity", m_Player.get());
@@ -46,7 +48,7 @@ void GameScreen::load(Context *context) {
     // clang-format on
     m_Player->addComponent<Engine::AIComponent>(state);
 
-    app.getSound().play("background", 0.5);
+    // app.getSound().play("background", 0.5);
 }
 
 void GameScreen::update() {
@@ -64,8 +66,8 @@ void GameScreen::update() {
         }
         m_FPressed = true;
         bool isAactive =
-            m_Player->getComponent<Engine::SpotLightComponent>()->isActive;
-        m_Player->getComponent<Engine::SpotLightComponent>()->isActive =
+            m_FlashLight->getComponent<Engine::SpotLightComponent>()->isActive;
+        m_FlashLight->getComponent<Engine::SpotLightComponent>()->isActive =
             !isAactive;
     } else {
         m_FPressed = false;

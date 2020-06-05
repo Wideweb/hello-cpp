@@ -1,21 +1,8 @@
 #include "Loader.hpp"
-#include "AnimationComponent.hpp"
 #include "Application.hpp"
-#include "CameraComponent.hpp"
-#include "CollisionComponent.hpp"
-#include "FrameAnimationComponent.hpp"
-#include "GroundComponent.hpp"
-#include "LocationComponent.hpp"
-#include "MaterialComponent.hpp"
+#include "ECS.hpp"
 #include "Math.hpp"
-#include "ObstacleComponent.hpp"
-#include "ParalaxScrollingComponent.hpp"
-#include "PointLightComponent.hpp"
-#include "RenderComponent.hpp"
-#include "RigitBodyComponent.hpp"
-#include "SpotLightComponent.hpp"
-#include "TextureComponent.hpp"
-#include "VelocityComponent.hpp"
+
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -28,7 +15,7 @@ Loader::Loader(std::shared_ptr<EntityManager> entityManager)
 Loader::~Loader() {}
 
 void Loader::load(const std::string &path) {
-    auto &app = Engine::Application::get();
+    auto &app = Application::get();
     auto &textures = app.getTextures();
     auto &shaders = app.getShaders();
     auto &sound = app.getSound();
@@ -233,14 +220,26 @@ void Loader::loadEntities(const std::string &path) {
         if (attribute == "camera") {
             int leftBound, rightBound, offset;
             in >> leftBound >> rightBound >> offset;
-            entity->addComponent<Engine::CameraComponent>(leftBound, rightBound,
-                                                          offset);
+            entity->addComponent<CameraComponent>(leftBound, rightBound,
+                                                  offset);
         }
 
         if (attribute == "rigitBody") {
             float weight;
             in >> weight;
-            entity->addComponent<Engine::RigitBodyComponent>(weight);
+            entity->addComponent<RigitBodyComponent>(weight);
+        }
+
+        if (attribute == "parent") {
+            std::string parent;
+            in >> parent;
+            entity->addComponent<ParentComponent>(parent);
+        }
+
+        if (attribute == "steering") {
+            std::string target;
+            in >> target;
+            entity->addComponent<SteeringComponent>(target);
         }
 
         in >> std::ws;

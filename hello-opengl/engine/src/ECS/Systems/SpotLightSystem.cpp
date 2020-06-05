@@ -5,6 +5,7 @@
 #include "MaterialComponent.hpp"
 #include "Math.hpp"
 #include "ParalaxScrollingComponent.hpp"
+#include "ParentComponent.hpp"
 #include "SpotLightComponent.hpp"
 #include "TextureComponent.hpp"
 #include "cmath"
@@ -40,14 +41,31 @@ void SpotLightSystem::exec(EntityManager &entities) {
         auto light = entity->getComponent<SpotLightComponent>();
         auto location = entity->getComponent<LocationComponent>();
 
-        float x = (location->x - camera.x) / windowWidth * 2.0 - 1;
-        float y = (location->y - camera.y) / windowHeight * 2.0 - 1;
+        float parentX = 0;
+        float parentY = 0;
+        int flip = 1;
+
+        if (entity->hasComponent<ParentComponent>()) {
+            std::string parentId =
+                entity->getComponent<ParentComponent>()->parent;
+            auto parent = entities.get(parentId);
+            auto parentLocation = parent->getComponent<LocationComponent>();
+
+            parentX = parentLocation->x;
+            parentY = parentLocation->y;
+
+            auto texture = parent->getComponent<TextureComponent>();
+            flip = texture->flip == Flip::Y ? 1 : -1;
+        }
+
+        float x = (location->x + parentX - camera.x) / windowWidth * 2.0 - 1;
+        float y = (location->y + parentY - camera.y) / windowHeight * 2.0 - 1;
 
         for (auto shader : shaders) {
             auto iStr = std::to_string(i);
             shader->setFloat2("spotLights[" + iStr + "].position", x, y);
             shader->setFloat2("spotLights[" + iStr + "].direction",
-                              light->direction.x, light->direction.y);
+                              light->direction.x * flip, light->direction.y);
             shader->setFloat("spotLights[" + iStr + "].cutOff", light->cutOff);
             shader->setFloat("spotLights[" + iStr + "].outerCutOff",
                              light->outerCutOff);

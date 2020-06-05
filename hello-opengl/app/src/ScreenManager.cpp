@@ -14,17 +14,33 @@ void ScreenManager::add(const std::string &screenId, Screen *screen) {
 }
 
 void ScreenManager::goTo(const std::string &screenId) {
-    auto newScreen = m_ScreenMap[screenId];
-
-    if (m_Current) {
-        m_Current->unload(m_Context);
+    if (m_IsTransitioning) {
+        return;
     }
-
-    newScreen->load(m_Context);
-    m_Current = newScreen;
+    m_IsTransitioning = true;
+    m_New = m_ScreenMap[screenId];
 }
 
 void ScreenManager::update() {
+    if (m_IsTransitioning) {
+        if (m_Current) {
+            m_Current->unload(m_Context);
+        }
+
+        auto &render = Engine::Application::get().getRender();
+        render.setClearColor(0.0, 0.0, 0.0, 1.0);
+        render.clear();
+        Engine::Application::get().getWindow().swapBuffers();
+        render.clear();
+
+        m_New->load(m_Context);
+        m_Current = m_New;
+
+        render.setClearColor(0.0, 0.1, 0.1, 1.0);
+
+        m_IsTransitioning = false;
+    }
+
     if (m_Current) {
         m_Current->update();
     }
