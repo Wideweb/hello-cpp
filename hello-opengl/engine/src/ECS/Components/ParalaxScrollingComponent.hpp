@@ -9,6 +9,10 @@ class ParalaxScrollingComponent : public Component {
     float scale = 1.0;
 
     ParalaxScrollingComponent(float scale) : scale(scale) {}
+
+    virtual void serialize(std::ostringstream &out) override {
+        out << "paralax " << scale << std::endl;
+    }
 };
 
 } // namespace Engine

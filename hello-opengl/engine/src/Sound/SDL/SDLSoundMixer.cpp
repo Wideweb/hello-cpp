@@ -34,15 +34,21 @@ void SDLSoundMixer::add(std::string name, std::string path) {
     SDL_UnlockAudioDevice(m_Device);
 }
 
-void SDLSoundMixer::play(std::string name, float volume) {
+void SDLSoundMixer::play(std::string name, float volume,
+                         SoundBuffer::Properties properties) {
     auto sound = m_SoundsMap[name];
-    sound->play(SoundBuffer::Properties::Once, volume);
+    sound->play(properties, volume);
 }
 
 void SDLSoundMixer::stop() {
     for (auto sound : m_Sounds) {
         sound->stop();
     }
+}
+
+void SDLSoundMixer::stop(std::string name) {
+    auto sound = m_SoundsMap[name];
+    sound->stop();
 }
 
 void SDLSoundMixer::audioCallback(void *userData, uint8_t *stream,
@@ -52,7 +58,7 @@ void SDLSoundMixer::audioCallback(void *userData, uint8_t *stream,
 
     for (auto sound : mixer->m_Sounds) {
         if (!sound->isPlaying()) {
-            return;
+            continue;
         }
 
         uint8_t *current = &sound->data()[sound->position()];

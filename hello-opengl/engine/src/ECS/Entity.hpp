@@ -2,6 +2,7 @@
 
 #include <map>
 #include <memory>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -18,6 +19,7 @@ class Component {
 
     virtual ~Component() = default;
     const Entity &getOwner() const { return *m_Entity; }
+    virtual void serialize(std::ostringstream &out) = 0;
 };
 
 class Entity {
@@ -27,11 +29,17 @@ class Entity {
     std::map<const std::type_info *, std::shared_ptr<Component>> m_ComponentMap;
 
   public:
+    bool isActive = true;
+
     Entity(const std::string name) : m_Name(name) {}
     virtual ~Entity() = default;
 
     template <typename T, typename... TArgs>
     std::shared_ptr<T> addComponent(TArgs &&... args) {
+        if (m_Name == "little-boy") {
+            float a = 1;
+        }
+
         std::shared_ptr<T> component;
         component.reset(new T(std::forward<TArgs>(args)...));
         m_Components.push_back(component);
@@ -39,8 +47,8 @@ class Entity {
         return component;
     }
 
-    template <typename T> bool hasComponent() const {
-        return m_ComponentMap.count(&typeid(T));
+    template <typename T> bool hasComponent() {
+        return getComponent<T>() != nullptr;
     }
 
     template <typename T> std::shared_ptr<T> getComponent() {
@@ -48,6 +56,16 @@ class Entity {
     }
 
     std::string &getName() { return m_Name; }
+    void setName(const std::string &name) { m_Name = name; }
+
+    void serialize(std::ostringstream &out) {
+        out << "entity " << getName();
+        out << std::endl;
+
+        for (auto component : m_Components) {
+            component->serialize(out);
+        }
+    }
 };
 
 } // namespace Engine

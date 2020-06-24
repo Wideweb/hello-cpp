@@ -11,6 +11,13 @@ class VelocityComponent : public Component {
     float y;
 
     VelocityComponent(float x, float y) : x(x), y(y), xMax(x) {}
+
+    virtual void serialize(std::ostringstream &out) override {
+        out << "velocity ";
+        out << x << " ";
+        out << y << " ";
+        out << std::endl;
+    }
 };
 
 } // namespace Engine

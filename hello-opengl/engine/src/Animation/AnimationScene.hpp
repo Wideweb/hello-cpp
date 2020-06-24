@@ -16,14 +16,22 @@ class AnimationScene {
 
     void add(const TimeLine &timeLine) { m_TimeLines.push_back(timeLine); }
 
-    std::vector<AnimationStep> step(float deltaTime) {
-        std::vector<AnimationStep> steps;
+    std::vector<TimeLineStep> step(float deltaTime) {
+        std::vector<TimeLineStep> steps;
 
         for (TimeLine &timeLine : m_TimeLines) {
-            steps.push_back(timeLine.step(deltaTime));
+            if (!timeLine.isEnd()) {
+                steps.push_back(timeLine.step(deltaTime));
+            }
         }
 
         return steps;
+    }
+
+    void reset() {
+        for (TimeLine &timeLine : m_TimeLines) {
+            timeLine.reset();
+        }
     }
 };
 

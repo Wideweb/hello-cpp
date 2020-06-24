@@ -18,6 +18,7 @@ set(SOURCE_LIB
     src/Core/ShaderManager.cpp
     src/Core/File.cpp
     src/Core/Loader.cpp
+    src/Animation/AnimationLoader.cpp
     src/Render/Buffer.cpp
     src/Render/Render.cpp
     src/Render/Shader.cpp
@@ -33,6 +34,7 @@ set(SOURCE_LIB
     src/ECS/Components/MorphingComponent.cpp
     src/ECS/Components/TextureComponent.cpp
     src/ECS/SystemStack.cpp
+    src/ECS/EntitySerializer.cpp
     src/ECS/Systems/CameraSystem.cpp
     src/ECS/Systems/CollisionSystem.cpp
     src/ECS/Systems/MoveSystem.cpp
@@ -45,10 +47,13 @@ set(SOURCE_LIB
     src/ECS/Systems/SpotLightSystem.cpp
     src/ECS/Systems/SteeringSystem.cpp
     src/ECS/Systems/AISystem.cpp
-    src/ECS/Systems/InteractionSystem.cpp
+    src/ECS/Systems/AttackSystem.cpp
+    src/ECS/Systems/EmitterSystem.cpp
+    src/ECS/Systems/GroundCollisionSystem.cpp
     src/Collision/CollisionDetection.cpp
     src/Collision/BroadPhaseAlgorithm.cpp
     src/Collision/NarrowPhaseAlgorithm.cpp
+    src/Collision/AABBOverlap.cpp
     src/ImGui/ImGuiLayer.cpp
     src/Sound/SoundMixer.cpp
     src/Sound/SDL/SDLSoundBuffer.cpp

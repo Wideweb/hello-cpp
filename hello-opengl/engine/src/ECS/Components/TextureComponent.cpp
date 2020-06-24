@@ -20,9 +20,8 @@ static std::vector<float> getVertices(const Rect &source) {
 }
 
 TextureComponent::TextureComponent(const std::string &name, const Rect &source,
-                                   int width, int height,
-                                   const std::string &shader)
-    : name(name), source(source), width(width), height(height), shader(shader) {
+                                   int width, int height, float alpha)
+    : name(name), source(source), width(width), height(height), alpha(alpha) {
     vertexArray.reset(Engine::VertexArray::create());
     vertexArray->bind();
 

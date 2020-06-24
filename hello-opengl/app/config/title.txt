@@ -1,0 +1,6 @@
+img red-hat ./assets/textures/red-hat.png
+
+shader plain-with-light ./assets/shaders/plain-with-light-vertex-shader.glsl ./assets/shaders/plain-with-light-fragment-shader.glsl
+shader texture-with-light ./assets/shaders/texture-with-light-vertex-shader.glsl ./assets/shaders/texture-with-light-fragment-shader.glsl
+
+entities ./config/title-entities.txt

@@ -19,6 +19,17 @@ class PointLightComponent : public Component {
                         float quadratic)
         : ambient(ambient), diffuse(diffuse), specular(specular),
           constant(constant), linear(linear), quadratic(quadratic) {}
+
+    virtual void serialize(std::ostringstream &out) override {
+        out << "pointLight ";
+        out << ambient << " ";
+        out << diffuse << " ";
+        out << specular << " ";
+        out << constant << " ";
+        out << linear << " ";
+        out << quadratic << " ";
+        out << std::endl;
+    }
 };
 
 } // namespace Engine

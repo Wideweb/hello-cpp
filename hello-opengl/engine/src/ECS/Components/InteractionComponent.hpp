@@ -1,28 +1,16 @@
 #pragma once
 
 #include "Entity.hpp"
-#include "Math.hpp"
-#include <string>
 
 namespace Engine {
 
-struct BeginInteractionEvent {
-    std::string subject;
-    std::string object;
-};
-
-struct EndInteractionEvent {
-    std::string subject;
-    std::string object;
-};
-
 class InteractionComponent : public Component {
   public:
-    float distance;
-    std::string subject;
+    InteractionComponent() {}
 
-    InteractionComponent(std::string subject, int distance)
-        : subject(subject), distance(distance) {}
+    virtual void serialize(std::ostringstream &out) override {
+        out << "interaction" << std::endl;
+    }
 };
 
 } // namespace Engine

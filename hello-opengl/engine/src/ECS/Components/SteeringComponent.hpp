@@ -9,6 +9,10 @@ class SteeringComponent : public Component {
     std::string target;
 
     SteeringComponent(const std::string &target) : target(target) {}
+
+    virtual void serialize(std::ostringstream &out) override {
+        out << "steering " << target << std::endl;
+    }
 };
 
 } // namespace Engine

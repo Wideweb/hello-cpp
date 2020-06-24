@@ -1,5 +1,6 @@
 #include "RenderSystem.hpp"
 #include "Application.hpp"
+#include "IgnoreLightComponent.hpp"
 #include "LocationComponent.hpp"
 #include "MaterialComponent.hpp"
 #include "ParalaxScrollingComponent.hpp"
@@ -44,18 +45,24 @@ void RenderSystem::exec(EntityManager &entities) {
             Mat2x3 move = Mat2x3::move(Vec2(x, y));
             Mat2x3 model = move * scale * rotate;
 
-            auto shader = shaders.get(c_render->shader);
+            std::shared_ptr<Shader> shader;
+
+            if (entity->hasComponent<IgnoreLightComponent>()) {
+                shader = shaders.get("plain");
+            } else {
+                shader = shaders.get("plain-with-light");
+
+                shader->setFloat3("material.ambient", c_material->ambient.x,
+                                  c_material->ambient.y, c_material->ambient.z);
+                shader->setFloat3("material.diffuse", c_material->diffuse.x,
+                                  c_material->diffuse.y, c_material->diffuse.z);
+                shader->setFloat3("material.specular", c_material->specular.x,
+                                  c_material->specular.y,
+                                  c_material->specular.z);
+                shader->setFloat("material.shininess", c_material->shininess);
+            }
 
             shader->setMatrix2x3("model", model.data());
-
-            shader->setFloat3("material.ambient", c_material->ambient.x,
-                              c_material->ambient.y, c_material->ambient.z);
-            shader->setFloat3("material.diffuse", c_material->diffuse.x,
-                              c_material->diffuse.y, c_material->diffuse.z);
-            shader->setFloat3("material.specular", c_material->specular.x,
-                              c_material->specular.y, c_material->specular.z);
-            shader->setFloat("material.shininess", c_material->shininess);
-
             render.drawTriangles(shader, c_render->vertexArray);
         }
     }

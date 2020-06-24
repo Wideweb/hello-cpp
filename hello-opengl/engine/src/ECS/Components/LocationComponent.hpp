@@ -12,6 +12,12 @@ class LocationComponent : public Component {
     float angle = 0.0;
 
     LocationComponent(float x, float y) : x(x), y(y) {}
+
+    virtual void serialize(std::ostringstream &out) override {
+        out << "location ";
+        out << x << " " << y;
+        out << std::endl;
+    }
 };
 
 } // namespace Engine

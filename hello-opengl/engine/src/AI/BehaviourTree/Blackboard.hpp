@@ -13,6 +13,7 @@ class Blackboard {
   private:
     std::shared_ptr<Blackboard> m_Parent;
     BlackboardData<float> m_floatData;
+    BlackboardData<int> m_intData;
     BlackboardData<void *> m_ptrData;
 
   public:
@@ -32,6 +33,22 @@ class Blackboard {
         auto it = m_floatData.find(key);
 
         if (it != m_floatData.end()) {
+            return it->second;
+        }
+
+        if (m_Parent != nullptr) {
+            return m_Parent->getFloat(key);
+        }
+
+        return 0.0f;
+    }
+
+    void setInt(const std::string key, float value) { m_intData[key] = value; }
+
+    int getInt(const std::string key) {
+        auto it = m_intData.find(key);
+
+        if (it != m_intData.end()) {
             return it->second;
         }
 

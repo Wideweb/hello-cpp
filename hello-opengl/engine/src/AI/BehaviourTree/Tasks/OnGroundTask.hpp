@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CollisionComponent.hpp"
+#include "GroundCollisionComponent.hpp"
 #include "GroundComponent.hpp"
 #include "Task.hpp"
 
@@ -14,8 +15,14 @@ class OnGroundTask : public Task {
         auto entity = blackboard->getPtr<Entity>("entity");
 
         auto collision = entity->getComponent<CollisionComponent>();
-        if (collision->entity != nullptr &&
+        auto groundCollision = entity->getComponent<GroundCollisionComponent>();
+
+        if (collision && collision->entity != nullptr &&
             collision->entity->hasComponent<GroundComponent>()) {
+            return TaskStatus::Success;
+        }
+
+        if (groundCollision != nullptr && groundCollision->onGround) {
             return TaskStatus::Success;
         }
 

@@ -14,7 +14,6 @@ void CollisionSystem::exec(EntityManager &entities) {
 
     std::vector<CollisionShape> colliders;
     for (auto &entity : entities.getAll()) {
-
         if (!entity->hasComponent<CollisionComponent>()) {
             continue;
         }
@@ -54,8 +53,8 @@ void CollisionSystem::exec(EntityManager &entities) {
         auto collision = entity->getComponent<CollisionComponent>();
 
         Vec2 gravity(0, -1);
-        float cos = gravity.dot(result.mtv) /
-                    (gravity.magnitude() * result.mtv.magnitude());
+        float cos = gravity.dot(result.mtv) * (gravity.inverseMagnitude() *
+                                               result.mtv.inverseMagnitude());
 
         if (cos < -0.7) {
             location->y += velocity->y;

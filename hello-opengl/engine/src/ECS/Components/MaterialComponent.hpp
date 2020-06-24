@@ -18,6 +18,15 @@ class MaterialComponent : public Component {
         specular = Vec3(1.0f, 1.0f, 1.0f);
         shininess = 32.0f;
     }
+
+    virtual void serialize(std::ostringstream &out) override {
+        out << "material ";
+        out << ambient.x << " ";
+        out << diffuse.x << " ";
+        out << specular.x << " ";
+        out << shininess;
+        out << std::endl;
+    }
 };
 
 } // namespace Engine

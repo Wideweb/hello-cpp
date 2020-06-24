@@ -10,6 +10,8 @@ class AnimationComponent : public Component {
     AnimationScene scene;
 
     AnimationComponent(const AnimationScene &scene) : scene(scene) {}
+
+    virtual void serialize(std::ostringstream &out) override {}
 };
 
 } // namespace Engine

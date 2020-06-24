@@ -1,0 +1,6 @@
+timeLine 0
+animation ambient 1 5.0
+timeLine 0
+animation diffuse 1 5.0
+timeLine 0
+animation specular 1 5.0

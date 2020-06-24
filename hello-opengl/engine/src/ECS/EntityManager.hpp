@@ -21,7 +21,23 @@ class EntityManager {
         return entity;
     }
 
-    std::vector<std::shared_ptr<Entity>> &getAll() { return m_Entities; }
+    std::shared_ptr<Entity> addEntity(Entity *entityPtr) {
+        auto entity = std::shared_ptr<Entity>(entityPtr);
+        m_Entities.push_back(entity);
+        m_EntitiesMap[entity->getName()] = entity;
+        return entity;
+    }
+
+    std::vector<std::shared_ptr<Entity>> getAll() {
+        std::vector<std::shared_ptr<Entity>> result;
+        for (auto entity : m_Entities) {
+            if (entity->isActive) {
+                result.push_back(entity);
+            }
+        }
+
+        return result;
+    }
 
     std::shared_ptr<Entity> get(const std::string name) {
         return m_EntitiesMap[name];
@@ -31,7 +47,7 @@ class EntityManager {
     std::vector<std::shared_ptr<Entity>> getByComponent() {
         std::vector<std::shared_ptr<Entity>> result;
         for (auto entity : m_Entities) {
-            if (entity->hasComponent<T>() &&
+            if (entity->isActive && entity->hasComponent<T>() &&
                 entity->getComponent<T>()->isActive) {
                 result.push_back(entity);
             }

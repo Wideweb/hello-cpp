@@ -17,7 +17,22 @@ Vec2 Vec2::operator*(float value) { return Vec2(x * value, y * value); }
 
 float Vec2::magnitude() { return std::sqrt(x * x + y * y); }
 
-Vec2 Vec2::unit() { return Vec2(x, y) / magnitude(); }
+float Q_rsqrt(float number) {
+    const float x2 = number * 0.5F;
+    const float threehalfs = 1.5F;
+
+    union {
+        float f;
+        uint32_t i;
+    } conv = {number}; // member 'f' set to value of 'number'.
+    conv.i = 0x5f3759df - (conv.i >> 1);
+    conv.f *= (threehalfs - (x2 * conv.f * conv.f));
+    return conv.f;
+}
+
+float Vec2::inverseMagnitude() { return Q_rsqrt(x * x + y * y); }
+
+Vec2 Vec2::unit() { return Vec2(x, y) * inverseMagnitude(); }
 
 Vec2 Vec2::normalL() { return Vec2(y, -x); }
 

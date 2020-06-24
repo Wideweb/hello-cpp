@@ -1,9 +1,9 @@
 #pragma once
 
+#include "DirectionComponent.hpp"
 #include "FrameAnimationComponent.hpp"
 #include "LocationComponent.hpp"
 #include "Task.hpp"
-#include "TextureComponent.hpp"
 #include "VelocityComponent.hpp"
 
 namespace Engine {
@@ -18,8 +18,8 @@ class MoveRightTask : public Task {
         auto velocity = entity->getComponent<VelocityComponent>();
         velocity->x = blackboard->getFloat("speedX");
 
-        auto texture = entity->getComponent<TextureComponent>();
-        texture->flip = Flip::Y;
+        auto direction = entity->getComponent<DirectionComponent>();
+        direction->x = 1;
 
         auto animation = entity->getComponent<FrameAnimationComponent>();
         animation->play("move");

@@ -10,26 +10,33 @@
 
 namespace Engine {
 
-enum class Flip { None = 0, Y = 1, X = 2 };
-
 class TextureComponent : public Component {
   public:
     int width;
     int height;
+    float alpha;
 
     std::string name;
     Rect source;
-    Flip flip;
 
     std::shared_ptr<Engine::VertexArray> vertexArray;
     std::shared_ptr<Engine::VertexBuffer> vertexBuffer;
     std::shared_ptr<Engine::IndexBuffer> indexBuffer;
-    std::string shader;
 
     TextureComponent(const std::string &name, const Rect &source, int width,
-                     int height, const std::string &shader);
+                     int height, float alpha);
 
     void update();
+
+    virtual void serialize(std::ostringstream &out) override {
+        out << "texture ";
+        out << name << " ";
+        out << source << " ";
+        out << width << " ";
+        out << height << " ";
+        out << alpha;
+        out << std::endl;
+    }
 };
 
 } // namespace Engine

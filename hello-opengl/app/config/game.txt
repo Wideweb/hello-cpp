@@ -7,11 +7,31 @@ img chickens ./assets/textures/chickens.png
 img props ./assets/textures/props.png
 img environment ./assets/textures/environment.png
 img wolf ./assets/textures/wolf.png
+img thunder ./assets/textures/thunder.png
+img drop ./assets/textures/drop.png
+img bodies ./assets/textures/bodies.png
+img break ./assets/textures/break.png
+img break-front ./assets/textures/break-front.png
+img mom-text ./assets/textures/mom-text.png
+img light ./assets/textures/light.png
+img grand-father-text ./assets/textures/grand-father-text.png
+img boy-text ./assets/textures/boy-text.png
+img boy ./assets/textures/boy.png
+img dog ./assets/textures/dog.png
+img mom ./assets/textures/mom.png
+img character ./assets/textures/characters-r2.png
 
 sound background ./assets/music/background.wav
+sound rain ./assets/music/rain.wav
+sound thunder-blast ./assets/music/thunder-blast.wav
+sound incoming ./assets/music/incoming.wav
+sound horror ./assets/music/horror.wav
+sound bark ./assets/music/bark.wav
 
 shader plain ./assets/shaders/plain-vertex-shader.glsl ./assets/shaders/plain-fragment-shader.glsl
+shader plain-with-light ./assets/shaders/plain-with-light-vertex-shader.glsl ./assets/shaders/plain-with-light-fragment-shader.glsl
 shader texture ./assets/shaders/texture-vertex-shader.glsl ./assets/shaders/texture-fragment-shader.glsl
+shader texture-with-light ./assets/shaders/texture-with-light-vertex-shader.glsl ./assets/shaders/texture-with-light-fragment-shader.glsl
 shader morphing ./assets/shaders/morphing-vertex-shader.glsl ./assets/shaders/plain-fragment-shader.glsl
 
 entities ./config/game-entities.txt

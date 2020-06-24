@@ -33,6 +33,10 @@ void Application::initialize() {
     m_Time.init();
 }
 
+Vec2 Application::getScreenFix() {
+    return Vec2(960.0 / m_Window->getWidth(), 540.0 / m_Window->getHeight());
+}
+
 void Application::run() {
     m_Render->setClearColor(0.0, 0.1, 0.1, 1.0);
     m_Time.tick();

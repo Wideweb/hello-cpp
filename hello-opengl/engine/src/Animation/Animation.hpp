@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 namespace Engine {
 
 enum class AnimationProperty {
@@ -8,28 +10,117 @@ enum class AnimationProperty {
     Y = 2,
     Scale = 3,
     Angle = 4,
+    Alpha = 5,
+    Diffuse = 6,
+    Specular = 7,
+    Ambient = 8,
 };
 
-struct AnimationStep {
-    AnimationProperty property;
+enum class ActionType {
+    None = 0,
+    Animation = 1,
+    PlayMusic = 2,
+    Active = 3,
+    Inactive = 4,
+};
+
+struct TimeLineStep {
+    ActionType action = ActionType::None;
+
+    // Active, Inactive
+    std::string component;
+
+    // Music
+    std::string sound;
+
+    // Animation
+    AnimationProperty property = AnimationProperty::None;
     float value;
 
-    AnimationStep(AnimationProperty property, float value)
-        : property(property), value(value) {}
+    static TimeLineStep animation(AnimationProperty property, float value) {
+        TimeLineStep step;
+        step.action = ActionType::Animation;
+        step.property = property;
+        step.value = value;
+        return step;
+    }
+
+    static TimeLineStep playSound(const std::string &sound) {
+        TimeLineStep step;
+        step.action = ActionType::PlayMusic;
+        step.sound = sound;
+        return step;
+    }
+
+    static TimeLineStep active(const std::string &component) {
+        TimeLineStep step;
+        step.action = ActionType::Active;
+        step.component = component;
+        return step;
+    }
+
+    static TimeLineStep inactive(const std::string &component) {
+        TimeLineStep step;
+        step.action = ActionType::Inactive;
+        step.component = component;
+        return step;
+    }
 };
 
-struct Animation {
+struct Action {
+    ActionType type = ActionType::None;
+
+    // Active, Inactive
+    std::string component;
+
+    // Music
+    std::string sound;
+
+    // Animation
     AnimationProperty property = AnimationProperty::None;
     float time = 0.0;
     float targetValue = 0.0;
     float currentValue = 0.0;
 
-    Animation(AnimationProperty property, float targetValue, float time)
-        : property(property), targetValue(targetValue), time(time) {}
-};
+    static Action animation(AnimationProperty property, float targetValue,
+                            float time) {
+        Action action;
+        action.type = ActionType::Animation;
+        action.property = property;
+        action.targetValue = targetValue;
+        action.time = time;
+        return action;
+    }
 
-struct TimeLineGap : public Animation {
-    TimeLineGap(float time) : Animation(AnimationProperty::None, 0.0, time) {}
+    static Action playSound(const std::string &sound) {
+        Action action;
+        action.type = ActionType::PlayMusic;
+        action.sound = sound;
+        return action;
+    }
+
+    static Action active(const std::string &component) {
+        Action action;
+        action.type = ActionType::Active;
+        action.component = component;
+        return action;
+    }
+
+    static Action inactive(const std::string &component) {
+        Action action;
+        action.type = ActionType::Inactive;
+        action.component = component;
+        return action;
+    }
+
+    static Action gap(float time) {
+        Action action;
+        action.type = ActionType::Animation;
+        action.property = AnimationProperty::None;
+        action.targetValue = 0;
+        action.time = time;
+        return action;
+    }
 };
 
 } // namespace Engine

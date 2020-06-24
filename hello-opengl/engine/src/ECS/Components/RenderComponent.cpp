@@ -2,9 +2,8 @@
 
 namespace Engine {
 
-RenderComponent::RenderComponent(int width, int height, Vec3 color,
-                                 const std::string &shader)
-    : shader(shader), width(width), height(height) {
+RenderComponent::RenderComponent(int width, int height, Vec3 color)
+    : width(width), height(height), m_Color(color) {
     std::vector<float> vertices = {
         -1.0, -1.0, 0.0, color.x, color.y, color.z,
 
@@ -17,12 +16,12 @@ RenderComponent::RenderComponent(int width, int height, Vec3 color,
 
     std::vector<uint32_t> indexes = {0, 1, 2, 1, 3, 2};
 
-    init(vertices, indexes, shader, width, height);
+    init(vertices, indexes, width, height);
 }
 
 void RenderComponent::init(std::vector<float> &vertices,
-                           std::vector<uint32_t> &indexes,
-                           const std::string &shader, int width, int height) {
+                           std::vector<uint32_t> &indexes, int width,
+                           int height) {
     vertexArray.reset(VertexArray::create());
     vertexArray->bind();
 

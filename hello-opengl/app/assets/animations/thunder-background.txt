@@ -1,0 +1,4 @@
+timeLine 1
+animation diffuse -1 0.5
+gap 5
+animation diffuse 1 0.1

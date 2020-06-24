@@ -24,6 +24,18 @@ class SpotLightComponent : public Component {
         : ambient(ambient), diffuse(diffuse), specular(specular),
           constant(constant), linear(linear), quadratic(quadratic),
           direction(direction), cutOff(cutOff), outerCutOff(outerCutOff) {}
+
+    virtual void serialize(std::ostringstream &out) override {
+        out << "spotLight ";
+        out << ambient << " ";
+        out << diffuse << " ";
+        out << direction << " ";
+        out << constant << " ";
+        out << linear << " ";
+        out << quadratic << " ";
+        out << cutOff << " ";
+        out << outerCutOff << " ";
+    }
 };
 
 } // namespace Engine

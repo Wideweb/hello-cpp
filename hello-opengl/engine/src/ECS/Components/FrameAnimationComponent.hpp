@@ -1,13 +1,8 @@
 #pragma once
 
-#include "Buffer.hpp"
 #include "Entity.hpp"
-#include "Shader.hpp"
-#include "Texture.hpp"
-#include "VertexArray.hpp"
-#include <map>
+
 #include <string>
-#include <vector>
 
 namespace Engine {
 
@@ -51,6 +46,19 @@ class FrameAnimationComponent : public Component {
     }
 
     FrameAnimation &getCurrent() { return m_Animaitions[m_AnimationId]; }
+
+    virtual void serialize(std::ostringstream &out) override {
+        out << "frameAnimation ";
+        out << m_Animaitions["wait"].y << " ";
+        out << m_Animaitions["wait"].dx << " ";
+        out << m_Animaitions["wait"].framesNumber << " ";
+        out << m_Animaitions["wait"].frameTime << " ";
+        out << m_Animaitions["move"].y << " ";
+        out << m_Animaitions["move"].dx << " ";
+        out << m_Animaitions["move"].framesNumber << " ";
+        out << m_Animaitions["move"].frameTime;
+        out << std::endl;
+    }
 };
 
 } // namespace Engine

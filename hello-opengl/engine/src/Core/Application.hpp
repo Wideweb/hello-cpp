@@ -56,6 +56,7 @@ class Application {
     ShaderManager &getShaders() { return *m_Shades; }
     EventHandler &getEventHandler() { return *m_EventHandler; }
     std::vector<Layer *> &getLayers() { return m_LayerStack; }
+    Vec2 getScreenFix();
 
     static Application &get() { return *s_Instance; }
 };

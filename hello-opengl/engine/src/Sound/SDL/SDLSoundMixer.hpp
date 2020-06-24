@@ -24,7 +24,9 @@ class SDLSoundMixer : public SoundMixer {
     virtual void init() override;
 
     virtual void add(std::string name, std::string path) override;
-    virtual void play(std::string name, float volume) override;
+    virtual void play(std::string name, float volume,
+                      SoundBuffer::Properties properties) override;
+    virtual void stop(std::string name) override;
     virtual void stop() override;
     virtual void clear() override;
 

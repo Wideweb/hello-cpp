@@ -1,5 +1,5 @@
 #include "BroadPhaseAlgorithm.hpp"
-#include "AABB.hpp"
+#include "AABBOverlap.hpp"
 
 namespace Engine {
 
@@ -18,7 +18,7 @@ std::vector<OverlappingPair> BroadPhaseAlgorithm::computeOverlappingPairs(
                 continue;
             }
 
-            if (testAABBOverlap(aabbs[i], aabbs[j])) {
+            if (AABBOverlap::test(aabbs[i], aabbs[j])) {
                 if (shapes[i].isStatic) {
                     pairs.emplace_back(shapes[j], shapes[i]);
                 } else {
@@ -29,21 +29,6 @@ std::vector<OverlappingPair> BroadPhaseAlgorithm::computeOverlappingPairs(
     }
 
     return pairs;
-}
-
-bool BroadPhaseAlgorithm::testAABBOverlap(AABB &a, AABB &b) {
-    float d1x = b.min.x - a.max.x;
-    float d1y = b.min.y - a.max.y;
-    float d2x = a.min.x - b.max.x;
-    float d2y = a.min.y - b.max.y;
-
-    if (d1x > 0.0f || d1y > 0.0f)
-        return false;
-
-    if (d2x > 0.0f || d2y > 0.0f)
-        return false;
-
-    return true;
 }
 
 } // namespace Engine

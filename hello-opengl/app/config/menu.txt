@@ -2,8 +2,7 @@ img menu ./assets/textures/menu.png
 img new-game ./assets/textures/new-game.png
 img exit ./assets/textures/exit.png
 
-shader plain ./assets/shaders/plain-vertex-shader.glsl ./assets/shaders/plain-fragment-shader.glsl
-shader texture ./assets/shaders/texture-vertex-shader.glsl ./assets/shaders/texture-fragment-shader.glsl
-shader morphing ./assets/shaders/morphing-vertex-shader.glsl ./assets/shaders/plain-fragment-shader.glsl
+shader plain-with-light ./assets/shaders/plain-with-light-vertex-shader.glsl ./assets/shaders/plain-with-light-fragment-shader.glsl
+shader texture-with-light ./assets/shaders/texture-with-light-vertex-shader.glsl ./assets/shaders/texture-with-light-fragment-shader.glsl
 
 entities ./config/menu-entities.txt

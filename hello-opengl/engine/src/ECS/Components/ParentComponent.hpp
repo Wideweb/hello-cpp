@@ -9,6 +9,10 @@ class ParentComponent : public Component {
     std::string parent;
 
     ParentComponent(const std::string &parent) : parent(parent) {}
+
+    virtual void serialize(std::ostringstream &out) override {
+        out << "parent " << parent << std::endl;
+    }
 };
 
 } // namespace Engine

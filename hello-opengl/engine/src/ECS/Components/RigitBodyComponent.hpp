@@ -9,6 +9,10 @@ class RigitBodyComponent : public Component {
     float weight;
 
     RigitBodyComponent(float weight) : weight(weight) {}
+
+    virtual void serialize(std::ostringstream &out) override {
+        out << "rigitBody " << weight << std::endl;
+    }
 };
 
 } // namespace Engine

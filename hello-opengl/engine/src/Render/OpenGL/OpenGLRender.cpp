@@ -14,6 +14,7 @@ void OpenGLRender::setClearColor(float r, float g, float b, float a) {
 
 void OpenGLRender::setViewport(uint16_t width, uint16_t height) {
     glViewport(0, 0, width, height);
+    GL_CHECK();
 }
 
 void OpenGLRender::clear() {

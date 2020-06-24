@@ -20,9 +20,6 @@ class BroadPhaseAlgorithm {
   public:
     std::vector<OverlappingPair>
     computeOverlappingPairs(const std::vector<CollisionShape> &shapes);
-
-  private:
-    bool testAABBOverlap(AABB &a, AABB &b);
 };
 
 } // namespace Engine

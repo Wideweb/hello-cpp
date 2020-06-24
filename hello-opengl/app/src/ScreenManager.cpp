@@ -23,22 +23,24 @@ void ScreenManager::goTo(const std::string &screenId) {
 
 void ScreenManager::update() {
     if (m_IsTransitioning) {
+        m_IsTransitioning = false;
+
         if (m_Current) {
             m_Current->unload(m_Context);
         }
 
         auto &render = Engine::Application::get().getRender();
-        render.setClearColor(0.0, 0.0, 0.0, 1.0);
+        render.setClearColor(0.0, 0.1, 0.1, 1.0);
         render.clear();
         Engine::Application::get().getWindow().swapBuffers();
         render.clear();
+
+        Engine::Application::get().getCamera().setPosition(0, 0);
 
         m_New->load(m_Context);
         m_Current = m_New;
 
         render.setClearColor(0.0, 0.1, 0.1, 1.0);
-
-        m_IsTransitioning = false;
     }
 
     if (m_Current) {

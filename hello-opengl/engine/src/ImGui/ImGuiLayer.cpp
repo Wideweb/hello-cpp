@@ -1,5 +1,6 @@
 #include "ImGuiLayer.hpp"
 #include "Application.hpp"
+#include "EmitterComponent.hpp"
 #include "LocationComponent.hpp"
 #include "ParalaxScrollingComponent.hpp"
 #include "PointLightComponent.hpp"
@@ -120,22 +121,9 @@ void ImGuiLayer::onRender() {
 
         if (entity != nullptr) {
             auto location = entity->getComponent<LocationComponent>();
-            auto texture = entity->getComponent<TextureComponent>();
-
             ImGui::Text("Location: ");
             ImGui::InputFloat("x", &location->x, 1.0f, 1.0f, "%.3f");
             ImGui::InputFloat("y", &location->y, 1.0f, 1.0f, "%.3f");
-
-            ImGui::Text("Texture: ");
-            ImGui::InputInt("width", &texture->width, 1.0f, 1.0f);
-            ImGui::InputInt("height", &texture->height, 1.0f, 1.0f);
-
-            ImGui::Text("Texture source: ");
-            ImGui::InputFloat("left", &texture->source.x, 0.01f, 0.01f, "%.3f");
-            ImGui::InputFloat("top", &texture->source.y, 0.01f, 0.01f, "%.3f");
-            ImGui::InputFloat("w", &texture->source.w, 0.01f, 0.01f, "%.3f");
-            ImGui::InputFloat("h", &texture->source.h, 0.01f, 0.01f, "%.3f");
-            texture->update();
         }
 
         if (ImGui::Button("Add")) {
@@ -151,6 +139,32 @@ void ImGuiLayer::onRender() {
                     ImGui::GetIO().Framerate);
 
         ImGui::End();
+
+        {
+            if (entity != nullptr) {
+                if (entity->hasComponent<TextureComponent>()) {
+                    auto texture = entity->getComponent<TextureComponent>();
+
+                    ImGui::Begin("Texture");
+
+                    ImGui::InputInt("width", &texture->width, 1.0f, 1.0f);
+                    ImGui::InputInt("height", &texture->height, 1.0f, 1.0f);
+
+                    ImGui::Text("Texture source: ");
+                    ImGui::InputFloat("left", &texture->source.x, 0.01f, 0.01f,
+                                      "%.3f");
+                    ImGui::InputFloat("top", &texture->source.y, 0.01f, 0.01f,
+                                      "%.3f");
+                    ImGui::InputFloat("w", &texture->source.w, 0.01f, 0.01f,
+                                      "%.3f");
+                    ImGui::InputFloat("h", &texture->source.h, 0.01f, 0.01f,
+                                      "%.3f");
+                    texture->update();
+
+                    ImGui::End();
+                }
+            }
+        }
 
         {
             if (entity != nullptr) {
@@ -245,6 +259,23 @@ void ImGuiLayer::onRender() {
                     ImGui::Text("outer cut off: ");
                     ImGui::InputFloat("out", &light->outerCutOff, 0.01f, 0.01f,
                                       "%.3f");
+
+                    ImGui::End();
+                }
+            }
+        }
+
+        {
+            if (entity != nullptr) {
+                if (entity->hasComponent<EmitterComponent>()) {
+                    auto emmiter = entity->getComponent<EmitterComponent>();
+
+                    ImGui::Begin("Emmiter");
+
+                    ImGui::InputInt("buffer", &emmiter->bufferSize, 1.0f, 1.0f);
+                    ImGui::InputInt("width", &emmiter->width, 1.0f, 1.0f);
+                    ImGui::InputFloat("interval", &emmiter->interval, 0.01f,
+                                      1.0f, "%.3f");
 
                     ImGui::End();
                 }

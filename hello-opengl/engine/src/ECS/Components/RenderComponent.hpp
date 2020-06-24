@@ -9,6 +9,9 @@
 namespace Engine {
 
 class RenderComponent : public Component {
+  private:
+    Vec3 m_Color;
+
   public:
     int width;
     int height;
@@ -16,14 +19,20 @@ class RenderComponent : public Component {
     std::shared_ptr<Engine::VertexArray> vertexArray;
     std::shared_ptr<Engine::VertexBuffer> vertexBuffer;
     std::shared_ptr<Engine::IndexBuffer> indexBuffer;
-    std::string shader;
 
-    RenderComponent(int width, int height, Vec3 color,
-                    const std::string &shader);
+    RenderComponent(int width, int height, Vec3 color);
+
+    virtual void serialize(std::ostringstream &out) override {
+        out << "render ";
+        out << width << " ";
+        out << height << " ";
+        out << m_Color;
+        out << std::endl;
+    }
 
   private:
     void init(std::vector<float> &vertices, std::vector<uint32_t> &indexes,
-              const std::string &shader, int width, int height);
+              int width, int height);
 };
 
 } // namespace Engine

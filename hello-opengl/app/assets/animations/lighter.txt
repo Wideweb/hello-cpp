@@ -1,0 +1,14 @@
+timeLine 0
+inactive spotLight
+gap 0.1
+active spotLight
+gap 0.1
+inactive spotLight
+gap 0.1
+active spotLight
+gap 1
+inactive spotLight
+gap 0.1
+active spotLight
+gap 0.5
+inactive spotLight

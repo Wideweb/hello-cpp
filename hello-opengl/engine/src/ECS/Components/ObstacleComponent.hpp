@@ -4,6 +4,10 @@
 
 namespace Engine {
 
-class ObstacleComponent : public Component {};
+class ObstacleComponent : public Component {
+    virtual void serialize(std::ostringstream &out) override {
+        out << "obstacle" << std::endl;
+    }
+};
 
 } // namespace Engine

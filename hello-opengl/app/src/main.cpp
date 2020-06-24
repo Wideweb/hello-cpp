@@ -2,6 +2,7 @@
 #include "MenuScreen.hpp"
 #include "PauseScreen.hpp"
 #include "ScreenManager.hpp"
+#include "TitleScreen.hpp"
 
 #include "Application.hpp"
 #include "EntryPoint.hpp"
@@ -29,10 +30,11 @@ class AppLayer : public Engine::Layer {
 
         m_ScreenManager.reset(new ScreenManager());
         m_ScreenManager->init(this);
+        m_ScreenManager->add("title", new TitleScreen());
         m_ScreenManager->add("menu", new MenuScreen(startMenu));
         m_ScreenManager->add("game", new GameScreen());
         m_ScreenManager->add("pause", new PauseScreen(pauseMenu));
-        m_ScreenManager->goTo("menu");
+        m_ScreenManager->goTo("title");
     }
 
     virtual void onUpdate() override { m_ScreenManager->update(); }
@@ -44,7 +46,7 @@ class MyApp : public Engine::Application {
   public:
     MyApp() {
         addLayer(new AppLayer());
-        addLayer(new Engine::ImGuiLayer());
+        // addLayer(new Engine::ImGuiLayer());
     }
 
     virtual ~MyApp() {}

@@ -32,14 +32,23 @@ void LightSystem::exec(EntityManager &entities) {
         auto light = entity->getComponent<PointLightComponent>();
         auto location = entity->getComponent<LocationComponent>();
 
-        float x = (location->x - camera.x) / windowWidth * 2.0 - 1;
-        float y = (location->y - camera.y) / windowHeight * 2.0 - 1;
+        float paralaxScale = 1.0;
 
-        auto shader1 = shaders.get("texture");
-        auto shader2 = shaders.get("plain");
-        std::vector<std::shared_ptr<Shader>> shaders = {shader1, shader2};
+        if (entity->hasComponent<ParalaxScrollingComponent>()) {
+            auto pralax = entity->getComponent<ParalaxScrollingComponent>();
+            paralaxScale = pralax->scale;
+        }
 
-        for (auto shader : shaders) {
+        float x =
+            (location->x - camera.x * paralaxScale) / windowWidth * 2.0 - 1;
+        float y =
+            (location->y - camera.y * paralaxScale) / windowHeight * 2.0 - 1;
+
+        auto shader1 = shaders.get("texture-with-light");
+        auto shader2 = shaders.get("plain-with-light");
+        std::vector<std::shared_ptr<Shader>> lightShaders = {shader1, shader2};
+
+        for (auto shader : lightShaders) {
             shader->setInt("pointLightsNumber", pointLights.size());
 
             auto iStr = std::to_string(i);

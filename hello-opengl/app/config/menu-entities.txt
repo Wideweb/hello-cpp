@@ -1,14 +1,20 @@
 entity menu
 location 300 400
-texture menu 0 0 1 1 256 64 texture
+direction -1 0
+texture menu 0 0 1 1 256 64 0.0
+animation ./assets/animations/fade-in-0.txt 1
 
 entity new-game
 location 300 300
-texture new-game 0 0 1 1 256 32 texture
+direction -1 0
+texture new-game 0 0 1 1 256 32 0.0
+animation ./assets/animations/fade-in-1.txt 1
 
 entity exit
 location 236 250
-texture exit 0 0 1 1 128 32 texture
+direction -1 0
+texture exit 0 0 1 1 128 32 0.0
+animation ./assets/animations/fade-in-2.txt 1
 
 entity light
 location 480 270

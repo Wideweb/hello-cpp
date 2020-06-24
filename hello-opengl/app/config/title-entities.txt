@@ -1,0 +1,9 @@
+entity title
+location 480 270
+direction -1 0
+texture red-hat 0 0 1 1 512 128 0.0
+animation ./assets/animations/fade-in-out.txt 1
+
+entity light
+location 480 270
+pointLight 1.0 1.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.1 0.1 0.1

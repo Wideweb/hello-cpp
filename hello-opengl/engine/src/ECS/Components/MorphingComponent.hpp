@@ -20,6 +20,8 @@ class MorphingComponent : public Component {
     MorphingComponent(std::vector<float> &from, std::vector<float> &to,
                       std::vector<uint32_t> &indexes, const std::string &shader,
                       int width, int height);
+
+    virtual void serialize(std::ostringstream &out) override {}
 };
 
 } // namespace Engine
